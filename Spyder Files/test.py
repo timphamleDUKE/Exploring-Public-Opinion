@@ -7,3 +7,4 @@ Created on Wed May 21 10:27:13 2025
 """
 
 print("hello")
+print(1 + 1)
