@@ -7,5 +7,23 @@ format: html
 #| label: packages
 
 library(tidyverse)
+
+# ces_2022 <- CCES22_Common_OUTPUT_vv_topost
+```
+
+```{r}
+#| label: data
+
+# ggplot(ces_2022, aes(x = CC22_307)) +
+#   geom_bar() +
+#   theme_minimal()
+# 
+# ces_2022 |>
+#   filter(pid3 %in% c(1, 2)) |>
+#   mutate(pid3 = if_else(pid3 == 1, "Democrat", "Republican")) |>
+#   ggplot(aes(x = CC22_307)) +
+#   geom_bar() +
+#   facet_wrap(~ pid3) +
+#   theme_minimal()
 ```
 
