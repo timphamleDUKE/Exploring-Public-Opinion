@@ -17,7 +17,7 @@ library(tidyverse)
 #| message: FALSE
 #| warning: FALSE
 
-root <- rprojroot::find_root(has_file("Exploring-Public-Opinion.Rproj"))
+root <- rprojroot::find_root(rprojroot::has_file("Exploring-Public-Opinion.Rproj"))
 ces_2022_raw <- read_csv(file.path(root, "Data", "CCES22_Common_OUTPUT_vv_topost.csv"))
 ```
 
@@ -719,6 +719,15 @@ ces_2022_clean <- ces_2022 |>
       transgender == 3 ~ "Prefer not to say"
     )
   )
+
+ces_2022_clean <- ces_2022_clean |>
+  mutate(
+    ideo5 = factor(ideo5, levels = c(
+      "Very liberal", "Liberal", "Moderate", "Conservative", 
+      "Very conservative", "Not sure")), 
+    pid3 = factor(pid3, levels = c(
+    "Democrat", "Republican", "Independent", "Other", "Not sure"))
+  )
 ```
 
 ```{r}
@@ -761,6 +770,28 @@ ggplot(ces_2022_clean, aes(x = CC22_307)) +
 ggplot(ces_2022_clean, aes(x = CC22_307)) +
   geom_bar() +
   facet_wrap(~ pid3) +
+  theme_minimal()
+
+ggplot(ces_2022_clean, aes(x = ideo5, fill = pid3)) +
+  geom_bar(position = "fill") +
+  labs(x = "Political Ideology", y = "Proportion", fill = "Party ID") +
+  scale_y_continuous(labels = scales::percent) +
+  theme_minimal()
+
+ces_2022_clean |>
+  select(ideo5, CC22_327a, CC22_330a, CC22_333a) |>
+  pivot_longer(cols = -ideo5, names_to = "policy", values_to = "support") |>
+  ggplot(aes(x = support, fill = ideo5)) +
+  geom_bar(position = "fill") +
+  facet_wrap(~ policy, scales = "free") +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Support", y = "Proportion", fill = "Ideology") +
+  theme_minimal()
+
+ggplot(ces_2022_clean, aes(x = pew_religimp, fill = pid3)) +
+  geom_bar(position = "fill") +
+  labs(x = "Importance of Religion", y = "Proportion", fill = "Party ID") +
+  scale_y_continuous(labels = scales::percent) +
   theme_minimal()
 ```
 
