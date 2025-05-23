@@ -1,29 +1,83 @@
 ---
 title: "test"
 format: html
+execute:
+  working-directory: project
 ---
 
 ```{r}
 #| label: packages
+#| message: FALSE
 
 library(tidyverse)
-
-# ces_2022 <- CCES22_Common_OUTPUT_vv_topost
 ```
 
 ```{r}
 #| label: data
+#| message: FALSE
+#| warning: FALSE
 
-# ggplot(ces_2022, aes(x = CC22_307)) +
-#   geom_bar() +
-#   theme_minimal()
-# 
-# ces_2022 |>
-#   filter(pid3 %in% c(1, 2)) |>
-#   mutate(pid3 = if_else(pid3 == 1, "Democrat", "Republican")) |>
-#   ggplot(aes(x = CC22_307)) +
-#   geom_bar() +
-#   facet_wrap(~ pid3) +
-#   theme_minimal()
+root <- rprojroot::find_root(has_file("Exploring-Public-Opinion.Rproj"))
+ces_2022_raw <- read_csv(file.path(root, "Data", "CCES22_Common_OUTPUT_vv_topost.csv"))
+```
+
+```{r}
+#| label: data-cleaning
+
+ces_2022 <- ces_2022_raw |>
+  select(-...1, -CCEStake, -add_confirm, -inputzip, -comptype, -votereg_f, -regzip, -CC22_302, -CC22_303, -CC22_304, -CC22_309a_1, -CC22_309a_2, -CC22_309a_3, -CC22_309a_4, -CC22_309a_5, -CC22_306, -CC22_309b_1, -CC22_309b_2, -CC22_309b_3, -CC22_309b_4, -CC22_309c_1, -CC22_309c_2, -CC22_309c_3, -CC22_309c_4, -CC22_309c_5, -CC22_309c_6, -CC22_309c_7, -CC22_309c_8, -CC22_309c_9, -CC22_309c_10, -CC22_310a, -CC22_310b, -CC22_310c, -CC22_310d, -CC22_311a, -CC22_311b, -CC22_311c, -CC22_311d, -CC22_361, -CC22_365_voted, -CC22_365_voted_t, -CC22_365b_voted, -CC22_365b_voted_t, -CC22_366_voted, -CC22_366_voted_t, -CC22_367_voted, -CC22_367_voted_t, -CC22_365, -CC22_365_t, -CC22_365a, -CC22_365a_t, -CC22_365b, -CC22_365b_t, -CC22_365c, -CC22_365c_t, -CC22_366, -CC22_366_t, -CC22_367, -CC22_367_t, -CC22_367a, -CC22_367a_t, -hadjob, -union_coverage, -unionhh, -healthins2
+         )
+ces_2022 <- ces_2022[, 1:267]
+```
+
+```{r}
+#| label: cols
+
+ces_2022_demographics <- ces_2022 |>
+  select(
+    caseid, ccesmodule, commonweight, commonpostweight, vvweight, vvweight_post, tookpost, birthyr, gender4, gender4_t, educ, race, race_other, hispanic, multrace_1, multrace_2, multrace_3, multrace_4, multrace_5, multrace_8, multrace_97, multrace_98, inputstate, region, CC22_305_1, CC22_305_2, CC22_305_3, CC22_305_4, CC22_305_5, CC22_305_6, CC22_305_7, CC22_305_9, CC22_305_10, CC22_305_11, CC22_305_12, CC22_305_13, CC22_309dx_1, CC22_309dx_2, CC22_309dx_3, CC22_309dx_4, CC22_309dx_5, CC22_309dx_6, CC22_309dx_7, CC22_309dx_8, CC22_309dx_9, CC22_309d_t, CC22_309e, CC22_309e, CC22_309f, cit1, immstat, employ, employ_t, investor, marstat, union, dualcit, dualctry, ownhome, ownhome_t, faminc_new, milstat_1, milstat_2, milstat_3, milstat_4, milstat_5, child18, child18num, healthins_1, healthins_2, healthins_3, healthins_4, healthins_5, healthins_6, CC22_hisp_1, CC22_hisp_2, CC22_hisp_3, CC22_hisp_4, CC22_hisp_5, CC22_hisp_6, CC22_hisp_7, CC22_hisp_8, CC22_hisp_9, CC22_hisp_10, CC22_hisp_11, CC22_hisp_12, CC22_hisp_t, CC22_asian_1, CC22_asian_2, CC22_asian_3, CC22_asian_4, CC22_asian_5, CC22_asian_6, CC22_asian_7, CC22_asian_8, CC22_asian_9, CC22_asian_10, CC22_asian_11, CC22_asian_12, CC22_asian_13, CC22_asian_14, CC22_asian_15, CC22_asian_t, industry, sexuality, transgender
+         )
+
+ces_2022_politics <- ces_2022 |>
+  select(
+    votereg, pid3, pid3_t, pid7, CC22_340a, CC22_340b, CC22_340c, CC22_340d, CC22_340e, CC22_340f, CC22_340g, CC22_340h, CC22_340i, CC22_340j, CC22_340k, CC22_340l, CC22_340m, CC22_340n, CC22_360, urbancity, urbancity_t, presvote20post, presvote20post_t, CC22_363, ideo5, presvote16post, presvote16post_t
+         )
+
+ces_2022_news <- ces_2022 |>
+  select(
+    CC22_300_1, CC22_300_2, CC22_300_3, CC22_300_4, CC22_300_5, CC22_300a, CC22_300c, CC22_300b_1, CC22_300b_2, CC22_300b_3, CC22_300b_4, CC22_300b_5, CC22_300b_6, CC22_300b_7, CC22_300b_8, CC22_300d_1, CC22_300d_2, CC22_300d_3, CC22_300d_4, CC22_300d_5, CC22_300d_6, newsint, phone, internethome, internetwork
+         )
+
+ces_2022_opinion <- ces_2022 |>
+  select(
+    CC22_307, CC22_320a, CC22_320b, CC22_320c, CC22_320d, CC22_320e, CC22_320f, CC22_320g, CC22_320h, CC22_321_1, CC22_321_2, CC22_321_3, CC22_321_4, CC22_321_5, CC22_321_6, CC22_321_7, CC22_321_8, CC22_327a, CC22_327b, CC22_327c, CC22_327d, CC22_330a, CC22_330b, CC22_330c, CC22_330d, CC22_330e, CC22_330f, CC22_331a, CC22_331b, CC22_331c, CC22_331d, CC22_332a, CC22_332b, CC22_332c, CC22_332d, CC22_332e, CC22_332f, CC22_333, CC22_333a, CC22_333b, CC22_333c, CC22_333d, CC22_333e, CC22_334a, CC22_334b, CC22_334c, CC22_334d, CC22_334e, CC22_334f, CC22_334g, CC22_334h, CC22_350a, CC22_350b, CC22_350c, CC22_350d, CC22_350e, CC22_350f, CC22_350g, CC22_350h, CC22_355a, CC22_355b, CC22_355c, CC22_355d, CC22_355e
+         )
+
+ces_2022_religion <- ces_2022 |>
+  select(
+    pew_bornagain, pew_religimp, pew_churatd, pew_prayer, religpew, religpew_t, religpew_protestant, religpew_protestant_t, religpew_baptist, religpew_baptist_t, religpew_methodist, religpew_methodist_t, religpew_nondenom, religpew_nondenom_t, religpew_lutheran, religpew_lutheran_t, religpew_presby, religpew_presby_t, religpew_pentecost, religpew_pentecost_t, religpew_episcop, religpew_episcop_t, religpew_christian, religpew_christian_t, religpew_congreg, religpew_congreg_t, religpew_holiness, religpew_holiness_t, religpew_reformed, religpew_reformed_t, religpew_advent, religpew_advent_t, religpew_catholic, religpew_catholic_t, religpew_mormon, religpew_mormon_t, religpew_orthodox, religpew_orthodox_t, religpew_jewish, religpew_jewish_t, religpew_muslim, religpew_muslim_t, religpew_buddhist, religpew_buddhist_t, religpew_hindu, religpew_hindu_t
+         )
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+#| label: plots
+
+ggplot(ces_2022, aes(x = CC22_307)) +
+  geom_bar() +
+  theme_minimal()
+
+ces_2022 |>
+  filter(pid3 %in% c(1, 2)) |>
+  mutate(pid3 = if_else(pid3 == 1, "Democrat", "Republican")) |>
+  ggplot(aes(x = CC22_307)) +
+  geom_bar() +
+  facet_wrap(~ pid3) +
+  theme_minimal()
 ```
 
