@@ -17,7 +17,7 @@ library(here)
 #| message: FALSE
 #| warning: FALSE
 
-ces_2022_raw <- read_csv(here("Data", "CCES22_Common_OUTPUT_vv_topost.csv"))
+ces_2022_raw <- read_csv(here("Data", "CCES_2022.csv"))
 ```
 
 ```{r}
