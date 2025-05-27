@@ -4,4 +4,5 @@ ANES_CUMULUATIVE_CSV.csv filter=lfs diff=lfs merge=lfs -text
 CCES_2022_CSV.csv filter=lfs diff=lfs merge=lfs -text
 Data/CCES_2022_CSV.csv filter=lfs diff=lfs merge=lfs -text
 Data/ANES_CUMULUATIVE_CSV.csv filter=lfs diff=lfs merge=lfs -text
+Data/ANES_CUMULATIVE_CSV.csv filter=lfs diff=lfs merge=lfs -text
 Data/*.csv filter=lfs diff=lfs merge=lfs -text
