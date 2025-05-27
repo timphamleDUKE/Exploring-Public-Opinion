@@ -33,9 +33,9 @@ existing_cols = [col for col in selected_cols if col in df.columns]
 df_filtered = df[existing_cols]
 
 # Remove invalid responses
-invalid_vals = [-9, -8, -7, -6, -5, -4, -3, -2, -1]
-for col in df_filtered.columns:
-    df_filtered = df_filtered[~df_filtered[col].isin(invalid_vals)]
+# invalid_vals = [-9, -8, -7, -6, -5, -4, -3, -2, -1]
+# for col in df_filtered.columns:
+    # df_filtered = df_filtered[~df_filtered[col].isin(invalid_vals)]
 
 # Save cleaned data
 df_filtered.to_csv("cleaned_anes_2024_subset.csv", index=False)
