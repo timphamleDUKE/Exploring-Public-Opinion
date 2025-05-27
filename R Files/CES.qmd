@@ -1,8 +1,6 @@
 ---
 title: "test"
 format: html
-execute:
-  working-directory: project
 ---
 
 ```{r}
@@ -10,6 +8,8 @@ execute:
 #| message: FALSE
 
 library(tidyverse)
+library(readr)
+library(here)
 ```
 
 ```{r}
@@ -17,8 +17,7 @@ library(tidyverse)
 #| message: FALSE
 #| warning: FALSE
 
-root <- rprojroot::find_root(rprojroot::has_file("Exploring-Public-Opinion.Rproj"))
-ces_2022_raw <- read_csv(file.path(root, "Data", "CCES22_Common_OUTPUT_vv_topost.csv"))
+ces_2022_raw <- read_csv(here("Data", "CCES22_Common_OUTPUT_vv_topost.csv"))
 ```
 
 ```{r}

@@ -1,0 +1,21 @@
+---
+title: "test"
+format: html
+---
+
+```{r}
+#| label: packages
+#| message: FALSE
+
+library(tidyverse)
+library(readr)
+library(here)
+```
+
+```{r}
+#| label: data
+#| message: FALSE
+#| warning: FALSE
+
+anes_2024_raw <- read_csv(here("Data", "anes_timeseries_2024_csv_20250430.csv"))
+```
