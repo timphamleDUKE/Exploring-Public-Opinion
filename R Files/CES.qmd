@@ -758,39 +758,48 @@ ces_2022_religion <- ces_2022_clean |>
          )
 ```
 
-
 ```{r}
-#| label: plots
+#| label: weights-1
 
 ggplot(ces_2022_clean, aes(x = CC22_307)) +
   geom_bar() +
-  theme_minimal()
-
-ggplot(ces_2022_clean, aes(x = CC22_307)) +
-  geom_bar() +
-  facet_wrap(~ pid3) +
-  theme_minimal()
-
-ggplot(ces_2022_clean, aes(x = ideo5, fill = pid3)) +
-  geom_bar(position = "fill") +
-  labs(x = "Political Ideology", y = "Proportion", fill = "Party ID") +
-  scale_y_continuous(labels = scales::percent) +
   theme_minimal()
 
 ces_2022_clean |>
-  select(ideo5, CC22_327a, CC22_330a, CC22_333a) |>
-  pivot_longer(cols = -ideo5, names_to = "policy", values_to = "support") |>
-  ggplot(aes(x = support, fill = ideo5)) +
-  geom_bar(position = "fill") +
-  facet_wrap(~ policy, scales = "free") +
-  scale_y_continuous(labels = scales::percent) +
-  labs(x = "Support", y = "Proportion", fill = "Ideology") +
+  group_by(CC22_307) |>
+  mutate(weighted_count = sum(commonweight, na.rm = TRUE)) |>
+  ggplot(aes(x = CC22_307, y = weighted_count)) +
+  geom_col() +
   theme_minimal()
+
+
+ces_2022_clean |>
+  group_by(CC22_307) |>
+  mutate(weighted_count = sum(commonweight, na.rm = TRUE)) |>
+  ggplot(aes(x = CC22_307, y = weighted_count)) +
+  geom_col() +
+  facet_wrap(~ pid3) +
+  theme_minimal()
+```
+
+```{r}
+#| label: weights-2
 
 ggplot(ces_2022_clean, aes(x = pew_religimp, fill = pid3)) +
   geom_bar(position = "fill") +
   labs(x = "Importance of Religion", y = "Proportion", fill = "Party ID") +
   scale_y_continuous(labels = scales::percent) +
+  theme_minimal()
+
+ces_2022_clean |>
+  group_by(pew_religimp, pid3) |>
+  mutate(weighted = sum(commonweight, na.rm = TRUE), .groups = "drop") |>
+  group_by(pew_religimp) |>
+  mutate(prop = weighted / sum(weighted)) |>
+  ggplot(aes(x = pew_religimp, y = prop, fill = pid3)) +
+  geom_col(position = "stack") +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Importance of Religion", y = "Weighted Proportion", fill = "Party ID") +
   theme_minimal()
 ```
 
