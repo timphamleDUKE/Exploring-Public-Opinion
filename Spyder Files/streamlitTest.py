@@ -11,9 +11,14 @@ import os
 
 st.write("Hello World")
 st.text_input("What is you favorite color?")
+is_clicked = st.button("Click me")
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 csv_path = os.path.join(script_dir, "..", "Data", "ANES_2024.csv")
 
 ANES_2024 = pd.read_csv(csv_path)
 st.write(ANES_2024)
+
+
+data = pd.read_csv(".../Data/ANES_2024.csv")
+st.write(data)
