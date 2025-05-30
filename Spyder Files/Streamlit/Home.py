@@ -2,16 +2,12 @@
 """
 Created on Fri May 30 11:23:25 2025
 
-<<<<<<< HEAD
 @author: heyti
 """
 
 import streamlit as st
 
-st.write("### Question Wording")
-=======
-import streamlit as st
+st.set_page_config(page_title = "Home")
 
-st.title("Page 1")
+st.title("Home")
 st.write("This is the first page.")
->>>>>>> da93d96b2768b658158b6d18bfab028c214d1d11
