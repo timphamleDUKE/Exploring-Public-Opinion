@@ -7,6 +7,4 @@ Created on Fri May 30 11:23:25 2025
 
 import streamlit as st
 
-st.write("### Question Wording")
-
-
+st.write("### Public Opinion Explorer")
