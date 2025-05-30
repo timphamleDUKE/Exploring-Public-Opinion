@@ -1,0 +1,13 @@
+CCES22_Common_OUTPUT_vv_topost.csv filter=lfs diff=lfs merge=lfs -text
+ANES_CUMULATIVE_CSV.csv filter=lfs diff=lfs merge=lfs -text
+ANES_CUMULUATIVE_CSV.csv filter=lfs diff=lfs merge=lfs -text
+CCES_2022_CSV.csv filter=lfs diff=lfs merge=lfs -text
+Data/CCES_2022_CSV.csv filter=lfs diff=lfs merge=lfs -text
+Data/ANES_CUMULUATIVE_CSV.csv filter=lfs diff=lfs merge=lfs -text
+Data/ANES_CUMULATIVE_CSV.csv filter=lfs diff=lfs merge=lfs -text
+Data/*.csv filter=lfs diff=lfs merge=lfs -text
+*.csv filter=lfs diff=lfs merge=lfs -text
+Spyder[[:space:]]Files/Streamlit/data/CES_2024.csv filter=lfs diff=lfs merge=lfs -text
+Spyder[[:space:]]Files/Streamlit/data/CES_2024_clean.csv filter=lfs diff=lfs merge=lfs -text
+Spyder[[:space:]]Files/Streamlit/data/CES_2022.csv filter=lfs diff=lfs merge=lfs -text
+Spyder[[:space:]]Files/Streamlit/data/ANES_CUMULATIVE.csv filter=lfs diff=lfs merge=lfs -text
