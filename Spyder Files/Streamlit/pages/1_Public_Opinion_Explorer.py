@@ -26,7 +26,7 @@ def public_opinion_explorer ():
     
     list_of_topics = [
         "Abortion",
-        "Gun Control"
+        "Gun Rights"
     ]
 
     global topic
@@ -67,27 +67,52 @@ def public_opinion_explorer ():
 
     select_study_csv(study, year, topic, group_by)
 
-    # list_of_questions = select_questions()
-    list_of_questions = []
+    list_of_questions = filtered_study_df[topic].dropna().unique().tolist()
     
     question = st.multiselect("Question", list_of_questions)
 
-def select_study_csv(study, year, topic, group_by):
-    if study == "Cooperative Election Study":
+def select_study_csv(selected_study, selected_year, selected_topic, selected_group_by):
+    global topic
+    global filtered_study_df
+
+    if selected_study == "Cooperative Election Study":
         study = "CES"
-    if study == "American National Election Studies":
+    if selected_study == "American National Election Studies":
         study = "ANES"
     
-    study_file_path = f"../Data/{study}_{year}.csv"
+    study_file_path = f"data/{study}_{selected_year}_clean.csv"
     study_df = pd.read_csv(study_file_path)
-
-    
 
     select_columns = []
 
+    group_by_dic = {
+        "Political Party": "poli_party_reg", 
+        "Education": "educ", 
+        "Employment Status": "employ", 
+        "Marriage": "marstat", 
+        "Income": "faminc_new", 
+        "Religion": "religion", 
+        "Gender": "gender",
+        "Race": "race",
+        "State": "input_state",
+        "Urban/Rural Status": "urban_rural"
+    }
+
+    for group_by in selected_group_by:
+        if group_by in group_by_dic:
+            select_columns.append(group_by_dic[group_by])
+
+    topic_dic = {
+        "Abortion": "q_abortion",
+        "Gun Rights": "q_gun_rights",
+        }
+    
+    if selected_topic in topic_dic:
+        topic = topic_dic[selected_topic]
+
+    select_columns.append(topic)
+
+    global filtered_study_df
     filtered_study_df = study_df[select_columns]
 
-# def select_questions():
-    
-    
 public_opinion_explorer()
