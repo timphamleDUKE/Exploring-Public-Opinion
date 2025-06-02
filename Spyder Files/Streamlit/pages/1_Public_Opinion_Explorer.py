@@ -7,55 +7,36 @@ Created on Fri May 30 11:23:25 2025
 
 import streamlit as st
 import pandas as pd
+import numpy as np
+from dictionaries import *
 
 def public_opinion_explorer ():
     st.write("### Public Opinion Explorer")
     
     st.markdown("--description of page--")
-    
-    
+
     # inputs
-    
     col1, col2, col3 = st.columns(3)
 
-    global study
+    codebook = pd.read_csv("data/codebook.csv")
+
     study = col1.selectbox(
         "Study",
         ("Cooperative Election Study", "American National Election Studies"),
     )
-    
-    list_of_topics = [
-        "Abortion",
-        "Gun Rights"
-    ]
+    study = study_dic[study]
 
-    global topic
     topic = col2.selectbox(
         "Topic", 
         list_of_topics,
     )
     
-    list_of_group_bys = [
-        "Political Party", 
-        "Education", 
-        "Employment Status", 
-        "Marriage", 
-        "Income", 
-        "Religion", 
-        "Gender",
-        "Race",
-        "State",
-        "Urban/Rural Status"
-        ]
-    
-    global group_by
     group_by = col3.multiselect(
         "Group By:",
         list_of_group_bys,
         default=["Political Party"],
     )
 
-    global year_range
     year_range = st.slider(
         "Year",
         min_value = 2000,
@@ -65,54 +46,44 @@ def public_opinion_explorer ():
     
     year = year_range[0] # hard coded
 
-    select_study_csv(study, year, topic, group_by)
+    select_study(study, year, topic, group_by)
 
-    list_of_questions = filtered_study_df[topic].dropna().unique().tolist()
+    list_of_questions = codebook[
+    (codebook["year"] == year) &
+    (codebook["study"] == study) &
+    (codebook["topic"] == topic)
+    ]["question"].dropna().tolist()
     
-    question = st.multiselect("Question", list_of_questions)
+    question = st.selectbox("Question", list_of_questions)
 
-def select_study_csv(selected_study, selected_year, selected_topic, selected_group_by):
-    global topic
+    graph(filtered_study_df, question, group_by)
+
+def select_study(study, selected_year, selected_topic, selected_group_by):
     global filtered_study_df
-
-    if selected_study == "Cooperative Election Study":
-        study = "CES"
-    if selected_study == "American National Election Studies":
-        study = "ANES"
     
     study_file_path = f"data/{study}_{selected_year}_clean.csv"
     study_df = pd.read_csv(study_file_path)
 
     select_columns = []
 
-    group_by_dic = {
-        "Political Party": "poli_party_reg", 
-        "Education": "educ", 
-        "Employment Status": "employ", 
-        "Marriage": "marstat", 
-        "Income": "faminc_new", 
-        "Religion": "religion", 
-        "Gender": "gender",
-        "Race": "race",
-        "State": "input_state",
-        "Urban/Rural Status": "urban_rural"
-    }
-
     for group_by in selected_group_by:
         if group_by in group_by_dic:
             select_columns.append(group_by_dic[group_by])
 
-    topic_dic = {
-        "Abortion": "q_abortion",
-        "Gun Rights": "q_gun_rights",
-        }
-    
-    if selected_topic in topic_dic:
-        topic = topic_dic[selected_topic]
+    matching_rows = codebook[(codebook["study"] == study) & (codebook["year"] == selected_year) & (codebook["topic"] == selected_topic)]
+    select_columns.extend(matching_rows["variable"].dropna().tolist())
 
-    select_columns.append(topic)
-
-    global filtered_study_df
     filtered_study_df = study_df[select_columns]
+
+def graph(df, question, group_by):
+    question_var = codebook.loc[codebook["question"] == question, "variable"].iloc[0]
+
+    st.write(question_var)
+
+    for group in group_by:
+        filtered_df = df[df[group_by_dic[group]] > 0]
+
+    st.dataframe(filtered_df)
+    
 
 public_opinion_explorer()
