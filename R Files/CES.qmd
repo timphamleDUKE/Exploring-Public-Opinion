@@ -38,7 +38,27 @@ ces_2024_clean |>
   theme_minimal()
 
 ces_2024_clean |>
-  filter(poli_party_reg < 4) |>
+  mutate(CC24_321b = if_else(CC24_321b == 1, "Support", "Oppose"), 
+         poli_party_reg = case_when(
+           poli_party_reg == 1 ~ "No Party, Independent, Declined to State", 
+           poli_party_reg == 2 ~ "Democratic Party", 
+           poli_party_reg == 3 ~ "Republican Party", 
+           poli_party_reg == 4 ~ "Other", 
+           poli_party_reg == 5 ~ NA
+         )) |>
+  group_by(CC24_321b) |>
+  mutate(weighted_count = sum(commonweight, na.rm = TRUE)) |>
+  ggplot(aes(y = poli_party_reg, x = weighted_count)) +
+  geom_col(aes(fill = CC24_321b), position = "fill") +
+  scale_x_continuous(labels = scales::comma_format()) +
+  labs(
+    title = "On the issue of gun regulation, do you support or oppose a 
+    proposal that would do the following?: Make it easier for people to 
+    obtain concealed-carry permits"
+  ) +
+  theme_minimal()
+
+ces_2024_clean |>
   mutate(CC24_321b = if_else(CC24_321b == 1, "Support", "Oppose"), 
          poli_party_reg = case_when(
            poli_party_reg == 1 ~ "No Party, Independent, Declined to State", 
@@ -46,11 +66,17 @@ ces_2024_clean |>
            poli_party_reg == 3 ~ "Republican Party", 
            poli_party_reg == 4 ~ "Other", 
            poli_party_reg == 5 ~ "N"
+         ), 
+         gender = case_when(
+           gender == 1 ~ "Male", 
+           gender == 2 ~ "Female", 
+           TRUE ~ "Other"
          )) |>
   group_by(CC24_321b) |>
   mutate(weighted_count = sum(commonweight, na.rm = TRUE)) |>
   ggplot(aes(y = poli_party_reg, x = weighted_count)) +
   geom_col(aes(fill = CC24_321b), position = "fill") +
+  facet_grid(gender ~ .) +
   scale_x_continuous(labels = scales::comma_format()) +
   labs(
     title = "On the issue of gun regulation, do you support or oppose a 
