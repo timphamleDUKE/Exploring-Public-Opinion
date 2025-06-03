@@ -2,4 +2,4 @@
 .Rhistory
 .RData
 .Ruserdata
-spyder files/streamlit/data/*.csv
+python files/streamlit/data/*.csv
