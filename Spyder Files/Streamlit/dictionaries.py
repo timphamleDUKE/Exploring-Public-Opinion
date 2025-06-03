@@ -41,7 +41,22 @@ group_by_dic = {
         "Urban/Rural Status": "urban_rural"
     }
 
+group_by_dic_reverse = {
+        "poli_party_reg": "Political Party",
+        "educ": "Education",
+        "employ": "Employment Status",
+        "marstat": "Marriage",
+        "faminc_new": "Income",
+        "religion": "Religion", 
+        "gender": "Gender",
+        "race": "Race",
+        "input_state": "State",
+        "urban_rural": "Urban/Rural Status",
+    }
+
 study_dic = {
     "Cooperative Election Study": "CES",
     "American National Election Studies": "ANES"
 }
+
+

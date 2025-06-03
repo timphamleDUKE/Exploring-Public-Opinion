@@ -9,6 +9,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from dictionaries import *
+from graph import *
 
 def public_opinion_explorer ():
     st.write("### Public Opinion Explorer")
@@ -75,13 +76,21 @@ def select_study(study, selected_year, selected_topic, selected_group_by):
 
 def graph(df, question, group_by):
     question_var = codebook.loc[codebook["question"] == question, "variable"].iloc[0]
+    st.write(question_var) # delete later
 
-    st.write(question_var)
+    group_by_vars = [group_by_dic[group] for group in group_by]
 
-    for group in group_by:
-        filtered_df = df[df[group_by_dic[group]] > 0]
+    st.write(group_by_vars) # delete later
 
-    st.dataframe(filtered_df)
+    valid_rows = df[question_var] > 0
+    for var in group_by_vars:
+        valid_rows &= df[var] > 0
+
+    filtered_df = df.loc[valid_rows, group_by_vars + [question_var]]
+
+    st.dataframe(filtered_df) # delete later
+
+    display_chart(filtered_df, question_var, group_by_vars)
     
 
 public_opinion_explorer()
