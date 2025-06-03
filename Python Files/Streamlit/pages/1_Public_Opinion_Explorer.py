@@ -10,6 +10,9 @@ import pandas as pd
 import numpy as np
 from dictionaries import *
 from graph import *
+from Home import set_logo
+
+set_logo()
 
 def public_opinion_explorer ():
     st.write("### Public Opinion Explorer")
@@ -55,7 +58,7 @@ def public_opinion_explorer ():
     
     question = st.selectbox("Question", list_of_questions)
 
-    graph(filtered_study_df, question, group_by)
+    filter_and_graph(filtered_study_df, question, group_by, study)
 
 def select_study(study, selected_year, selected_topic, selected_group_by):
     global filtered_study_df
@@ -65,19 +68,25 @@ def select_study(study, selected_year, selected_topic, selected_group_by):
 
     select_columns = []
 
+    # adds weight vars
+    for weight_var in reversed(weight_dic[study]):
+        select_columns.append(weight_var)
+
+    # adds demographic group by vars
     for group_by in selected_group_by:
         if group_by in group_by_dic:
             select_columns.append(group_by_dic[group_by])
 
+    # adds the question var that match question
     matching_rows = codebook[(codebook["study"] == study) & (codebook["year"] == selected_year) & (codebook["topic"] == selected_topic)]
     select_columns.extend(matching_rows["variable"].dropna().tolist())
 
+    # filters the df
     filtered_study_df = study_df[select_columns]
 
-def graph(df, question, group_by):
+def filter_and_graph(df, question, group_by, study):
     question_var = codebook.loc[codebook["question"] == question, "variable"].iloc[0]
     st.write(question_var) # delete later
-
     group_by_vars = [group_by_dic[group] for group in group_by]
 
     st.write(group_by_vars) # delete later
@@ -86,11 +95,16 @@ def graph(df, question, group_by):
     for var in group_by_vars:
         valid_rows &= df[var] > 0
 
-    filtered_df = df.loc[valid_rows, group_by_vars + [question_var]]
+    columns = group_by_vars + [question_var]
+
+    for weight_var in reversed(weight_dic[study]):
+        columns = [weight_var] + columns
+
+    filtered_df = df.loc[valid_rows, columns]
 
     st.dataframe(filtered_df) # delete later
-
     display_chart(filtered_df, question_var, group_by_vars)
+
     
 
 public_opinion_explorer()

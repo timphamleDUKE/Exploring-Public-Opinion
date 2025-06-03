@@ -59,4 +59,7 @@ study_dic = {
     "American National Election Studies": "ANES"
 }
 
-
+weight_dic = {
+    "CES": ["commonweight"],
+    "ANES": ["pre_full", "post_full", "full_var_psu", "full_var_stratum"]
+}

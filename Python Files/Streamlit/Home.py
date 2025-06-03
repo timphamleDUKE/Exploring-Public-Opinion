@@ -12,25 +12,22 @@ st.set_page_config(
     layout="wide"
 )
 
-LOGO_WIDE = "images/logo.png"
-LOGO_ICON = "images/logo.png"
+def set_logo():
+    logo = "images/logo.png"
+    data_plus_logo = "images/data+.png"
 
-# Display the logo
-st.logo(
-    image=LOGO_WIDE,
-    size="large",
-    link="https://your-company-website.com", 
-    icon_image=LOGO_ICON
-)
+    st.logo(
+        image=logo,
+        link="https://your-company-website.com", 
+        icon_image=logo,
+        size = "large"
+    )
 
-LOGO_PATH = "images/logo.png"
 
-# Display a large logo at the top of the page
-st.image(LOGO_PATH, width=300)
+    with st.sidebar:
+        st.image(data_plus_logo, use_container_width=True)
 
-# Add a large logo to the sidebar
-with st.sidebar:
-    st.image(LOGO_PATH, width=300)
+set_logo()
 
 
 st.title("The Survey Navigator")
