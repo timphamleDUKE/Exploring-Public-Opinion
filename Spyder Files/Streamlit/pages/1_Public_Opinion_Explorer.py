@@ -18,8 +18,6 @@ def public_opinion_explorer ():
     # inputs
     col1, col2, col3 = st.columns(3)
 
-    codebook = pd.read_csv("data/codebook.csv")
-
     study = col1.selectbox(
         "Study",
         ("Cooperative Election Study", "American National Election Studies"),
