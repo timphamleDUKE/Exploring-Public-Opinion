@@ -26,7 +26,7 @@ ces_2024_clean <- read_csv("../Python Files/Streamlit/data/CES_2024_clean.csv")
 ces_2024_clean |>
   mutate(CC24_321b = ifelse(CC24_321b == 1, "Support", "Oppose")) |>
   group_by(CC24_321b) |>
-  mutate(weighted_count = sum(commonweight, na.rm = TRUE)) |>
+  summarize(weighted_count = sum(commonweight, na.rm = TRUE)) |>
   ggplot(aes(y = CC24_321b, x = weighted_count)) +
   geom_col() +
   scale_x_continuous(labels = scales::comma_format()) +
@@ -38,18 +38,21 @@ ces_2024_clean |>
   theme_minimal()
 
 ces_2024_clean |>
+  filter(!is.na(poli_party_reg)) |>
   mutate(CC24_321b = if_else(CC24_321b == 1, "Support", "Oppose"), 
          poli_party_reg = case_when(
-           poli_party_reg == 1 ~ "No Party, Independent, Declined to State", 
-           poli_party_reg == 2 ~ "Democratic Party", 
-           poli_party_reg == 3 ~ "Republican Party", 
-           poli_party_reg == 4 ~ "Other", 
-           poli_party_reg == 5 ~ NA
+           poli_party_reg == 1 ~ "1", 
+           poli_party_reg == 2 ~ "2", 
+           poli_party_reg == 3 ~ "3", 
+           poli_party_reg == 4 ~ "4", 
+           poli_party_reg == 5 ~ "5"
          )) |>
-  group_by(CC24_321b) |>
-  mutate(weighted_count = sum(commonweight, na.rm = TRUE)) |>
-  ggplot(aes(y = poli_party_reg, x = weighted_count)) +
-  geom_col(aes(fill = CC24_321b), position = "fill") +
+  group_by(poli_party_reg, CC24_321b) |>
+  summarize(weighted_count = sum(commonweight, na.rm = TRUE), .groups = "drop") |>
+  group_by(poli_party_reg) |>
+  mutate(prop = weighted_count / sum(weighted_count)) |>
+  ggplot(aes(y = poli_party_reg, x = prop, fill = CC24_321b)) +
+  geom_col() +
   scale_x_continuous(labels = scales::comma_format()) +
   labs(
     title = "On the issue of gun regulation, do you support or oppose a 
@@ -72,8 +75,8 @@ ces_2024_clean |>
            gender == 2 ~ "Female", 
            TRUE ~ "Other"
          )) |>
-  group_by(CC24_321b) |>
-  mutate(weighted_count = sum(commonweight, na.rm = TRUE)) |>
+  group_by(poli_party_reg, gender, CC24_321b) |>
+  summarize(weighted_count = sum(commonweight, na.rm = TRUE), .groups = "drop") |>
   ggplot(aes(y = poli_party_reg, x = weighted_count)) +
   geom_col(aes(fill = CC24_321b), position = "fill") +
   facet_grid(gender ~ .) +
