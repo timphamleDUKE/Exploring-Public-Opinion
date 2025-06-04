@@ -1,0 +1,344 @@
+---
+title: "Introduction to R Survey Package"
+author: "Diana Jordan"
+date: "3/30/25"
+output: html_document
+---
+
+# Setup + Load Data
+```{r, warning = FALSE}
+rm(list = ls())
+
+# install.packages("survey")
+library(survey)
+library(memisc)
+library(readstata13)
+library(dplyr)
+library(arm) # using display() function from arm package to display model results
+
+
+# load data (available for download at 
+# https://electionstudies.org/anes_timeseries_2012_dta/
+anes <- read.dta13("~/Desktop/anes_timeseries_2012.dta")
+
+# Filter data set to exclude online sample
+table(anes$mode)
+anes <- filter(anes, mode == "1. FTF (face-to-face) mode") # You may want web or both for your analyses of interest as such choose the correct weights below 
+```
+
+# Creation of topline of your variables of interest
+```{r}
+# Load required packages
+library(memisc)
+
+anes_subset <- anes[, c("pid_x", "gender_respondent_x", "dem_raceeth_x", "rvote2012_x")]
+
+# Convert to a memisc dataset
+anes_dataset <- as.data.set(anes_subset)
+
+# Assign variable descriptions
+description(anes_dataset$pid_x) <- "Party Identification (1-7 scale, higher = stronger Republican)"
+description(anes_dataset$gender_respondent_x) <- "Gender (1 = Male, 2 = Female)"
+description(anes_dataset$dem_raceeth_x) <- "Race/Ethnicity"
+description(anes_dataset$rvote2012_x) <- "Voted in 2012 Election (1 = Yes, 0 = No)"
+
+# Assign value labels
+labels(anes_dataset$pid_x) <- c(
+  "Strong Democrat" = 1,
+  "Not very strong Democrat" = 2,
+  "Independent, Lean Democrat" = 3,
+  "Independent" = 4,
+  "Independent, Lean Republican" = 5,
+  "Not very strong Republican" = 6,
+  "Strong Republican" = 7
+)
+
+labels(anes_dataset$gender_respondent_x) <- c(
+  "Male" = 1,
+  "Female" = 2
+)
+
+labels(anes_dataset$dem_raceeth_x) <- c(
+  "White" = 1,
+  "Black" = 2,
+  "Asian or Pacific Islander" = 3,
+  "Native American" = 4,
+  "Hispanic" = 5,
+  "Other" = 6
+)
+
+labels(anes_dataset$rvote2012_x) <- c(
+  "Voted" = 1,
+  "Did not vote" = 2
+)
+
+output <- capture.output(memisc::codebook(anes_dataset))
+# Add HTML formatting
+html_output <- c("<html><body><pre>", output, "</pre></body></html>")
+
+# Write to file
+writeLines(html_output, "~/Desktop/ANES_codebook.html")
+```
+
+# Preparing your variables
+```{r}
+table(anes$gender_respondent_x)
+# 7-point Party ID (1 = strong dem, 7 = strong rep)
+anes$party7 <- anes$pid_x
+anes$party7[anes$party7 < 0] <- NA
+table(anes$party7)
+
+# Race/ethnicity
+table(anes$dem_raceeth_x)
+anes$race_ethnicity <- anes$dem_raceeth_x
+anes$race_ethnicity[anes$race_ethnicity < 0] <- NA
+
+anes <- anes %>% 
+  dplyr::mutate(race_ethnicity = case_when(dem_raceeth_x == 1 ~ "White", 
+                                           dem_raceeth_x == 2 ~ "Black",
+                                           dem_raceeth_x == 3 ~ "Asian or PI",
+                                           dem_raceeth_x == 4 ~ "Native American",
+                                           dem_raceeth_x == 5 ~ "Hispanic",
+                                           dem_raceeth_x == 6 ~ "Other"))
+table(anes$race_ethnicity)
+anes$race_ethnicity <- factor(anes$race_ethnicity)
+
+anes$race_ethnicity <- relevel(anes$race_ethnicity, "Hispanic")
+anes$race_ethnicity <- relevel(anes$race_ethnicity, "Black")
+anes$race_ethnicity <- relevel(anes$race_ethnicity, "White")
+table(anes$race_ethnicity)
+
+# Gender, set as dummy variable
+# female
+table(anes$gender_respondent_x)
+anes$female <- as.numeric(anes$gender_respondent_x)
+anes$female <- with(anes, ifelse(female == 2, 1, 
+                                ifelse(female < 0, NA, 0)))
+table(anes$female)
+
+# vote turnout
+table(anes$rvote2012_x)
+anes$voteturnout <- anes$rvote2012_x
+anes$voteturnout <- with(anes, ifelse(voteturnout == 1, 1, 0))
+table(anes$voteturnout)
+```
+
+# Create Survey Design Object
+
+You can think of the survey object as a special type of object (like a dataframe) that stores two things A) your data and B) the information you provide it about your weights + sampling design
+```{r}
+
+# from the ANES codebook and asdfree.com, I've
+# identified the variables that tell me A) which 
+# primary sampling unit each respondent is in, B) 
+# which stratum each respondent is in, and C) the 
+# variable containing the weights. Here I rename them
+# to make things easier to follow. 
+
+# If you want both ftf and web make sure to use full anes (because I subsetted only on ftf), then choose psu_full, strata_full, weight_full
+
+# Primary sampling unit (PSU): This is the primary sampling unit. This is the first unit that is sampled in the design.  For example, school districts from California may be sampled and then schools within districts may be sampled.  The school district would be the PSU. 
+
+# Strata:  Stratification is a method of breaking up the population into different groups, often by demographic variables such as gender, race or SES.  Once these groups have been defined, one samples from each group as if it were independent of all of the other groups.  For example, if a sample is to be stratified on gender, men and women would be sampled independent of one another.  This means that the sampling weights for men will likely be different from the sampling weights for the women.  In most cases, you need to have two or more PSUs in each stratum.  The purpose of stratification is to improve the precision of the estimates.
+
+anes$psu <- anes$psu_ftf # Primary Sampling Unit (PSU)
+anes$stratum <- anes$strata_ftf # Stratum
+anes$weight <- anes$weight_ftf # Vector of weights
+
+# create survey design object using these renamed 
+# variables
+anes_design <-
+  svydesign( 
+    ~psu,             # PSU
+    strata = ~stratum ,    # stratum
+    weights = ~weight,     # weights
+    nest = T,              # make sure R knows to create unique stratum-cluster pairs 
+    data = anes          # dataframe
+  )
+
+```
+
+# Summarize Data (Weighted and Unweighted)
+
+## Means
+```{r}
+# unweighted
+mean(x = anes$female, 
+     na.rm = T)
+
+# weighted
+svymean(x = ~female, 
+        na.rm = T, 
+        design = anes_design)
+
+# unweighted
+mean(x = anes$party7, 
+     na.rm = T)
+
+# weighted
+svymean(x = ~party7, 
+        na.rm = T, 
+        design = anes_design)
+
+# unweighted
+mean(x = anes$voteturnout, 
+     na.rm = T)
+
+# weighted
+svymean(x = ~voteturnout, 
+        na.rm = T, 
+        design = anes_design)
+
+```
+
+## Variances
+```{r}
+
+# unweighted
+var(x = anes$female, 
+     na.rm = T)
+
+# weighted
+svyvar(x = ~female, 
+        na.rm = T, 
+        design = anes_design)
+
+# unweighted
+var(x = anes$party7, 
+     na.rm = T)
+
+# weighted
+svyvar(x = ~party7, 
+        na.rm = T, 
+        design = anes_design)
+```
+
+## T-test
+```{r}
+# unweighted
+with(anes, 
+     t.test(voteturnout ~ female))
+
+diff(with(anes, 
+     t.test(voteturnout ~ female)$estimate))
+
+# weighted
+svyttest(voteturnout ~ female, 
+         design = anes_design)
+
+```
+
+# Run Function by Grouping Variable
+
+svyby is similar to aggregate in base R or group_by and summarize in dplyr. It allows you to apply a function to different groups (i.e., calculating the percentage of respondents who can name the current vice president, by gender (separately for males and females)).
+
+```{r}
+
+# what percent of males and females know who the VP is?
+
+# base r (unweighted)
+with(anes, 
+     aggregate(x = voteturnout, 
+               by = list(female), 
+               FUN = mean, na.rm=T))
+
+# dplyr (unweighted)
+anes %>%
+  group_by(female) %>%
+  summarize(mean = mean(voteturnout))
+
+# weighted
+svyby(formula = ~voteturnout, 
+      by = ~female, 
+      FUN = svymean, na.rm=T,  
+      design = anes_design)
+
+# this is the same as running 
+svymean(~voteturnout, na.rm=T,
+        design = subset(anes_design, female == 0)) # note use of subset() to subset survey design object
+svymean(~voteturnout, na.rm=T,
+        design = subset(anes_design, female == 1))
+
+# svyby() function is particularly useful when there are many groups!
+test <- svyby(formula = ~voteturnout, 
+              by = ~party7, 
+              FUN = svymean, na.rm=T,  
+              design = anes_design)
+
+with(test, 
+     plot(party7, voteturnout, 
+          ylim = c(0, 1), pch = 16, 
+     main = "Vote Turnout by Party ID"))
+with(test,
+     segments(x0 = 1:7, x1 = 1:7, 
+              y0 = voteturnout - 1.96*se, 
+              y1 = voteturnout + 1.96*se))
+
+# note: you can replace svymean with almost any function in 
+# svy package
+
+# e.g., svyvar
+svyby(formula = ~voteturnout, 
+      by = ~female, 
+      FUN = svyvar, na.rm=T,  
+      design = anes_design)
+
+```
+
+# More Complex Formulas
+
+```{r}
+svymean(~female, na.rm=T,
+        design = anes_design)
+
+svymean(~female + party7, na.rm=T,
+        design = anes_design)
+
+svyby(~female, 
+      by = ~ party7, 
+      FUN = svymean, na.rm=T, 
+      design = anes_design)
+
+```
+
+## Running Regressions with Survey Package
+
+Note that the base R function has a `weights' argument, but this will not incorporate the weights into the calculation of the standard error and therefore should not be used! Just use svyglm in the survey package!!
+
+```{r}
+
+# unweighted (base R)
+display(
+  lm(party7 ~ female + race_ethnicity, 
+     data = anes))
+
+# weighted (base R)
+display(
+  lm(party7 ~ female + race_ethnicity, 
+     weights = weight,
+     data = anes))
+
+# weighted (survey package)
+display(svyglm(party7 ~ female + race_ethnicity, 
+               design = anes_design))
+
+```
+
+## Other Survey Functions
+
+See the survey package documentation and Lumley's book for a full list of all functions in the survey package. Here a few useful ones:
+```{r}
+
+svyhist(~party7, design = anes_design)
+
+table(anes$party7)
+svytable(~party7, design = anes_design)
+
+svytable(~party7 + female, design = anes_design)
+
+svytable(~party7 + race_ethnicity, design = anes_design)
+
+svyquantile(~party7, c(.05, .50, .95), na.rm=T, design = anes_design)
+
+svytotal(~female, na.rm=T, design = anes_design)
+```
