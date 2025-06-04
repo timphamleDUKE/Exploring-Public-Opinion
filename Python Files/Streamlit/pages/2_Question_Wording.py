@@ -7,6 +7,9 @@ Created on Fri May 30 11:23:25 2025
 
 import streamlit as st
 import pandas as pd
+from Home import set_logo
+
+set_logo()
 
 st.write("### Question Wording")
 
