@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Jun  2 12:39:46 2025
-
-@author: heyti
-"""
-
 import pandas as pd
 
 codebook = pd.read_csv("data/codebook.csv")

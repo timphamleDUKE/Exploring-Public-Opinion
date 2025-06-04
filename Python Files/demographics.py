@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri May 30 14:50:30 2025
-
-@author: heyti
-"""
-
 import pandas as pd
 
 study = "CES"

@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri May 30 11:23:25 2025
-
-@author: heyti
-"""
-
 import streamlit as st
 
 st.set_page_config(
@@ -13,7 +6,7 @@ st.set_page_config(
 )
 
 def set_logo():
-    logo = "images/logo.png"
+    logo = "images/logo-black.PNG"
     data_plus_logo = "images/data+.png"
 
     st.logo(
@@ -22,10 +15,6 @@ def set_logo():
         icon_image=logo,
         size = "large"
     )
-
-
-    with st.sidebar:
-        st.image(data_plus_logo, use_container_width=True)
 
 set_logo()
 

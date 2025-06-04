@@ -1,15 +1,8 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri May 30 11:23:25 2025
-
-@author: heyti
-"""
-
 import streamlit as st
 import pandas as pd
 import numpy as np
-from dictionaries import *
-from graph import *
+from functions.dictionaries import *
+from functions.graph import *
 from Home import set_logo
 
 set_logo()
@@ -85,6 +78,7 @@ def select_study(study, selected_year, selected_topic, selected_group_by):
     filtered_study_df = study_df[select_columns]
 
 def filter_and_graph(df, question, group_by, study):
+    # filter
     question_var = codebook.loc[codebook["question"] == question, "variable"].iloc[0]
     st.write(question_var) # delete later
     group_by_vars = [group_by_dic[group] for group in group_by]
@@ -103,7 +97,9 @@ def filter_and_graph(df, question, group_by, study):
     filtered_df = df.loc[valid_rows, columns]
 
     st.dataframe(filtered_df) # delete later
-    display_chart(filtered_df, question_var, group_by_vars)
+
+    # graph
+    display_chart(filtered_df, question_var, group_by_vars, study)
 
     
 
