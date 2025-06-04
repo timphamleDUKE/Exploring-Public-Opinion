@@ -10,6 +10,8 @@ format: html
 library(tidyverse)
 library(readr)
 library(here)
+library(survey)
+library(ggplot2)
 ```
 
 ```{r}
@@ -18,7 +20,6 @@ library(here)
 #| warning: FALSE
 
 anes_2024_clean <- read_csv("../Python Files/Streamlit/data/ANES_2024_clean.csv")
-ces_2024_clean <- read_csv("../Python Files/Streamlit/data/CES_2024_clean.csv")
 ```
 
 ```{r}
@@ -33,7 +34,11 @@ anes_2024_clean |>
 #| warning: FALSE
 
 anes_2024_clean |>
-  filter(V242325 > 0) |>
+  filter(
+    !is.na(full_var_psu),
+    !is.na(full_var_stratum),
+    !is.na(post_full)
+  ) |>
   mutate(V242325 = case_when(
     V242325 == -9 ~ "Refused", 
     V242325 == -8 ~ "Don’t know",
@@ -59,8 +64,13 @@ as they are now?"
   theme_minimal()
 
 anes_2024_clean |>
-  filter(V242325 > 0) |>
-  filter(poli_party_reg > 0) |>
+    filter(
+    !is.na(full_var_psu),
+    !is.na(full_var_stratum),
+    !is.na(post_full),
+    !is.na(V242325),
+    !is.na(poli_party_reg)
+  ) |>
   mutate(V242325 = case_when(
     V242325 == -9 ~ "Refused", 
     V242325 == -8 ~ "Don’t know",
@@ -91,6 +101,114 @@ anes_2024_clean |>
 difficult for people to buy a gun than it is now, make it easier
 for people to buy a gun, or keep these rules about the same
 as they are now?"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+#| label: weights
+
+
+anes_subset <- subset(anes_2024_clean, 
+                      !is.na(full_var_psu) & 
+                      !is.na(full_var_stratum) & 
+                      !is.na(post_full))
+
+# Define the design object using post-election weights (example)
+anes_design <- svydesign(
+  ids = ~full_var_psu,
+  strata = ~full_var_stratum,
+  weights = ~post_full,
+  data = anes_subset,
+  nest = TRUE
+)
+
+# Use svytable() to get proper weighted counts
+tab <- svytable(~V242325, design = anes_design)
+df <- as.data.frame(tab)
+names(df) <- c("response", "weighted_count")
+
+df <- df |>
+  mutate(response = case_when(
+    response == -9 ~ "Refused", 
+    response == -8 ~ "Don’t know",
+    response == -7 ~ "Insufficient partial, interview deleted",
+    response == -6 ~ "No post interview",
+    response == -5 ~ "Sufficient partial, breakoff",
+    response == -1 ~ "Inapplicable",
+    response == 1 ~ "More difficult",
+    response == 2 ~ "Easier",
+    response == 3 ~ "Keep these rules about the same"
+  ))
+
+
+ggplot(df, aes(y = response, x = weighted_count)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Do you think the federal government should make it more
+difficult for people to buy a gun than it is now, make it easier
+for people to buy a gun, or keep these rules about the same
+as they are now?",
+       x = "Response", y = "Weighted Count") +
+    scale_x_continuous(labels = scales::comma_format()) +
+  theme_minimal()
+
+
+
+
+# Step 1: Clean + recode
+anes_subset_2 <- anes_2024_clean |>
+  filter(
+    !is.na(full_var_psu),
+    !is.na(full_var_stratum),
+    !is.na(post_full),
+    !is.na(V242325),
+    !is.na(poli_party_reg)
+  ) |>
+  mutate(
+    V242325 = case_when(
+      V242325 == -9 ~ "Refused", 
+      V242325 == -8 ~ "Don’t know",
+      V242325 == -7 ~ "Insufficient partial, interview deleted",
+      V242325 == -6 ~ "No post interview",
+      V242325 == -5 ~ "Sufficient partial, breakoff",
+      V242325 == -1 ~ "Inapplicable",
+      V242325 == 1 ~ "More difficult",
+      V242325 == 2 ~ "Easier",
+      V242325 == 3 ~ "Keep these rules about the same"
+    ),
+    poli_party_reg = case_when(
+      poli_party_reg == -9 ~ "Refused",
+      poli_party_reg == -8 ~ "Don’t know",
+      poli_party_reg == -1 ~ "Inapplicable",
+      poli_party_reg == 1 ~ "Democratic party",
+      poli_party_reg == 2 ~ "Republican party",
+      poli_party_reg == 4 ~ "None or independent",
+      poli_party_reg == 5 ~ "Another party"
+    )
+  )
+
+# Step 2: Define survey design
+anes_design <- svydesign(
+  ids = ~full_var_psu,
+  strata = ~full_var_stratum,
+  weights = ~post_full,
+  data = anes_subset_2,
+  nest = TRUE
+)
+
+# Step 3: Get weighted counts by response and party
+tab <- svytable(~poli_party_reg + V242325, design = anes_design)
+df <- as.data.frame(tab)
+names(df) <- c("poli_party_reg", "V242325", "weighted_count")
+
+# Step 4: Plot
+ggplot(df, aes(y = poli_party_reg, x = weighted_count, fill = V242325)) +
+  geom_col(position = "fill") +
+  scale_x_continuous(labels = scales::percent_format()) +
+  labs(
+    title = "Do you think the federal government should make it more
+difficult for people to buy a gun than it is now, make it easier
+for people to buy a gun, or keep these rules about the same?"
   ) +
   theme_minimal()
 ```
