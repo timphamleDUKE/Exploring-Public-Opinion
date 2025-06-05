@@ -22,58 +22,6 @@ def ces_calc_weights(df, question, group):
     
     return grouped
 
-def anes_calc_weights(df, question, group):
-    weight_col = 'post_full'
-    stratum_col = 'full_var_stratum'
-    psu_col = 'full_var_psu'
-    
-    # Drop missing data AND empty strings
-    df = df.dropna(subset=[group, question, weight_col, stratum_col, psu_col])
-    
-    # Additional filtering to remove empty strings
-    df = df[
-        (df[group] != '') & 
-        (df[question] != '') & 
-        (df[weight_col] != '') & 
-        (df[stratum_col] != '') & 
-        (df[psu_col] != '')
-    ]
-    
-    # Convert weight columns to numeric, coercing errors to NaN
-    df[weight_col] = pd.to_numeric(df[weight_col], errors='coerce')
-    df[stratum_col] = pd.to_numeric(df[stratum_col], errors='coerce')
-    df[psu_col] = pd.to_numeric(df[psu_col], errors='coerce')
-    
-    # Drop any rows where conversion failed
-    df = df.dropna(subset=[weight_col, stratum_col, psu_col])
-    
-    st.write("ANES data after cleaning:")
-    st.write(f"Unique groups: {df[group].unique()}")
-    st.write(f"Unique responses: {df[question].unique()}")
-    
-    # Simplified approach - calculate weighted counts directly like CES
-    # Group by group and response, sum the weights
-    grouped = (
-        df.groupby([group, question])[weight_col]
-        .sum()
-        .reset_index(name='weighted_count')
-    )
-    
-    st.write("ANES grouped data (simplified):")
-    st.write(grouped)
-    
-    # Calculate proportions within each group
-    totals = grouped.groupby(group)['weighted_count'].transform('sum')
-    grouped['proportion'] = grouped['weighted_count'] / totals
-    
-    # Rename columns to match CES format
-    grouped = grouped.rename(columns={question: "response", group: "group"})
-    
-    st.write("ANES final data:")
-    st.write(grouped)
-    
-    return grouped
-
 def anes_calc_weights_complex(df, question, group):
     """
     This is your original complex survey weight calculation

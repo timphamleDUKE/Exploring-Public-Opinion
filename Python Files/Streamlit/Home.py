@@ -18,6 +18,5 @@ def set_logo():
 
 set_logo()
 
-
 st.title("The Survey Navigator")
 st.divider()

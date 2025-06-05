@@ -2,7 +2,7 @@ import streamlit as st
 import textstat
 import pandas as pd
 from transformers import pipeline
-from Home import set_logo
+from Home import *
 
 set_logo()
 
