@@ -32,15 +32,13 @@ def public_opinion_explorer ():
         default=["Political Party"],
     )
 
-    year_range = st.slider(
+    year = st.slider(
         "Year",
         min_value = 2000,
         max_value = 2024,
-        value = [2024,2024]
+        value = 2024
         )
     
-    year = year_range[0] # hard coded
-
     select_study(study, year, topic, group_by)
 
     list_of_questions = codebook[

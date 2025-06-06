@@ -9,9 +9,6 @@ def ces_calc_weights(df, question, group):
         .reset_index(name='weighted_count')
     )
     
-    st.write("CES grouped data:")
-    st.write(grouped)
-    
     totals = grouped.groupby(group)['weighted_count'].transform('sum')
     grouped['proportion'] = grouped['weighted_count'] / totals
     
@@ -124,7 +121,7 @@ def anes_calc_weights_complex(df, question, group):
     # Ensure consistent column naming - rename the group column to match CES format
     result_df = result_df.rename(columns={group: "group"})
     
-    st.write("ANES complex result:")
+    st.write("ANES Final Data:")
     st.write(result_df)
     
     return result_df
