@@ -9,7 +9,6 @@ format: html
 
 library(tidyverse)
 library(readr)
-library(here)
 library(survey)
 library(ggplot2)
 ```
@@ -19,7 +18,6 @@ library(ggplot2)
 #| message: FALSE
 #| warning: FALSE
 
-anes_2024_clean <- read_csv("../Python Files/Streamlit/data/ANES_2024_clean.csv")
 anes_2024 <- read_csv("../Python Files/Streamlit/data/ANES_2024.csv")
 ```
 
@@ -28,30 +26,38 @@ anes_2024 <- read_csv("../Python Files/Streamlit/data/ANES_2024.csv")
 
 anes_2024_sunshine <- anes_2024 |>
   select(
-    V240001, V240002a, V240002b, V240107a, V240107b, V240107c, V240107d, V241025, V241156, V241157, V241158, V241164, V241165, V241166, V241167, V241177, V241178, V241226, V241263x, V241266x, V241269x, V241272x, V241275x, V241278x, V241281x, V241284x, V241287x, V241290x, V241302, V241308x, V241312x, V241313, V241319x, V241322x, V241333x, V241366x, V241369x, V241372x, V241375x, V241378x, V241381x, V241385x, V241389x, V241392x, V241395x, V241400x, V241403x, V241406x, V241409x, V241412x, V241422, V241458x, V241459, V241463, V241501x, V241551, V241567x, V241579, V242067, V242125, V242126, V242134, V242135, V242136, V242137, V242138, V242139, V242140, V242141, V242142, V242143, V242144, V242145, V242146, V242147, V242148, V242149, V242150, V242151, V242152, V242153, V242154, V242155, V242156, V242226x, V242227, V242228, V242231x, V242232, V242235, V242236, V242241x, V242245x, V242248x, V242249, V242253x, V242254, V242279x, V242315, V242316a, V242319x, V242320, V242321, V242324x, V242325, V242328x, V242331x, V242335x, V242336, V242346x, V242349x, V242350, V242353x, V242357x, V242361x, V242364x, V242365, V242366, V242367, V242368, V242369, V242370, V242514, V242515, V242516, V242517, V242518
+    V240107a, V240107b, V240107c, V240107d, V241422, V241458x, V241459, V241463, V241501x, V241551, V241567x, V241025, V241226, V241177, V241178, V242067, V241156, V241157, V241158, V241164, V241166, V241167, V241263x, V241266x, V241269x, V241272x, V241275x, V241278x, V241281x, V241284x, V241287x, V241290x, V241302, V241308x, V241312x, V241313, V241319x, V241322x, V241333x, V241366x, V241369x, V241372x, V241375x, V241378x, V241381x, V241385x, V241389x, V241392x, V241395x, V241400x, V241403x, V241406x, V241409x, V241412x, V241579, V242125, V242126, V242134, V242135, V242136, V242137, V242138, V242139, V242140, V242141, V242142, V242143, V242144, V242145, V242146, V242147, V242148, V242149, V242150, V242151, V242152, V242153, V242154, V242155, V242156, V242226x, V242227, V242228, V242231x, V242232, V242235, V242236, V242241x, V242245x, V242248x, V242249, V242253x, V242254, V242279x, V242315, V242316a, V242319x, V242320, V242321, V242324x, V242325, V242328x, V242331x, V242335x, V242336, V242346x, V242349x, V242350, V242353x, V242357x, V242361x, V242364x, V242365, V242366, V242367, V242368, V242369, V242370, V242514, V242515, V242516, V242517, V242518
   ) |>
   rename(
-    # info
-    id = V240001,
-    pre_interview_mode = V240002a,
-    post_interview_mode = V240002b,
+    # weights
     pre_full = V240107a, 
     post_full = V240107b, 
     full_var_psu = V240107c, 
     full_var_stratum = V240107d, 
     
-    # thermometer / lib-con / party
+    # demographics
+    religion = V241422, 
+    age_election_day = V241458x, 
+    marriage = V241459, 
+    educ = V241463, 
+    race_ethnicity = V241501x, 
+    gender = V241551, 
+    income = V241567x, 
+    
+    # lib-con / party
     poli_party_reg = V241025, 
+    poli_party_self_7pt = V241226, 
+    lib_con_7pt = V241177, 
+    lib_con_2pt = V241178,
+    pres_vote = V242067, 
+    
+    # pre-survey thermometer
     harris_thermometer_pre = V241156, 
     trump_thermometer_pre = V241157, 
     biden_thermometer_pre = V241158, 
     vance_thermometer_pre = V241164, 
-    walz_thermometer_pre = V241165, 
     democrat_thermometer_pre = V241166, 
     republican_thermometer_pre = V241167, 
-    lib_con_7pt = V241177, 
-    lib_con_2pt = V241178, 
-    poli_party_self_7pt = V241226, 
     
     # issue positions
     budget_social_security = V241263x, 
@@ -88,18 +94,8 @@ anes_2024_sunshine <- anes_2024 |>
     gaza_protests = V241412x, 
     political_violence = V241579,
     
-    # demographics
-    religion = V241422, 
-    age_election_day = V241458x, 
-    marriage = V241459, 
-    educ = V241463, 
-    race_ethnicity = V241501x, 
-    gender = V241551, 
-    income = V241567x, 
-    
     # post election survey
     
-    pres_vote = V242067, 
     # thermometers
     harris_thermometer_post = V242125, 
     trump_thermometer_post = V242126, 
@@ -131,6 +127,7 @@ anes_2024_sunshine <- anes_2024 |>
     black_thermometer = V242516,
     illegal_immigrant_thermometer = V242517,
     white_thermometer = V242518,
+    
     # issue positions
     import_limits = V242226x, 
     immigration_levels = V242227, 
@@ -172,10 +169,16 @@ anes_2024_sunshine <- anes_2024 |>
     israel_threat = V242370
   )
 
+#write.csv(anes_2024_sunshine, file = "~/Downloads/anes_clean.csv")
 ```
+
+
+
 
 ```{r}
 #| label: weights
+
+anes_2024_clean <- read_csv("../Python Files/Streamlit/data/ANES_2024_clean.csv")
 
 anes_subset <- subset(anes_2024_clean, 
                       !is.na(full_var_psu) & 
