@@ -1,9 +1,9 @@
 import pandas as pd
 
-study = "CES"
+study = "ANES"
 year = 2024
 
-study_file_path = f"Streamlit/data/{study}_{year}.csv"
+study_file_path = f"Streamlit/data/{study}_{year}_clean.csv"
 study_df = pd.read_csv(study_file_path, low_memory=False)
 
 rename_dicts = {
@@ -17,9 +17,9 @@ rename_dicts = {
         "V241025": "poli_party_reg",
         "V241221": "poli_party_self3",
         "V241226": "poli_party_self7",
-        "V241463": "educ",
+        "V241465x": "educ",
         "V241483": "employ",
-        "V241459": "marstat",
+        "v241461x": "marstat",
         "V241567x": "faminc_new",
         "V241422": "religion",
         "V241551": "gender",
@@ -46,28 +46,51 @@ if study in rename_dicts:
 if (study, year) in rename_dicts:
     study_df = study_df.rename(columns=rename_dicts[(study, year)])
 
-select_cols = [
-    "commonweight",
-    "commonpostweight",
-    
-    "birthyr",
-    "poli_party_reg",
-    "poli_party_self3",
-    "poli_party_self7",
-    "educ",
-    "employ",
-    "marstat",
-    "faminc_new",
-    "religion",
-    "gender",
-    "race",
-    "input_state",
-    "urban_rural"
-]
+if study == "CES":
+    select_cols = [
+        "commonweight",
+        "commonpostweight",
+        
+        "birthyr",
+        "poli_party_reg",
+        "poli_party_self3",
+        "poli_party_self7",
+        "educ",
+        "employ",
+        "marstat",
+        "faminc_new",
+        "religion",
+        "gender",
+        "race",
+        "input_state",
+        "urban_rural"
+    ]
+
+if study == "ANES":
+    select_cols = [
+        "pre_full",
+        "post_full",
+        "full_var_psu",
+        "full_var_stratum",
+        
+        "birth",
+        "poli_party_reg",
+        "poli_party_self3",
+        "poli_party_self7",
+        "educ",
+        "employ",
+        "marstat",
+        "faminc_new",
+        "religion",
+        "gender",
+        "race",
+        "input_state",
+        "urban_rural"
+    ]
 
 other_cols = [col for col in study_df.columns if col not in select_cols]
 
 study_df = study_df[select_cols + other_cols]
 
-study_df.to_csv("Streamlit/data/CES_2024_clean.csv", index=False)
+study_df.to_csv("Streamlit/data/ANES_2024_clean.csv", index=False)
 

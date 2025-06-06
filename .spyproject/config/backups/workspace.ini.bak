@@ -4,7 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-recent_files = ['.gitignore', '.gitattributes', 'Spyder Files\\Streamlit\\dictionaries.py', 'Spyder Files\\Streamlit\\graph.py']
+recent_files = ['.gitignore', '.gitattributes']
 
 [main]
 version = 0.2.0
