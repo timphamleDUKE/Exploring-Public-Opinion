@@ -3,6 +3,24 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
+st.set_page_config(
+    page_title="Survey Navigator",
+    layout="wide"
+)
+
+def set_logo():
+    logo = "images/logo-black.PNG"
+    data_plus_logo = "images/data+.png"
+
+    st.logo(
+        image=logo,
+        link="https://your-company-website.com", 
+        icon_image=logo,
+        size = "large"
+    )
+
+set_logo()
+
 # Load + clean data
 df = pd.read_csv("../../data/anes_2024_clean.csv")
 df.columns = df.columns.str.strip()
@@ -94,11 +112,12 @@ fig.add_trace(go.Scatterpolar(
     theta=df_polar['theta'],
     mode='markers',
     marker=dict(
-        size=5, 
+        size=4, 
+        opacity = 0.5,
         color=df_polar['party'].map(
-            {'Republican': 'rgba(255, 0, 0, 0.3)',
-            'Democrat': 'rgba(0, 0, 255, 0.3)',
-            'None/Independent': 'rgba(0, 255, 0, 0.3)'}
+            {'Republican': 'red',
+            'Democrat': 'blue',
+            'None/Independent': 'green'}
              )),
     hoverinfo='text'
 ))
@@ -141,5 +160,19 @@ fig.update_layout(
     height=800,
     showlegend=False
 )
+
+fig.add_annotation(
+    x=0.5, y=1.1, xref='paper', yref='paper',
+    text="Republicans", showarrow=False, font=dict(size=14, color='red')
+)
+fig.add_annotation(
+    x=0.1, y=0.1, xref='paper', yref='paper',
+    text="Democrats", showarrow=False, font=dict(size=14, color='blue')
+)
+fig.add_annotation(
+    x=0.9, y=0.1, xref='paper', yref='paper',
+    text="Independents", showarrow=False, font=dict(size=14, color='green')
+)
+
 
 st.write(fig)
