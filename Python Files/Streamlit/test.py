@@ -5,8 +5,8 @@ import plotly.graph_objects as go
 from scipy.stats import gaussian_kde
 
 # Streamlit setup
-st.title("MAGA Thermometer Distribution by Party (Interactive)")
-st.write("Interactive density plot of MAGA thermometer ratings for Democrats, Republicans, and Independents.")
+st.title("Thermometer Distribution by Party (Interactive)")
+st.write("Interactive density plot of thermometer ratings for Democrats, Republicans, and None/Independents.")
 
 list_of_thermometer = (
     "harris_thermometer_pre",
@@ -49,40 +49,56 @@ list_of_thermometer = (
 
 question = st.selectbox("Question", list_of_thermometer)
 
+st.write("Select Parties")
+
+republican_check = st.checkbox("Republican Party", value = True)
+democratic_check = st.checkbox("Democratic Party", value = True)
+independent_check = st.checkbox("None/Independent Party", value = False)
+
+list_of_groups = []
+if republican_check:
+    list_of_groups.append("Republican Party")
+
+if democratic_check:
+    list_of_groups.append("Democratic Party")
+
+if independent_check:
+    list_of_groups.append("None/Independent Party")
+
 anes_2024_sunshine = pd.read_csv("../../data/anes_2024_clean.csv")
 
 # Create party labels
 anes_2024_sunshine["party"] = anes_2024_sunshine["poli_party_reg"].map({
-    1: "Democratic",
-    2: "Republican",
-    4: "None/Independent"
+    1: "Democratic Party",
+    2: "Republican Party",
+    4: "None/Independent Party"
 })
 
 # Filter valid data
 df = anes_2024_sunshine[
-    (anes_2024_sunshine["party"].isin(["Democratic", "Republican", "None/Independent"])) &
+    (anes_2024_sunshine["party"].isin(list_of_groups)) &
     (anes_2024_sunshine[question] >= 0) &
     (anes_2024_sunshine[question] <= 100)
 ]
 
 # Colors for each party
 colors = {
-    "Democratic": "blue",
-    "Republican": "red",
-    "None/Independent": "green"
+    "Democratic Party": "blue",
+    "Republican Party": "red",
+    "None/Independent Party": "green"
 }
 
 # Create figure
 fig = go.Figure()
 
 fill_colors = {
-    'Democratic': 'rgba(0, 0, 255, 0.3)',     # Blue
-    'Republican': 'rgba(255, 0, 0, 0.3)',     # Red
-    'None/Independent': 'rgba(0, 128, 0, 0.3)'  # Green
+    'Democratic Party': 'rgba(0, 0, 255, 0.3)',     # Blue
+    'Republican Party': 'rgba(255, 0, 0, 0.3)',     # Red
+    'None/Independent Party': 'rgba(0, 128, 0, 0.3)'  # Green
 }
 
 # Add KDE traces for each party
-for party in ["Democratic", "Republican", "None/Independent"]:
+for party in list_of_groups:
     values = df[df["party"] == party][question].dropna().values
 
     # Compute KDE
@@ -101,9 +117,11 @@ for party in ["Democratic", "Republican", "None/Independent"]:
         fillcolor=fill_colors.get(party, 'rgba(128, 128, 128, 0.3)')
     ))
 
+list_groups_joined = ", ".join(list_of_groups)
+
 # Layout settings
 fig.update_layout(
-    title=f"Overlayed Density of {question} Thermometer Ratings by Party",
+    title=f"Overlayed Density of {question} Thermometer Ratings by {list_groups_joined}",
     xaxis_title="Thermometer Rating (0–100)",
     yaxis_title="Density",
     xaxis=dict(tickmode="linear", tick0=0, dtick=20),
