@@ -3,3 +3,4 @@
 .RData
 .Ruserdata
 .RDataTmp
+python files/streamlit/data/*.csv
