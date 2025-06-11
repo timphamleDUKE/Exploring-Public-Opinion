@@ -166,5 +166,5 @@ anes_2024_clean <- anes_2024 |>
     israel_threat = V242370
   )
 
-#write.csv(anes_2024_clean, file = "~/Downloads/anes_clean.csv")
+#write.csv(anes_2024_clean, file = "~/Downloads/anes_2024_clean.csv")
 ```
