@@ -23,6 +23,8 @@ with st.sidebar:
 
     issue_question = st.selectbox("Issue Position Question", list_of_issues)
 
+    weighting_method = st.selectbox("Weighting Method", ("simple", "replication", "bootstrap"))
+
 
 list_of_groups = []
 if republican_check:
@@ -35,10 +37,12 @@ if independent_check:
     list_of_groups.append("None/Independent Party")
 
 
-density_graph = (densityGraph(df, thermometer_question, list_of_groups))
+density_graph = (densityGraph(df, thermometer_question, list_of_groups, weight_method=weighting_method))
+
 # sankey_graph = (sankeyGraph(df, issue_question, list_of_groups))
 
 # Display plots
 
 st.plotly_chart(density_graph, use_container_width=True)
+
 # st.plotly_chart(sankey_graph, use_container_width=True)

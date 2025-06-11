@@ -6,7 +6,7 @@ from scipy.stats import gaussian_kde
 from functions.dictionaries import *
 from functions.weights import get_anes_weighted_density_data  # Import our weights module
 
-def densityGraph(df, question, groups, use_weights=True, weight_method='replication'):
+def densityGraph(df, question, groups, use_weights=True, weight_method='bootstrap'):
     """
     Create density graph with optional ANES survey weights
     
@@ -58,13 +58,13 @@ def densityGraph(df, question, groups, use_weights=True, weight_method='replicat
                         x=x_range,
                         y=y_values,
                         mode="lines",
-                        name=f"{party} (Survey-Weighted)",
+                        name=f"{party}",
                         line=dict(color=colors[party], width=2),
                         fill="tozeroy",
                         fillcolor=fill_colors.get(party, 'rgba(128, 128, 128, 0.3)')
                     ))
             
-            title_suffix = f" (Survey-Weighted using {weight_method.title()} Method)"
+            title_suffix = f"(Survey-Weighted using {weight_method.title()} Method)"
             
         except Exception as e:
             st.warning(f"Error applying survey weights: {e}. Falling back to unweighted analysis.")
@@ -98,7 +98,7 @@ def densityGraph(df, question, groups, use_weights=True, weight_method='replicat
 
     # Layout settings
     fig.update_layout(
-        title=f"Overlayed Density of {question} Thermometer Ratings by {list_groups_joined}{title_suffix}",
+        title=f"Density Plot of {question} Thermometer Ratings<br>{title_suffix}",
         xaxis_title="Thermometer Rating (0–100)",
         yaxis_title="Density",
         xaxis=dict(tickmode="linear", tick0=0, dtick=20),
