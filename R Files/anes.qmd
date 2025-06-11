@@ -444,8 +444,8 @@ anes_2024_clean |>
     party %in% c("Democratic", "Republican"),
     maga_thermometer >= 0 & maga_thermometer <= 100
   ) |>
-  ggplot(aes(x = maga_thermometer, color = party, fill = party, weight = post_full)) +
-  geom_density(alpha = 0.3, linewidth = 1.2) +
+  ggplot(aes(x = maga_thermometer, color = party, fill = party)) +
+  geom_density(alpha = 0.3) +
   scale_fill_manual(values = c(Democratic = "blue", Republican = "red")) +
   scale_color_manual(values = c(Democratic = "blue", Republican = "red")) +
   scale_x_continuous(
@@ -455,12 +455,10 @@ anes_2024_clean |>
   labs(
     title = "Overlayed Density of MAGA Thermometer Ratings by Party",
     x = "Thermometer Rating (0–100)",
-    y = "Density"
+    y = "Density", 
+    fill = "Party"
   ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(face = "bold", hjust = 0.5)
-  )
+  theme_minimal()
 
 ```
 
