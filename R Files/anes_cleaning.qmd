@@ -15,7 +15,7 @@ library(tidyverse)
 #| message: FALSE
 #| warning: FALSE
 
-anes_2024 <- read_csv("../Python Files/Streamlit/data/ANES_2024.csv")
+anes_2024 <- read_csv("../data/anes_2024_raw.csv")
 ```
 
 ```{r}
