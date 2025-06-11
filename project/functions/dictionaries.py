@@ -128,7 +128,17 @@ colors = {
 }
 
 fill_colors = {
-    'Democratic Party': 'rgba(0, 0, 255, 0.3)',     # Blue
-    'Republican Party': 'rgba(255, 0, 0, 0.3)',     # Red
-    'None/Independent Party': 'rgba(0, 128, 0, 0.3)'  # Green
+    "Democratic Party": "rgba(0, 0, 255, 0.3)",     # Blue
+    "Republican Party": "rgba(255, 0, 0, 0.3)",     # Red
+    "None/Independent Party": "rgba(0, 128, 0, 0.3)"  # Green
+}
+
+lib_con_map = {
+    1: "Extremely liberal",
+    2: "Liberal",
+    3: "Slightly Liberal",
+    4: "Moderate",
+    5: "Slightly Conservative",
+    6: "Conservative",
+    7: "Extremely Conservative"
 }
