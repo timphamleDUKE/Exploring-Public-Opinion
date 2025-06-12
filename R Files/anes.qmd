@@ -26,7 +26,20 @@ library(ggalluvial)
 #| warning: FALSE
 
 anes_2024_clean <- read_csv("../data/anes_2024_clean.csv")
+anes_2024_raw <- read_csv("../data/anes_2024_raw.csv")
 ```
+
+```{r}
+anes_2024_raw |>
+  count(V240002a) |>
+  mutate(V240002a = case_when(
+    V240002a == 1 ~ "Face-to-face (FTF)",
+    V240002a == 2 ~ "Internet (WEB)",
+    V240002a == 3 ~ "Paper (PAPI)", 
+    V240002a == 4 ~ "Phone"
+  ))
+```
+
 
 # Issue Position
 
@@ -479,6 +492,44 @@ anes_2024_clean |>
     axis.text.y = element_blank(),
     panel.grid.major = element_blank()
   )
+
+anes_2024_clean |>
+  filter(
+    lib_con_7pt %in% 1:7,
+    gun_difficulty %in% 1:3
+  ) |>
+  mutate(
+    gun_difficulty = factor(gun_difficulty, levels = 1:3, 
+                            labels = c("More difficult", "Easier", "Keep these rules about the same")),
+    lib_con_7pt = factor(lib_con_7pt, levels = 1:7, labels = party_levels),
+    ideology_group = case_when(
+      lib_con_7pt %in% c("Extremely liberal", "Liberal", "Slightly liberal") ~ "Liberal",
+      lib_con_7pt == "Moderate" ~ "Moderate",
+      lib_con_7pt %in% c("Slightly conservative", "Conservative", "Extremely conservative") ~ "Conservative"
+    )
+  ) |>
+  count(gun_difficulty, ideology_group, name = "Freq") |>
+  ggplot(aes(axis1 = ideology_group, axis2 = gun_difficulty, y = Freq, fill = ideology_group)) +
+  geom_alluvium(width = 0.15) +
+  geom_stratum(width = 0.15, fill = "grey80", color = "darkgrey") +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
+  scale_x_discrete(limits = c("Ideology", "Gun Attitude"), expand = c(0.2, 0.05)) +
+  scale_fill_manual(
+    values = c("Liberal" = "blue", "Moderate" = "purple", "Conservative" = "red"),
+    name = "Ideology"
+  ) +
+  labs(
+    title = "Gun Difficulty by Ideology",
+    x = NULL,
+    y = NULL
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    axis.text.y = element_blank(),
+    panel.grid.major = element_blank()
+  )
+
 ```
 
 # Thermometer
