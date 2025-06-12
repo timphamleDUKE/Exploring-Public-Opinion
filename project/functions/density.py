@@ -44,7 +44,7 @@ def densityGraph(df, question, groups, use_weights=True, weight_method='bootstra
         # Use weighted density estimation
         try:
             plotting_data = get_anes_weighted_density_data(
-                df, question, groups, group_var='party', weight_method=weight_method
+                df, question, groups, group_var='party', weight_method=weight_method, random_state = 12345
             )
             
             # Add weighted KDE traces for each party
@@ -98,7 +98,8 @@ def densityGraph(df, question, groups, use_weights=True, weight_method='bootstra
 
     # Layout settings
     fig.update_layout(
-        title=f"Density Plot of {question} Thermometer Ratings<br>{title_suffix}",
+        # title=f"Density Plot of {question} Thermometer Ratings<br>{title_suffix}",
+        title = description_map[question],
         xaxis_title="Thermometer Rating (0–100)",
         yaxis_title="Density",
         xaxis=dict(tickmode="linear", tick0=0, dtick=20),

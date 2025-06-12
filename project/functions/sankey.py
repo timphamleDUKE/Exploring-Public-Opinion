@@ -1,7 +1,7 @@
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.colors import n_colors
-from functions.dictionaries import lib_con_map
+from functions.dictionaries import lib_con_map, description_map
 
 def sankeyGraph(df, question, groups, title=None):
     """
@@ -81,7 +81,8 @@ def sankeyGraph(df, question, groups, title=None):
 
     fig = go.Figure(sankey)
     fig.update_layout(
-        title_text= f"Sankey Diagram of Liberal-Conservative Meter for {target_col}",
+        # title_text= f"Sankey Diagram of Liberal-Conservative Meter for {target_col}",
+        title_text = "There has been some discussion about abortion during recent years.<br>Which one of the opinions on this page best agrees with your view?<br>You can just tell me the number of the opinion you choose.",
         font_size=10
     )
     return fig

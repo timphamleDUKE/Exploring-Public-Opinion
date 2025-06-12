@@ -10,7 +10,7 @@ class ANESWeights:
     Implements survey design adjustment using strata and PSU information
     """
     
-    def __init__(self, df, weight_col='post_full', strata_col='full_var_stratum', psu_col='full_var_psu'):
+    def __init__(self, df, weight_col='post_full', strata_col='full_var_stratum', psu_col='full_var_psu', random_state=None):
         """
         Initialize with ANES dataframe and weight columns
         
@@ -24,11 +24,18 @@ class ANESWeights:
             Column name for strata variable (default: 'full_var_stratum')
         psu_col : str
             Column name for PSU/cluster variable (default: 'full_var_psu')
+        random_state : int, optional
+            Random seed for reproducibility
         """
         self.df = df.copy()
         self.weight_col = weight_col
         self.strata_col = strata_col
         self.psu_col = psu_col
+        self.random_state = random_state
+        
+        # Set random seed if provided
+        if self.random_state is not None:
+            np.random.seed(self.random_state)
         
         # Clean and prepare the data
         self._prepare_data()
@@ -62,6 +69,10 @@ class ANESWeights:
         method : str
             Method for creating replicates ('bootstrap' or 'jackknife')
         """
+        # Set seed for reproducibility
+        if self.random_state is not None:
+            np.random.seed(self.random_state)
+        
         if method == 'bootstrap':
             # Bootstrap resampling within strata and PSUs
             replicate_weights = []
@@ -72,9 +83,10 @@ class ANESWeights:
                 for stratum in self.df[self.strata_col].unique():
                     strata_df = self.df[self.df[self.strata_col] == stratum]
                     
-                    # Resample PSUs within stratum
+                    # Resample PSUs within stratum with seed
                     psus = strata_df[self.psu_col].unique()
-                    resampled_psus = resample(psus, replace=True, n_samples=len(psus))
+                    resampled_psus = resample(psus, replace=True, n_samples=len(psus), 
+                                            random_state=self.random_state + rep if self.random_state else None)
                     
                     # Create replicate weight for this stratum
                     for _, row in strata_df.iterrows():
@@ -107,6 +119,10 @@ class ANESWeights:
         --------
         dict : Dictionary with weighted samples by group (if group_var provided)
         """
+        # Set seed for reproducibility
+        if self.random_state is not None:
+            np.random.seed(self.random_state)
+        
         # Filter valid data
         valid_cols = [variable, self.weight_col, self.strata_col, self.psu_col]
         if group_var:
@@ -153,6 +169,10 @@ class ANESWeights:
         """
         Bootstrap sampling with survey weights
         """
+        # Set seed for bootstrap sampling
+        if self.random_state is not None:
+            np.random.seed(self.random_state)
+        
         def bootstrap_group(group_df):
             values = group_df[variable].values
             weights = group_df[self.weight_col].values
@@ -198,7 +218,7 @@ class ANESWeights:
                 }
             }
 
-def weighted_kde(values, weights=None, bandwidth=None):
+def weighted_kde(values, weights=None, bandwidth=None, random_state=None):
     """
     Compute weighted kernel density estimation
     
@@ -210,6 +230,8 @@ def weighted_kde(values, weights=None, bandwidth=None):
         Weights for each value
     bandwidth : float, optional
         KDE bandwidth
+    random_state : int, optional
+        Random seed for reproducibility
     
     Returns:
     --------
@@ -217,6 +239,10 @@ def weighted_kde(values, weights=None, bandwidth=None):
     """
     if weights is None:
         return gaussian_kde(values, bw_method=bandwidth)
+    
+    # Set seed for weighted KDE sampling
+    if random_state is not None:
+        np.random.seed(random_state)
     
     # For weighted KDE, we'll use a bootstrap approach
     weights = np.array(weights)
@@ -229,7 +255,7 @@ def weighted_kde(values, weights=None, bandwidth=None):
     
     return gaussian_kde(weighted_values, bw_method=bandwidth)
 
-def apply_anes_weights_to_density(df, variable, group_var=None, weight_method='replication'):
+def apply_anes_weights_to_density(df, variable, group_var=None, weight_method='replication', random_state=None):
     """
     Main function to apply ANES survey weights to density estimation
     
@@ -243,13 +269,15 @@ def apply_anes_weights_to_density(df, variable, group_var=None, weight_method='r
         Grouping variable
     weight_method : str
         Weighting method ('replication', 'bootstrap', or 'simple')
+    random_state : int, optional
+        Random seed for reproducibility
     
     Returns:
     --------
     dict : Dictionary with KDE objects for each group
     """
-    # Initialize weights handler
-    weights_handler = ANESWeights(df)
+    # Initialize weights handler with seed
+    weights_handler = ANESWeights(df, random_state=random_state)
     
     # Get weighted samples
     weighted_samples = weights_handler.get_weighted_sample(
@@ -262,7 +290,7 @@ def apply_anes_weights_to_density(df, variable, group_var=None, weight_method='r
     for group, data in weighted_samples.items():
         if weight_method == 'simple':
             # Handle simple method with explicit weights
-            kde_results[group] = weighted_kde(data['values'], data['weights'])
+            kde_results[group] = weighted_kde(data['values'], data['weights'], random_state=random_state)
         else:
             # Handle replication and bootstrap methods
             kde_results[group] = gaussian_kde(data)
@@ -270,7 +298,7 @@ def apply_anes_weights_to_density(df, variable, group_var=None, weight_method='r
     return kde_results
 
 # Convenience function for direct integration with existing code
-def get_anes_weighted_density_data(df, variable, groups, group_var='party', weight_method='replication'):
+def get_anes_weighted_density_data(df, variable, groups, group_var='party', weight_method='replication', random_state=None):
     """
     Get weighted density data ready for plotting
     
@@ -286,6 +314,8 @@ def get_anes_weighted_density_data(df, variable, groups, group_var='party', weig
         Grouping variable name
     weight_method : str
         Weighting method
+    random_state : int, optional
+        Random seed for reproducibility
     
     Returns:
     --------
@@ -294,9 +324,9 @@ def get_anes_weighted_density_data(df, variable, groups, group_var='party', weig
     # Filter data for specified groups
     df_filtered = df[df[group_var].isin(groups)]
     
-    # Apply weights and get KDE
+    # Apply weights and get KDE with seed
     kde_results = apply_anes_weights_to_density(
-        df_filtered, variable, group_var, weight_method
+        df_filtered, variable, group_var, weight_method, random_state=random_state
     )
     
     # Generate plotting data
