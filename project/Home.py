@@ -39,10 +39,10 @@ if independent_check:
 
 density_graph = (densityGraph(df, thermometer_question, list_of_groups, weight_method=weighting_method))
 
-# sankey_graph = (sankeyGraph(df, issue_question, list_of_groups))
+sankey_graph = (sankeyGraph(df, issue_question, list_of_groups))
 
 # Display plots
 
 st.plotly_chart(density_graph, use_container_width=True)
 
-# st.plotly_chart(sankey_graph, use_container_width=True)
+st.plotly_chart(sankey_graph, use_container_width=True)
