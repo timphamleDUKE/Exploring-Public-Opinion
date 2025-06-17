@@ -1,39 +1,22 @@
 import streamlit as st
-from functions.dictionaries import set_logo, list_of_issues, list_of_thermometer, df
+from functions.dictionaries import set_logo, list_of_issues, df, description_map
 from functions.sankey import sankeyGraph
 
 set_logo()
 
+st.title("Issue Position Questions")
+
 with st.sidebar:
-    st.title("Select the following:")
-
-    thermometer_question = st.selectbox("Thermometer Question", list_of_thermometer)
-
-    st.text("Group By")
-    republican_check = st.checkbox("Republican Party", value = True)
-    democratic_check = st.checkbox("Democratic Party", value = True)
-    independent_check = st.checkbox("None/Independent Party", value = False)
-
-    lib_con_check = st.checkbox("Liberal/Conservative Meter", value = False)
-
+    st.title("Customize:")
     issue_question = st.selectbox("Issue Position Question", list_of_issues)
+    lib_con_pt = st.radio("Group By", ("Liberal/Conservative 2-Point Scale", "Liberal/Conservative 7-Point Scale"))
 
-    weighting_method = st.selectbox("Weighting Method", ("simple", "replication", "bootstrap"), index = 2)
-
-
-list_of_groups = []
-if republican_check:
-    list_of_groups.append("Republican Party")
-
-if democratic_check:
-    list_of_groups.append("Democratic Party")
-
-if independent_check:
-    list_of_groups.append("None/Independent Party")
-
-sankey_graph = (sankeyGraph(df, issue_question, list_of_groups))
+sankey_graph = (sankeyGraph(df, issue_question, lib_con_pt))
 
 # Display plots
 
 st.write(df)
+st.markdown(f"### {description_map.get(issue_question)}")
 st.plotly_chart(sankey_graph, use_container_width=True)
+
+st.caption("This Sankey diagram uses survey weights to represent population-level transitions between ideological self-placement and responses. However, it does not calculate standard errors using Taylor series linearization as recommended by ANES for formal inference.")

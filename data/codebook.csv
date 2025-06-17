@@ -60,20 +60,27 @@ Year,Variable Code,Renamed,Category,Pre/Post,Description,Answer Choices
 Hispanic
 5. Native American/Alaska Native or other race, non-Hispanic
 6. Multiple races, non-Hispanic"
-2024,V241156,harris_thermometer_pre,Feeling Thermometer,Pre,(How would you rate:) Kamala Harris,"-9. Refused
+2024,V241166,democrat_thermometer_pre,Feeling Thermometer,Pre,How would you rate: the Democratic Party,"-9. Refused
 -8. Don’t know"
-2024,V241157,trump_thermometer_pre,Feeling Thermometer,Pre,(How would you rate:) Donald Trump,"-9. Refused
+2024,V241167,republican_thermometer_pre,Feeling Thermometer,Pre,How would you rate: the Republican Party,"-9. Refused
 -8. Don’t know
 -1. Inapplicable"
-2024,V241158,biden_thermometer_pre,Feeling Thermometer,Pre,(How would you rate:) Joe Biden,"-9. Refused
+2024,V242139,liberals_thermometer,Feeling Thermometer,Post,How would you rate: Liberals,"-9. Refused
+-7. Insufficient partial, interview deleted
+-6. No post interview
+-5. Sufficient partial, breakoff
+-1. Inapplicable
+998. Don’t know (where to rate)
+999. Don’t recognize"
+2024,V242142,conservatives_thermometer,Feeling Thermometer,Post,How would you rate: Conservatives,"-9. Refused
+-7. Insufficient partial, interview deleted
+-6. No post interview
+-5. Sufficient partial, breakoff
+-1. Inapplicable
+998. Don’t know (where to rate)
+999. Don’t recognize"
+2024,V241156,harris_thermometer_pre,Feeling Thermometer,Pre,How would you rate: Kamala Harris,"-9. Refused
 -8. Don’t know"
-2024,V241164,vance_thermometer_pre,Feeling Thermometer,Pre,(How would you rate:) J.D. Vance,"-9. Refused
--8. Don’t know"
-2024,V241166,democrat_thermometer_pre,Feeling Thermometer,Pre,(How would you rate:) the Democratic Party,"-9. Refused
--8. Don’t know"
-2024,V241167,republican_thermometer_pre,Feeling Thermometer,Pre,(How would you rate:) the Republican Party,"-9. Refused
--8. Don’t know
--1. Inapplicable"
 2024,V242125,harris_thermometer_post,Feeling Thermometer,Post,How would you rate: Kamala Harris,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
@@ -81,6 +88,9 @@ Hispanic
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize"
+2024,V241157,trump_thermometer_pre,Feeling Thermometer,Pre,How would you rate: Donald Trump,"-9. Refused
+-8. Don’t know
+-1. Inapplicable"
 2024,V242126,trump_thermometer_post,Feeling Thermometer,Post,How would you rate: Donald Trump,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
@@ -88,7 +98,25 @@ Hispanic
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize"
-2024,V242134,walz_thermometer_post,Feeling Thermometer,Post,(How would you rate:) Tim Walz,"-9. Refused
+2024,V241158,biden_thermometer_pre,Feeling Thermometer,Pre,How would you rate: Joe Biden,"-9. Refused
+-8. Don’t know"
+2024,V242136,biden_thermometer_post,Feeling Thermometer,Post,How would you rate: Joe Biden,"-9. Refused
+-7. Insufficient partial, interview deleted
+-6. No post interview
+-5. Sufficient partial, breakoff
+-1. Inapplicable
+998. Don’t know (where to rate)
+999. Don’t recognize"
+2024,V241164,vance_thermometer_pre,Feeling Thermometer,Pre,How would you rate: J.D. Vance,"-9. Refused
+-8. Don’t know"
+2024,V242135,vance_thermometer_post,Feeling Thermometer,Post,How would you rate: J.D. Vance,"-9. Refused
+-7. Insufficient partial, interview deleted
+-6. No post interview
+-5. Sufficient partial, breakoff
+-1. Inapplicable
+998. Don’t know (where to rate)
+999. Don’t recognize"
+2024,V242134,walz_thermometer_post,Feeling Thermometer,Post,How would you rate: Tim Walz,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
@@ -96,98 +124,70 @@ Hispanic
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize"
-2024,V242135,vance_thermometer_post,Feeling Thermometer,Post,(How would you rate:) J.D. Vance,"-9. Refused
+2024,V242137,christian_fundamentalists_thermometer,Feeling Thermometer,Post,How would you rate: Christian Fundamentalists,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize"
-2024,V242136,biden_thermometer_post,Feeling Thermometer,Post,(How would you rate:) Joe Biden,"-9. Refused
+2024,V242138,feminists_thermometer,Feeling Thermometer,Post,How would you rate: Feminists,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize"
-2024,V242137,christian_fundamentalists_thermometer,Feeling Thermometer,Post,(How would you rate:) Christian Fundamentalists,"-9. Refused
+2024,V242140,labor_unions_thermometer,Feeling Thermometer,Post,How would you rate: Labor unions,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize"
-2024,V242138,feminists_thermometer,Feeling Thermometer,Post,(How would you rate:) Feminists,"-9. Refused
+2024,V242141,big_business_thermometer,Feeling Thermometer,Post,How would you rate: Big business,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize"
-2024,V242139,liberals_thermometer,Feeling Thermometer,Post,(How would you rate:) Liberals,"-9. Refused
+2024,V242143,supreme_court_thermometer,Feeling Thermometer,Post,How would you rate: The U.S. Supreme Court,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize"
-2024,V242140,labor_unions_thermometer,Feeling Thermometer,Post,(How would you rate:) Labor unions,"-9. Refused
+2024,V242144,lgbt_thermometer,Feeling Thermometer,Post,How would you rate: Gay men and lesbians,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize"
-2024,V242141,big_business_thermometer,Feeling Thermometer,Post,(How would you rate:) Big business,"-9. Refused
+2024,V242145,congress_thermometer,Feeling Thermometer,Post,How would you rate: Congress,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize"
-2024,V242142,conservatives_thermometer,Feeling Thermometer,Post,(How would you rate:) Conservatives,"-9. Refused
+2024,V242146,muslims_thermometer,Feeling Thermometer,Post,How would you rate: Muslims,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize"
-2024,V242143,supreme_court_thermometer,Feeling Thermometer,Post,(How would you rate:) The U.S. Supreme Court,"-9. Refused
+2024,V242147,christians_thermometer,Feeling Thermometer,Post,How would you rate: Christians,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize"
-2024,V242144,lgbt_thermometer,Feeling Thermometer,Post,(How would you rate:) Gay men and lesbians,"-9. Refused
--7. Insufficient partial, interview deleted
--6. No post interview
--5. Sufficient partial, breakoff
--1. Inapplicable
-998. Don’t know (where to rate)
-999. Don’t recognize"
-2024,V242145,congress_thermometer,Feeling Thermometer,Post,(How would you rate:) Congress,"-9. Refused
--7. Insufficient partial, interview deleted
--6. No post interview
--5. Sufficient partial, breakoff
--1. Inapplicable
-998. Don’t know (where to rate)
-999. Don’t recognize"
-2024,V242146,muslims_thermometer,Feeling Thermometer,Post,(How would you rate:) Muslims,"-9. Refused
--7. Insufficient partial, interview deleted
--6. No post interview
--5. Sufficient partial, breakoff
--1. Inapplicable
-998. Don’t know (where to rate)
-999. Don’t recognize"
-2024,V242147,christians_thermometer,Feeling Thermometer,Post,(How would you rate:) Christians,"-9. Refused
--7. Insufficient partial, interview deleted
--6. No post interview
--5. Sufficient partial, breakoff
--1. Inapplicable
-998. Don’t know (where to rate)
-999. Don’t recognize"
-2024,V242148,maga_thermometer,Feeling Thermometer,Post,(How would you rate:) MAGA movement,"-9. Refused
+2024,V242148,maga_thermometer,Feeling Thermometer,Post,How would you rate: MAGA movement,"-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
 -6. No post interview
@@ -196,42 +196,42 @@ Hispanic
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize"
-2024,V242149,jews_thermometer,Feeling Thermometer,Post,(How would you rate:) Jews,"-9. Refused
+2024,V242149,jews_thermometer,Feeling Thermometer,Post,How would you rate: Jews,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize"
-2024,V242150,police_thermometer,Feeling Thermometer,Post,(How would you rate:) Police,"-9. Refused
+2024,V242150,police_thermometer,Feeling Thermometer,Post,How would you rate: Police,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize"
-2024,V242151,transgender_thermometer,Feeling Thermometer,Post,(How would you rate:) Transgender people,"-9. Refused
+2024,V242151,transgender_thermometer,Feeling Thermometer,Post,How would you rate: Transgender people,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize"
-2024,V242152,blm_thermometer,Feeling Thermometer,Post,(How would you rate:) Black Lives Matter movement,"-9. Refused
+2024,V242152,blm_thermometer,Feeling Thermometer,Post,How would you rate: Black Lives Matter movement,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize"
-2024,V242153,nra_thermometer,Feeling Thermometer,Post,(How would you rate:) The National Rifle Association (NRA),"-9. Refused
+2024,V242153,nra_thermometer,Feeling Thermometer,Post,How would you rate: The National Rifle Association (NRA),"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize"
-2024,V242154,fbi_thermometer,Feeling Thermometer,Post,"(How would you rate:) The Federal Bureau of Investigation
+2024,V242154,fbi_thermometer,Feeling Thermometer,Post,"How would you rate: The Federal Bureau of Investigation
 (FBI)","-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
@@ -239,14 +239,14 @@ Hispanic
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize"
-2024,V242155,rural_thermometer,Feeling Thermometer,Post,(How would you rate:) Rural Americans,"-9. Refused
+2024,V242155,rural_thermometer,Feeling Thermometer,Post,How would you rate: Rural Americans,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize"
-2024,V242156,planned_parenthood_thermometer,Feeling Thermometer,Post,(How would you rate:) Planned Parenthood,"-9. Refused
+2024,V242156,planned_parenthood_thermometer,Feeling Thermometer,Post,How would you rate: Planned Parenthood,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
@@ -351,8 +351,7 @@ Do you [favor / oppose] the death penalty for persons convicted of murder strong
 2. Favor not strongly
 3. Oppose not strongly
 4. Oppose strongly"
-2024,V241312x,us_world_involvement,Issue Position,Pre,"Do you agree or disagree with this statement: ‘This country would be better off if we just stayed home and did not concern ourselves with problems in other parts of the world.’
-Do you agree strongly or agree somewhat with this statement? / Do you disagree strongly or disagree somewhat with this statement?","-2. DK/RF in V241309 or V241310
+2024,V241312x,us_world_involvement,Issue Position,Pre,Do you agree or disagree with this statement: ‘This country would be better off if we just stayed home and did not concern ourselves with problems in other parts of the world.’ Do you agree strongly or agree somewhat with this statement? / Do you disagree strongly or disagree somewhat with this statement?,"-2. DK/RF in V241309 or V241310
 -1. Applicable
 1. Agree strongly
 2. Agree somewhat

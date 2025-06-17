@@ -1,88 +1,95 @@
-import pandas as pd
+import numpy as np
 import plotly.graph_objects as go
-from plotly.colors import n_colors
-from functions.dictionaries import lib_con_map, description_map
+from functions.dictionaries import lib_con_map_2pt, lib_con_map_7pt, lib_con_2pt, lib_con_7pt, find_weight_col
+from functions.weights import SurveyDesign
+import streamlit as st
 
-def sankeyGraph(df, question, groups, title=None):
+def sankeyGraph(df, question, group, use_weights = True):
     """
-    Create a Sankey diagram with source nodes labeled descriptively per lib_con_map.
+    Create a Sankey diagram with optional survey-weighted flows.
     """
-    source_col = "lib_con_7pt"
+
+    if group == "Liberal/Conservative 2-Point Scale":
+        source_col = "lib_con_2pt"
+        lib_con_map = lib_con_map_2pt
+        ideology_colors = lib_con_2pt
+    else:
+        source_col = "lib_con_7pt"
+        lib_con_map = lib_con_map_7pt
+        ideology_colors = lib_con_7pt
+
     target_col = question
 
-    # Filter data to valid ranges
+    # Clean data using SurveyDesign if weights are enabled
+
+    weight_col = find_weight_col(question)
+
+
+    if use_weights:
+        design = SurveyDesign(df, weight = "post_full", strata = "full_var_stratum", psu = "full_var_psu")
+        df = design.df
+    else:
+        df = df.copy()
+        df[weight_col] = 1  # treat all weights as 1
+
+    # Filter valid values
     df = df[
-        (df[target_col] >= 0) & (df[target_col] <= 7) &
-        (df[source_col] >= 1) & (df[source_col] <= 7)
+        (df[source_col].between(1, 7)) &
+        (df[target_col].between(0, 7))
     ]
 
-    # Compute flow counts
+    # Weighted flow counts
     flow_df = (
-        df[[source_col, target_col]]
+        df[[source_col, target_col, weight_col]]
         .dropna()
-        .groupby([source_col, target_col])
-        .size()
-        .reset_index(name='count')
+        .groupby([source_col, target_col], as_index = False)
+        .agg(count = (weight_col, "sum"))
     )
 
-    # Build ordered/descriptive source labels
+    # Label mapping
     present_keys = sorted(flow_df[source_col].unique())
     sources = [lib_con_map[int(k)] for k in present_keys]
-    # Build target labels (strings) in first-seen order
     targets = flow_df[target_col].astype(str).unique().tolist()
-
-    # Combine for all node labels
     labels = sources + targets
 
-    # Node positions: sources on left (x=0), targets on right (x=1)
     x_coords = [0] * len(sources) + [1] * len(targets)
-    # Evenly space y coordinates
-    y_coords = list(__import__('numpy').linspace(0, 1, len(sources))) + \
-               list(__import__('numpy').linspace(0, 1, len(targets)))
+    y_coords = list(np.linspace(0.05, 0.95, len(sources))) + list(np.linspace(0.05, 0.95, len(targets)))
 
-    # Map labels to numeric indices for the Sankey
     label_indices = {label: idx for idx, label in enumerate(labels)}
-    source_indices = (
-        flow_df[source_col]
-        .map(lambda x: label_indices[lib_con_map[int(x)]])
-        .tolist()
-    )
-    target_indices = (
-        flow_df[target_col]
-        .astype(str)
-        .map(lambda t: label_indices[t] + len(sources))
-        .tolist()
-    )
-    values = flow_df['count'].tolist()
+    source_indices = flow_df[source_col].map(lambda x: label_indices[lib_con_map[int(x)]]).tolist()
+    target_indices = flow_df[target_col].astype(str).map(lambda t: label_indices[t] + len(sources)).tolist()
+    values = flow_df["count"].tolist()
 
-    # Generate gradient link colors (blue→red) with 0.3 opacity
-    rgb_grad = n_colors('rgb(0,0,255)', 'rgb(255,0,0)', 7, colortype='rgb')
-    gradient = [c.replace('rgb(', 'rgba(').replace(')', ',0.3)') for c in rgb_grad]
-    link_colors = [gradient[int(k)-1] for k in flow_df[source_col]]
+    link_colors = [ideology_colors[int(k)] for k in flow_df[source_col]]
 
-    # Build sankey with fixed arrangement
     sankey = go.Sankey(
-        node=dict(
-            label=labels,
-            x=x_coords,
-            y=y_coords,
-            pad=30,
-            thickness=30,
-            line=dict(color='darkgrey', width=0.5),
-            color='lightgrey'
+        node = dict(
+            label = labels,
+            x = x_coords,
+            y = y_coords,
+            pad = 15,
+            thickness = 20,
+            line = dict(color = "black", width = 0.5),
+            color = "white"
         ),
-        link=dict(
-            source=source_indices,
-            target=target_indices,
-            value=values,
-            color=link_colors
+        link = dict(
+            source = source_indices,
+            target = target_indices,
+            value = values,
+            color = link_colors,
+            customdata = flow_df[["count"]],
+            hovertemplate = "%{source.label} → %{target.label}<br>Weighted Count: %{customdata[0]:,.0f}<extra></extra>"
         )
     )
 
     fig = go.Figure(sankey)
     fig.update_layout(
-        # title_text= f"Sankey Diagram of Liberal-Conservative Meter for {target_col}",
-        title_text = "There has been some discussion about abortion during recent years.<br>Which one of the opinions on this page best agrees with your view?<br>You can just tell me the number of the opinion you choose.",
-        font_size=10
+        font = dict(size = 12, family = "Arial"),
+        margin = dict(l = 20, r = 20, t = 100, b = 100),
+        width = 1000,   # or more
+        height = 600,   # increase if nodes/links overlap
     )
+
+    fig.add_annotation(text = "Ideology (Source)", x = 0.01, y = 1.05, showarrow = False, font = dict(size = 12))
+
     return fig
