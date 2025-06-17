@@ -1,0 +1,11 @@
+[theme]
+base="light"
+primaryColor="#e54d46"
+font = "sans serif"
+
+[server]
+headless=true
+
+[client]
+showSidebarNavigation=true
+

@@ -1,0 +1,58 @@
+import pandas as pd
+
+codebook = pd.read_csv("data/codebook.csv")
+
+# Lists
+
+list_of_group_bys = [
+        "Political Party", 
+        "Education", 
+        "Employment Status", 
+        "Marriage", 
+        "Income", 
+        "Religion", 
+        "Gender",
+        "Race",
+        "State",
+        "Urban/Rural Status"
+        ]
+
+list_of_topics = codebook["topic"].dropna().unique().tolist()
+
+# Dictionaries
+
+group_by_dic = {
+        "Political Party": "poli_party_reg", 
+        "Education": "educ", 
+        "Employment Status": "employ", 
+        "Marriage": "marstat", 
+        "Income": "faminc_new", 
+        "Religion": "religion", 
+        "Gender": "gender",
+        "Race": "race",
+        "State": "input_state",
+        "Urban/Rural Status": "urban_rural"
+    }
+
+group_by_dic_reverse = {
+        "poli_party_reg": "Political Party",
+        "educ": "Education",
+        "employ": "Employment Status",
+        "marstat": "Marriage",
+        "faminc_new": "Income",
+        "religion": "Religion", 
+        "gender": "Gender",
+        "race": "Race",
+        "input_state": "State",
+        "urban_rural": "Urban/Rural Status",
+    }
+
+study_dic = {
+    "Cooperative Election Study": "CES",
+    "American National Election Studies": "ANES"
+}
+
+weight_dic = {
+    "CES": ["commonweight"],
+    "ANES": ["pre_full", "post_full", "full_var_psu", "full_var_stratum"]
+}
