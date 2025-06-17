@@ -28,13 +28,16 @@ list_of_issues = list_of_issues["Renamed"]
 colors = {
     "Democratic Party": "blue",
     "Republican Party": "red",
-    "None/Independent Party": "green"
+    "Other": "green",
+    "N/A": "rgb(141, 142, 147)"
 }
 
 fill_colors = {
     "Democratic Party": "rgba(0, 0, 255, 0.3)",     # Blue
     "Republican Party": "rgba(255, 0, 0, 0.3)",     # Red
-    "None/Independent Party": "rgba(0, 128, 0, 0.3)"  # Green
+    "Other": "rgba(0, 128, 0, 0.3)",  # Green
+    "N/A": "rgba(141, 142, 147, 0.3)"
+
 }
 
 target_label_map = {
@@ -50,6 +53,7 @@ target_label_map = {
 
 # Descriptions
 description_map = dict(zip(codebook["Renamed"], codebook["Description"]))
+full_description_map = dict(zip(codebook["Renamed"], codebook["Original Question"]))
 
 # Ideology color mappin
 lib_con_2pt = {
