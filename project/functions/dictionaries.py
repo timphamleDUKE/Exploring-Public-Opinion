@@ -17,12 +17,27 @@ df = pd.read_csv("../data/anes_2024_clean.csv")
 codebook = pd.read_csv("../data/codebook.csv")
 
 # List of thermometer questions
-list_of_thermometer = codebook[(codebook["Category"] == "Feeling Thermometer")]
-list_of_thermometer = list_of_thermometer["Renamed"]
+thermometer_codebook = codebook[(codebook["Category"] == "Feeling Thermometer")]
+list_of_thermometer = thermometer_codebook["Renamed"]
+list_of_thermometer_topics = sorted(thermometer_codebook["Topic"].dropna().unique().tolist())
+
+topic_to_list_of_thermometer_map = (
+    thermometer_codebook.groupby("Topic")["Description"]
+    .apply(lambda x: x.dropna().tolist())
+    .to_dict()
+)
+
 
 # List of issue questions
-list_of_issues = codebook[(codebook["Category"] == "Issue Position")]
-list_of_issues = list_of_issues["Renamed"]
+issue_codebook = codebook[(codebook["Category"] == "Issue Position")]
+list_of_issues = issue_codebook["Renamed"]
+list_of_issue_topics = sorted(issue_codebook["Topic"].dropna().unique().tolist())
+
+topic_to_list_of_issue_map = (
+    issue_codebook.groupby("Topic")["Description"]
+    .apply(lambda x: x.dropna().tolist())
+    .to_dict()
+)
 
 # List of colors based on group by
 colors = {
@@ -54,6 +69,8 @@ target_label_map = {
 # Descriptions
 description_map = dict(zip(codebook["Renamed"], codebook["Description"]))
 full_description_map = dict(zip(codebook["Renamed"], codebook["Original Question"]))
+
+description_to_renamed = dict(zip(codebook["Description"], codebook["Renamed"]))
 
 # Ideology color mappin
 lib_con_2pt = {

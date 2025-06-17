@@ -90,7 +90,7 @@ def sankeyGraph(df, question, group, use_weights = True):
 
     fig = go.Figure(sankey)
     fig.update_layout(
-        font = dict(size = 18, family = "Arial"),
+        font = dict(size = 15, family = "Arial"),
         margin = dict(l = 10, r = 10, t = 120, b = 50),
         width = 1000,   # or more
         height = 800,   # increase if nodes/links overlap

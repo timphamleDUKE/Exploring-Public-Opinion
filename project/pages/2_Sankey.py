@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from functions.dictionaries import set_logo, list_of_issues, df, description_map, full_description_map
+from functions.dictionaries import set_logo, list_of_issue_topics, topic_to_list_of_issue_map, description_to_renamed, df, description_map, full_description_map
 from functions.sankey import sankeyGraph
 
 set_logo()
@@ -9,7 +9,12 @@ st.title("Issue Position Questions")
 
 with st.sidebar:
     st.title("Customize:")
-    issue_question = st.selectbox("Issue Position Question", list_of_issues)
+
+    topic = st.selectbox("Topic", list_of_issue_topics, index = 0)
+    list_of_issues = topic_to_list_of_issue_map.get(topic)
+    issue_question = st.selectbox("Issue Question", list_of_issues, index = 0)
+    issue_question = description_to_renamed.get(issue_question)
+
     lib_con_pt = st.radio("Group By", ("Liberal/Conservative 2-Point Scale", "Liberal/Conservative 7-Point Scale"))
 
 sankey_graph = (sankeyGraph(df, issue_question, lib_con_pt))

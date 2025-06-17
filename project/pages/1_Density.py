@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from functions.dictionaries import set_logo, list_of_thermometer, df, description_map, full_description_map
+from functions.dictionaries import set_logo, list_of_thermometer_topics, topic_to_list_of_thermometer_map, df, description_map, full_description_map, description_to_renamed
 from functions.density import densityGraph
 
 set_logo()
@@ -10,22 +10,18 @@ st.title("Thermometer Questions")
 with st.sidebar:
     st.title("Customize:")
 
-    col1, col2 = st.columns(2)
+    
+    topic = st.selectbox("Topic", list_of_thermometer_topics, index = 0)
+    list_of_thermometer = topic_to_list_of_thermometer_map.get(topic)
+    thermometer_question = st.selectbox("Thermometer Question", list_of_thermometer, index = 0)
 
-    with col1:
-        topic = st.selectbox("Topic", ("Race", "Candidate"))
-
-    with col2:
-        thermometer_question = st.selectbox("Thermometer Question", list_of_thermometer)
-
+    thermometer_question = description_to_renamed.get(thermometer_question)
 
     st.text("Group By")
     republican_check = st.checkbox("Republican Party", value = True)
     democratic_check = st.checkbox("Democratic Party", value = True)
     other_check = st.checkbox("Other", value = False)
     na_check = st.checkbox("N/A", value = False)
-
-
 
     st.text("Compare")
     compare_weight = st.toggle("Compare Weighted/Unweighted", value = False)
