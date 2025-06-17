@@ -88,3 +88,19 @@ def find_weight_col(question):
     else:
         weight_col = "post_full"
     return weight_col
+
+def find_answer_choices(question):
+    df = codebook[codebook["Renamed"] == question]["Answer Choices"]
+
+    df_text = df.iloc[0]
+
+    # Split into lines and parse each line
+    answer_map = {}
+    for line in df_text.strip().split("\n"):
+        if "." in line:
+            key, value = line.strip().split(".", 1)
+            try:
+                answer_map[int(key.strip())] = value.strip()
+            except ValueError:
+                continue  # Skip if the key isn't an int
+    return answer_map

@@ -1,10 +1,9 @@
 import streamlit as st
-import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 from scipy.stats import gaussian_kde
 from functions.dictionaries import *
-from functions.weights import get_anes_weighted_density_data  # Import our weights module
+from functions.weights import get_anes_weighted_density_data
 
 def densityGraph(df, question, groups, use_weights = True):
     """

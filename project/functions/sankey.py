@@ -1,8 +1,7 @@
 import numpy as np
 import plotly.graph_objects as go
-from functions.dictionaries import lib_con_map_2pt, lib_con_map_7pt, lib_con_2pt, lib_con_7pt, find_weight_col
+from functions.dictionaries import lib_con_map_2pt, lib_con_map_7pt, lib_con_2pt, lib_con_7pt, find_weight_col, find_answer_choices
 from functions.weights import SurveyDesign
-import streamlit as st
 
 def sankeyGraph(df, question, group, use_weights = True):
     """
@@ -47,9 +46,13 @@ def sankeyGraph(df, question, group, use_weights = True):
     )
 
     # Label mapping
-    present_keys = sorted(flow_df[source_col].unique())
-    sources = [lib_con_map[int(k)] for k in present_keys]
-    targets = flow_df[target_col].astype(str).unique().tolist()
+    source_keys = sorted(flow_df[source_col].unique())
+    sources = [lib_con_map[int(k)] for k in source_keys]
+
+    answer_choice_map = find_answer_choices(question)
+    target_keys = sorted(flow_df[target_col].unique())
+    targets = [answer_choice_map[int(k)] for k in target_keys]
+    # targets = flow_df[target_col].astype(str).unique().tolist()
     labels = sources + targets
 
     x_coords = [0] * len(sources) + [1] * len(targets)
@@ -57,7 +60,10 @@ def sankeyGraph(df, question, group, use_weights = True):
 
     label_indices = {label: idx for idx, label in enumerate(labels)}
     source_indices = flow_df[source_col].map(lambda x: label_indices[lib_con_map[int(x)]]).tolist()
-    target_indices = flow_df[target_col].astype(str).map(lambda t: label_indices[t] + len(sources)).tolist()
+
+
+    target_indices = flow_df[target_col].map(lambda t: label_indices[answer_choice_map[int(t)]]).tolist()
+
     values = flow_df["count"].tolist()
 
     link_colors = [ideology_colors[int(k)] for k in flow_df[source_col]]
@@ -67,7 +73,7 @@ def sankeyGraph(df, question, group, use_weights = True):
             label = labels,
             x = x_coords,
             y = y_coords,
-            pad = 15,
+            pad = 70,
             thickness = 20,
             line = dict(color = "black", width = 0.5),
             color = "white"
@@ -85,11 +91,13 @@ def sankeyGraph(df, question, group, use_weights = True):
     fig = go.Figure(sankey)
     fig.update_layout(
         font = dict(size = 12, family = "Arial"),
-        margin = dict(l = 20, r = 20, t = 100, b = 100),
+        margin = dict(l = 10, r = 10, t = 120, b = 50),
         width = 1000,   # or more
-        height = 600,   # increase if nodes/links overlap
+        height = 800,   # increase if nodes/links overlap
     )
 
-    fig.add_annotation(text = "Ideology (Source)", x = 0.01, y = 1.05, showarrow = False, font = dict(size = 12))
+    fig.add_annotation(text = "Ideology (Source)", x = 0.01, y = 1.05, xanchor="left", showarrow = False, font = dict(size = 13))
+    fig.add_annotation(text = "Answer Choices", x = 1, y = 1.05, xanchor="right", showarrow = False, font = dict(size = 13))
+
 
     return fig
