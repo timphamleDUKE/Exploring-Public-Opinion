@@ -5,19 +5,19 @@ from functions.density import densityGraph
 
 set_logo()
 
-st.title("Thermometer Questions")
+st.title("Affective Polarization")
 
 with st.sidebar:
     st.title("Customize:")
 
     
-    topic = st.selectbox("Topic", list_of_thermometer_topics, index = 0)
+    topic = st.selectbox("Topic", list_of_thermometer_topics, index = 3)
     list_of_thermometer = topic_to_list_of_thermometer_map.get(topic)
     thermometer_question = st.selectbox("Thermometer Question", list_of_thermometer, index = 0)
 
     thermometer_question = description_to_renamed.get(thermometer_question)
 
-    st.text("Group By")
+    st.text("Groups")
     republican_check = st.checkbox("Republican Party", value = True)
     democratic_check = st.checkbox("Democratic Party", value = True)
     other_check = st.checkbox("Other", value = False)

@@ -35,7 +35,7 @@ with col1:
     author_card("images/AF.jpg", "Alexa Fahrer", "https://www.linkedin.com/in/alexa-fahrer-138456133/")
 
 with col2:
-    author_card("images/TL.jpg", "Tim Le", "https://www.linkedin.com/in/tim-le-836296283/")
+    author_card("images/TL.jpg", "Tim Le", "https://www.li  nkedin.com/in/tim-le-836296283/")
 
 with col3:
     author_card("images/JJ.jpeg", "Joie Jacobs", "https://www.linkedin.com/in/joie-jacobs-09801b332/")
