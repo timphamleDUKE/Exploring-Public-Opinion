@@ -27,8 +27,11 @@ def densityGraph(df, question, groups, use_weights = True):
     df["party"] = df["poli_party_reg"].map({
         1: "Democratic Party",
         2: "Republican Party",
-        4: "None/Independent Party"
-    })
+        4: "Other",
+        5: "Other",
+        -8: "Other",
+        -9: "N/A"
+    }).fillna("N/A")
 
     # Filter the valid data
     df = df[
@@ -92,11 +95,29 @@ def densityGraph(df, question, groups, use_weights = True):
     # Layout settings
     fig.update_layout(
         # title = f"Density Plot of {question} Thermometer Ratings<br>{title_suffix}",
-        xaxis_title = "Thermometer Rating (0–100)",
-        yaxis_title = "Density",
-        xaxis = dict(tickmode = "linear", tick0 = 0, dtick = 20),
+        xaxis_title = dict(
+            text = "Thermometer Rating (0–100)",
+            font = dict(size = 20)
+        ),
+        yaxis_title = dict(
+            text = "Density",
+            font = dict(size = 20)
+        ),
+        xaxis = dict(
+            tickmode = "linear", 
+            tick0 = 0, 
+            dtick = 20,
+            tickfont=dict(size=16)
+            ),
+        yaxis = dict(
+            tickfont=dict(size=16)
+        ),
+        legend=dict(
+            font = dict(size=16)
+        ),
         hovermode = "x unified",
-        template = "simple_white"
+        template = "simple_white",
+        font = dict(size = 16)
     )
 
     return fig

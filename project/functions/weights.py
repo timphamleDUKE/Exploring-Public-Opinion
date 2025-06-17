@@ -102,7 +102,6 @@ def weighted_kde(values, weights=None, bandwidth=None):
 
 def apply_svy_density(df, variable, weight_col, group_var=None, strata_col="full_var_stratum", psu_col="full_var_psu", method="bootstrap", seed=None):
     design = SurveyDesign(df, weight=weight_col, strata=strata_col, psu=psu_col, seed=seed)
-    st.write(weight_col)
     return design.get_weighted_sample(variable, group_var=group_var, method=method)
 
 

@@ -1,6 +1,6 @@
 import numpy as np
 import plotly.graph_objects as go
-from functions.dictionaries import lib_con_map_2pt, lib_con_map_7pt, lib_con_2pt, lib_con_7pt, find_weight_col, find_answer_choices
+from functions.dictionaries import lib_con_map_2pt, lib_con_map_7pt, lib_con_2pt, lib_con_7pt, find_weight_col, find_answer_choices, description_map
 from functions.weights import SurveyDesign
 
 def sankeyGraph(df, question, group, use_weights = True):
@@ -90,14 +90,17 @@ def sankeyGraph(df, question, group, use_weights = True):
 
     fig = go.Figure(sankey)
     fig.update_layout(
-        font = dict(size = 12, family = "Arial"),
+        font = dict(size = 15, family = "Arial"),
         margin = dict(l = 10, r = 10, t = 120, b = 50),
         width = 1000,   # or more
         height = 800,   # increase if nodes/links overlap
+        # title = dict(
+        #     text = f"{description_map.get(question)}", 
+        #     font = dict(size = 20))
     )
 
-    fig.add_annotation(text = "Ideology (Source)", x = 0.01, y = 1.05, xanchor="left", showarrow = False, font = dict(size = 13))
-    fig.add_annotation(text = "Answer Choices", x = 1, y = 1.05, xanchor="right", showarrow = False, font = dict(size = 13))
+    fig.add_annotation(text = "Ideology (Source)", x = 0.01, y = 1.05, xanchor="left", showarrow = False, font = dict(size = 15))
+    fig.add_annotation(text = "Answer Choices", x = 1, y = 1.05, xanchor="right", showarrow = False, font = dict(size = 15))
 
 
     return fig
