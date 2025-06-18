@@ -23,14 +23,27 @@ def densityGraph(df, question, groups, use_weights = True):
         Method for applying weights ("replication", "bootstrap", or "simple")
     """
 
-    # Make party labels
-    df["party"] = df["poli_party_reg"].map({
-        1: "Democratic Party",
-        2: "Republican Party",
-        4: "Other",
-        5: "Other",
-        -8: "Other",
-        -9: "N/A"
+    # # Make party labels
+    # df["party"] = df["poli_party_reg"].map({
+    #     1: "Democratic Party",
+    #     2: "Republican Party",
+    #     4: "Other",
+    #     5: "Other",
+    #     -8: "Other",
+    #     -9: "N/A"
+    # }).fillna("N/A")
+
+    df["party"] = df["lib_con_7pt"].map({
+        1: "Liberal",
+        2: "Liberal",
+        3: "Liberal",
+        4: "Moderate",
+        5: "Conservative",
+        6: "Conservative",
+        7: "Conservative",
+        99: "Other",
+        -4: "Other",
+        -9: "Other"
     }).fillna("N/A")
 
     # Filter the valid data
@@ -97,27 +110,27 @@ def densityGraph(df, question, groups, use_weights = True):
         # title = f"Density Plot of {question} Thermometer Ratings<br>{title_suffix}",
         xaxis_title = dict(
             text = "Thermometer Rating (0–100)",
-            font = dict(size = 20)
+            font = dict(size = 24)
         ),
         yaxis_title = dict(
             text = "Density",
-            font = dict(size = 20)
+            font = dict(size = 24)
         ),
         xaxis = dict(
             tickmode = "linear", 
             tick0 = 0, 
             dtick = 20,
-            tickfont=dict(size=16)
+            tickfont=dict(size=20) 
             ),
         yaxis = dict(
-            tickfont=dict(size=16)
+            tickfont=dict(size=20)
         ),
         legend=dict(
-            font = dict(size=16)
+            font = dict(size=20)
         ),
         hovermode = "x unified",
         template = "simple_white",
-        font = dict(size = 16)
+        font = dict(size = 20)
     )
 
     return fig

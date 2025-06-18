@@ -88,7 +88,20 @@ fill_colors = {
     "Republican Party": "rgba(255, 0, 0, 0.3)",     # Red
     "Other": "rgba(0, 128, 0, 0.3)",  # Green
     "N/A": "rgba(141, 142, 147, 0.3)"
+}
 
+colors = {
+    "Liberal": "blue",
+    "Conservative": "red",
+    "Moderate": "rgb(141, 142, 147)",
+    "Other": "green"
+}
+
+fill_colors = {
+    "Liberal": "rgba(0, 0, 255, 0.3)",     # Blue
+    "Conservative": "rgba(255, 0, 0, 0.3)",     # Red
+    "Moderate": "rgba(141, 142, 147, 0.3)",  # Green
+    "Other": "rgba(0, 128, 0, 0.3)"
 }
 
 target_label_map = {

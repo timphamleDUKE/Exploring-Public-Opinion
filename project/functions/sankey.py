@@ -2,6 +2,7 @@ import numpy as np
 import plotly.graph_objects as go
 from functions.dictionaries import lib_con_map_2pt, lib_con_map_7pt, lib_con_2pt, lib_con_7pt, find_weight_col, find_answer_choices, description_map
 from functions.weights import SurveyDesign
+import streamlit as st
 
 def sankeyGraph(df, question, group, use_weights = True):
     """
@@ -68,6 +69,11 @@ def sankeyGraph(df, question, group, use_weights = True):
 
     link_colors = [ideology_colors[int(k)] for k in flow_df[source_col]]
 
+    total = sum(values)
+    percentages = [v / total * 100 for v in values]
+    flow_df["percent"] = np.round(percentages, 2)
+
+
     sankey = go.Sankey(
         node = dict(
             label = labels,
@@ -83,17 +89,17 @@ def sankeyGraph(df, question, group, use_weights = True):
             target = target_indices,
             value = values,
             color = link_colors,
-            customdata = flow_df[["count"]],
-            hovertemplate = "%{source.label} → %{target.label}<br>Weighted Count: %{customdata[0]:,.0f}<extra></extra>"
+            customdata = flow_df[["percent"]],
+            hovertemplate="%{source.label} → %{target.label}<br>Percent: %{customdata[0]:.2f}%<extra></extra>"
         )
     )
-
+    
     fig = go.Figure(sankey)
     fig.update_layout(
         font = dict(size = 15, family = "Arial"),
         margin = dict(l = 10, r = 10, t = 120, b = 50),
-        width = 1000,   # or more
-        height = 800,   # increase if nodes/links overlap
+        width = 600,   # or more
+        height = 450,   # increase if nodes/links overlap
         # title = dict(
         #     text = f"{description_map.get(question)}", 
         #     font = dict(size = 20))

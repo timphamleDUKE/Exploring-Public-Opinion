@@ -44,7 +44,7 @@ with col1:
         image_path="images/AF_cropped.png",
         name="Alexa Fahrer",
         class_year="Class of 2026",
-        major="Public Policy & Statistical Science",
+        major="Statistical Science & Public Policy",
         school="Duke University",
         linkedin_url="https://www.linkedin.com/in/alexa-fahrer-138456133/"
     )
@@ -64,7 +64,7 @@ with col3:
         image_path="images/JJ_cropped.png",
         name="Joie Jacobs",
         class_year="Class of 2028",
-        major="Accounting and Math",
+        major="Accounting & Math",
         school="North Carolina Central University",
         linkedin_url="https://www.linkedin.com/in/joie-jacobs-09801b332/"
     )

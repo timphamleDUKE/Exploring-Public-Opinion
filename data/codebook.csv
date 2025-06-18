@@ -1,4 +1,4 @@
-Year,Variable Code,Pre/Post,Renamed,Category,Topic,Description,Answer Choices,Original Question
+de,Variable Code,Pre/Post,Renamed,Category,Topic,Description,Answer Choices,Original Question
 2024,V240107a,Pre,pre_full,Weights,,Pre full ANES sample (FTF + panel + web + PAPI),,
 2024,V240107b,Post,post_full,Weights,,Post full ANES sample (FTF + panel + web + PAPI),,
 2024,V240107c,,full_var_psu,Weights,,Full ANES sample variance PSU,,
@@ -360,7 +360,7 @@ Do you [favor / oppose] the death penalty for persons convicted of murder strong
 3. Moderately willing
 4. A little willing
 5. Not at all willing","How willing should the United States be to use military force to solve international problems? [Extremely willing, very willing, moderately willing, a little willing, or not at all willing / Not at all willing, a little willing, moderately willing, very willing, or extremely willing]?"
-2024,V241319x,Pre,voting_id,Issue Position,,"Do you favor, oppose, or neither favor nor oppose requiring all people to show a government issued photo ID when they vote?","-2. DK/RF in V241317 or V241318
+2024,V241319x,Pre,voting_id,Issue Position,Voting Rights and Democratic Access,"Do you favor, oppose, or neither favor nor oppose requiring all people to show a government issued photo ID when they vote?","-2. DK/RF in V241317 or V241318
 -1. Inapplicable
 1. Favor a great deal
 2. Favor moderately
@@ -370,7 +370,7 @@ Do you [favor / oppose] the death penalty for persons convicted of murder strong
 6. Oppose moderately
 7. Oppose a great deal","Do you favor, oppose, or neither favor nor oppose requiring all people to show a government issued photo ID when they vote?
 Do you [favor / oppose] that [a great deal, moderately, or a little / a little, moderately, or a great deal]?"
-2024,V241322x,Pre,voting_felons,Issue Position,,"Do you favor, oppose, or neither favor nor oppose allowing convicted felons to vote once they complete their sentence?","-2. DK/RF in V241319 or V241320
+2024,V241322x,Pre,voting_felons,Issue Position,Voting Rights and Democratic Access,"Do you favor, oppose, or neither favor nor oppose allowing convicted felons to vote once they complete their sentence?","-2. DK/RF in V241319 or V241320
 -1. Inapplicable
 1. Favor a great deal
 2. Favor moderately
@@ -380,7 +380,7 @@ Do you [favor / oppose] that [a great deal, moderately, or a little / a little, 
 6. Oppose moderately
 7. Oppose a great deal","Do you favor, oppose, or neither favor nor oppose allowing convicted felons to vote once they complete their sentence?
 Do you [favor / oppose] that [a great deal, moderately, or a little / a little, moderately, or a great deal]?"
-2024,V241333x,Pre,journalists,Issue Position,,"Do you favor, oppose, or neither favor nor oppose elected officials restricting journalists’ access to information about government decision-making?","-2. DK/RF in V241331 or V241332
+2024,V241333x,Pre,journalists,Issue Position,Voting Rights and Democratic Access,"Do you favor, oppose, or neither favor nor oppose elected officials restricting journalists’ access to information about government decision-making?","-2. DK/RF in V241331 or V241332
 -1. Inapplicable
 1. Favor a great deal
 2. Favor moderately
@@ -535,7 +535,7 @@ How much more do you side with the [Israelis / Palestinians]? A little, a modera
 6. Disapprove a moderate amount of protests
 7. Disapprove a lot of protests","Do you approve, disapprove, or neither approve nor disapprove of the protests on college campuses against the war in Gaza?
 How much do you [approve / disapprove] of the protests? A little, a moderate amount, or a lot?"
-2024,V241579,Pre,political_violence,Issue Position,Other,How much do you feel it is justified for people to use violence to pursue their political goals in this country?,"-9. Refused
+2024,V241579,Pre,political_violence,Issue Position,Values,How much do you feel it is justified for people to use violence to pursue their political goals in this country?,"-9. Refused
 -5. Break off, sufficient partial
 -1. Inapplicable
 1. Not at all
@@ -644,7 +644,7 @@ Do you favor preference in hiring and promotion strongly or not strongly?"
 6. Oppose a moderate amount
 7. Oppose a great deal","Do you favor, oppose, or neither favor nor oppose allowing universities to increase the number of black students studying at their schools by considering race along with other factors when choosing students?
 Do you favor that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]? Do you oppose that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?"
-2024,V242248x,Post,gov_involvement,Issue Position,Other,"Which of the following statements comes closer to your view? One, the less government, the better; or Two, there are more things that government should be doing. How strongly do you feel this way?","-7. Insufficient partial, interview deleted
+2024,V242248x,Post,gov_involvement,Issue Position,Values,"Which of the following statements comes closer to your view? One, the less government, the better; or Two, there are more things that government should be doing. How strongly do you feel this way?","-7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -2. DK/RF in V242246 or V242247
@@ -656,7 +656,7 @@ Do you favor that [a great deal, a moderate amount, or a little / a little, a mo
 5. Feels somewhat strongly there is more gov should be doing
 6. Feels very stronglt there is more gov should be doing","Which of the following statements comes closer to your view? One, the less government, the better; or Two, there are more things that government should be doing. 
 How strongly do you feel this way? [Very strongly, somewhat strongly, or not strongly / Not strongly, somewhat strongly, or very strongly]?"
-2024,V242249,Post,gov_regulation,Issue Position,Other,"Would it be good for society to have more, about the same as it is now, or less government regulation?","-9. Refused
+2024,V242249,Post,gov_regulation,Issue Position,"Economy, Budget, and Taxes","Would it be good for society to have more, about the same as it is now, or less government regulation?","-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
 -6. No post interview
@@ -829,7 +829,7 @@ Do you [favor / oppose] that [a great deal, a moderate amount, or a little / a l
 7. Should be doing a great deal less","Do you think the federal government should be doing more about the opioid drug addiction issue, should it be doing less, or is it currently doing the right amount?
 How much [more / less]? [A great deal, a moderate amount, or a little / A little, a moderate amount, or a great deal]?
 "
-2024,V242336,Post,police_force,Issue Position,Other,"How often do you think police officers use more force than is
+2024,V242336,Post,police_force,Issue Position,Guns and Crime,"How often do you think police officers use more force than is
 necessary?","-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted

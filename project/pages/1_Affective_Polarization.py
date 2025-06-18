@@ -12,7 +12,7 @@ with st.sidebar:
     st.title("Customize:")
 
     
-    topic = st.selectbox("Topic", list_of_thermometer_topics, index = 3)
+    topic = st.selectbox("Topic", list_of_thermometer_topics, index = 2)
     list_of_thermometer = topic_to_list_of_thermometer_map.get(topic)
     thermometer_question = st.selectbox("Thermometer Question", list_of_thermometer, index = 0)
 
@@ -22,28 +22,56 @@ with st.sidebar:
         '<div style="font-size: 0.875rem; font-weight: 400; margin-bottom: 0.5rem;">Groups</div>',
         unsafe_allow_html=True
     )
-    republican_check = st.checkbox("Republican Party", value = True)
-    democratic_check = st.checkbox("Democratic Party", value = True)
+    # republican_check = st.checkbox("Republican Party", value = True)
+    # democratic_check = st.checkbox("Democratic Party", value = True)
+    # other_check = st.checkbox("Other", value = False)
+    # na_check = st.checkbox("N/A", value = False)
+
+    liberal_check = st.checkbox("Liberal", value = True)
+    conservative_check = st.checkbox("Conservative", value = True)
+    moderate_check = st.checkbox("Moderate", value = False)
     other_check = st.checkbox("Other", value = False)
-    na_check = st.checkbox("N/A", value = False)
 
     # st.text("Compare")
     # compare_weight = st.toggle("Compare Weighted/Unweighted", value = False)
 
 list_of_groups = []
-if republican_check:
-    list_of_groups.append("Republican Party")
+# if republican_check:
+#     list_of_groups.append("Republican Party")
 
-if democratic_check:
-    list_of_groups.append("Democratic Party")
+# if democratic_check:
+#     list_of_groups.append("Democratic Party")
+
+# if other_check:
+#     list_of_groups.append("Other")
+
+# if na_check:
+#     list_of_groups.append("N/A")
+
+if liberal_check:
+    list_of_groups.append("Liberal")
+
+if conservative_check:
+    list_of_groups.append("Conservative")
+
+if moderate_check:
+    list_of_groups.append("Moderate")
 
 if other_check:
     list_of_groups.append("Other")
 
-if na_check:
-    list_of_groups.append("N/A")
-
 density_graph = (densityGraph(df, thermometer_question, list_of_groups))
+
+# democratic_graph = (densityGraph(df, "democrat_thermometer_pre", ("Republican Party", "Democratic Party")))
+# republican_graph = (densityGraph(df, "republican_thermometer_pre", ("Republican Party", "Democratic Party")))
+
+# col1, col2 = st.columns(2)
+
+# with col1:
+#     st.write(democratic_graph)
+# with col2:
+#     st.write(republican_graph)
+
 
 # Display plots
 st.markdown(f"### {description_map.get(thermometer_question)}")
