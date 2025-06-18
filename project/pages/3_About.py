@@ -64,13 +64,13 @@ with col3:
         image_path="images/JJ_cropped.png",
         name="Joie Jacobs",
         class_year="Class of 2028",
-        major="Accounting and English",
+        major="Accounting and Math",
         school="North Carolina Central University",
         linkedin_url="https://www.linkedin.com/in/joie-jacobs-09801b332/"
     )
 
 # ---------- Footer ----------
-st.markdown("<hr style='margin-top: 2rem;'>", unsafe_allow_html=True)
+st.markdown("<hr style='margin-top: 0.01rem;'>", unsafe_allow_html=True)
 st.markdown("""
 <p style='font-size:18px; line-height:1.6; text-align: Left;'>
 This project was created as part of a research collaboration with the <strong>Duke University Polarization Lab</strong>.<br>

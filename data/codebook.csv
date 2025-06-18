@@ -223,14 +223,14 @@ Year,Variable Code,Pre/Post,Renamed,Category,Topic,Description,Answer Choices,Or
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize",
-2024,V242153,Post,nra_thermometer,Feeling Thermometer,,How would you rate: The National Rifle Association (NRA),"-9. Refused
+2024,V242153,Post,nra_thermometer,Feeling Thermometer,Other,How would you rate: The National Rifle Association (NRA),"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize",
-2024,V242154,Post,fbi_thermometer,Feeling Thermometer,,"How would you rate: The Federal Bureau of Investigation
+2024,V242154,Post,fbi_thermometer,Feeling Thermometer,Other,"How would you rate: The Federal Bureau of Investigation
 (FBI)","-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
@@ -238,14 +238,14 @@ Year,Variable Code,Pre/Post,Renamed,Category,Topic,Description,Answer Choices,Or
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize",
-2024,V242155,Post,rural_thermometer,Feeling Thermometer,,How would you rate: Rural Americans,"-9. Refused
+2024,V242155,Post,rural_thermometer,Feeling Thermometer,Other,How would you rate: Rural Americans,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize",
-2024,V242156,Post,planned_parenthood_thermometer,Feeling Thermometer,,How would you rate: Planned Parenthood,"-9. Refused
+2024,V242156,Post,planned_parenthood_thermometer,Feeling Thermometer,Other,How would you rate: Planned Parenthood,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
@@ -273,7 +273,7 @@ Please enter the rating number in the number box. Ratings between 50 degrees and
 -1. Inapplicable","[Using the same thermometer scale which you used earlier in the interview, how would you rate: blacks
 
 Please enter the rating number in the number box. Ratings between 50 degrees and 100 degrees mean that you feel favorable and warm toward the group. Ratings between 0 degrees and 50 degrees mean that you don’t feel favorable toward the group and that you don’t care too much for that group. You would rate the group at the 50 degree mark if you don’t feel particularly warm or cold toward the group."
-2024,V242517,Post,illegal_immigrant_thermometer,Feeling Thermometer,,How would you rate: Illegal immigrants,"-9. Refused
+2024,V242517,Post,illegal_immigrant_thermometer,Feeling Thermometer,Other,How would you rate: Illegal immigrants,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
@@ -535,7 +535,7 @@ How much more do you side with the [Israelis / Palestinians]? A little, a modera
 6. Disapprove a moderate amount of protests
 7. Disapprove a lot of protests","Do you approve, disapprove, or neither approve nor disapprove of the protests on college campuses against the war in Gaza?
 How much do you [approve / disapprove] of the protests? A little, a moderate amount, or a lot?"
-2024,V241579,Pre,political_violence,Issue Position,,How much do you feel it is justified for people to use violence to pursue their political goals in this country?,"-9. Refused
+2024,V241579,Pre,political_violence,Issue Position,Other,How much do you feel it is justified for people to use violence to pursue their political goals in this country?,"-9. Refused
 -5. Break off, sufficient partial
 -1. Inapplicable
 1. Not at all
@@ -644,7 +644,7 @@ Do you favor preference in hiring and promotion strongly or not strongly?"
 6. Oppose a moderate amount
 7. Oppose a great deal","Do you favor, oppose, or neither favor nor oppose allowing universities to increase the number of black students studying at their schools by considering race along with other factors when choosing students?
 Do you favor that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]? Do you oppose that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?"
-2024,V242248x,Post,gov_involvement,Issue Position,,"Which of the following statements comes closer to your view? One, the less government, the better; or Two, there are more things that government should be doing. How strongly do you feel this way?","-7. Insufficient partial, interview deleted
+2024,V242248x,Post,gov_involvement,Issue Position,Other,"Which of the following statements comes closer to your view? One, the less government, the better; or Two, there are more things that government should be doing. How strongly do you feel this way?","-7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -2. DK/RF in V242246 or V242247
@@ -656,7 +656,7 @@ Do you favor that [a great deal, a moderate amount, or a little / a little, a mo
 5. Feels somewhat strongly there is more gov should be doing
 6. Feels very stronglt there is more gov should be doing","Which of the following statements comes closer to your view? One, the less government, the better; or Two, there are more things that government should be doing. 
 How strongly do you feel this way? [Very strongly, somewhat strongly, or not strongly / Not strongly, somewhat strongly, or very strongly]?"
-2024,V242249,Post,gov_regulation,Issue Position,,"Would it be good for society to have more, about the same as it is now, or less government regulation?","-9. Refused
+2024,V242249,Post,gov_regulation,Issue Position,Other,"Would it be good for society to have more, about the same as it is now, or less government regulation?","-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
 -6. No post interview
@@ -829,7 +829,7 @@ Do you [favor / oppose] that [a great deal, a moderate amount, or a little / a l
 7. Should be doing a great deal less","Do you think the federal government should be doing more about the opioid drug addiction issue, should it be doing less, or is it currently doing the right amount?
 How much [more / less]? [A great deal, a moderate amount, or a little / A little, a moderate amount, or a great deal]?
 "
-2024,V242336,Post,police_force,Issue Position,,"How often do you think police officers use more force than is
+2024,V242336,Post,police_force,Issue Position,Other,"How often do you think police officers use more force than is
 necessary?","-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted

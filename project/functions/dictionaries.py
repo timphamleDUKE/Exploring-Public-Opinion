@@ -20,7 +20,7 @@ def set_logo():
     st.markdown("""
         <style>
             [data-testid="stSidebar"] {
-                width: 400px;
+                width: 600px;
             }
         </style>
     """, unsafe_allow_html=True)
@@ -51,7 +51,9 @@ codebook = pd.read_csv("../data/codebook.csv")
 # List of thermometer questions
 thermometer_codebook = codebook[(codebook["Category"] == "Feeling Thermometer")]
 list_of_thermometer = thermometer_codebook["Renamed"]
-list_of_thermometer_topics = sorted(thermometer_codebook["Topic"].dropna().unique().tolist())
+list_of_thermometer_topics = thermometer_codebook["Topic"].dropna().unique().tolist()
+list_of_thermometer_topics = sorted([t for t in list_of_thermometer_topics if t != "Other"]) + ["Other"]
+
 
 topic_to_list_of_thermometer_map = (
     thermometer_codebook.groupby("Topic")["Description"]
@@ -63,7 +65,9 @@ topic_to_list_of_thermometer_map = (
 # List of issue questions
 issue_codebook = codebook[(codebook["Category"] == "Issue Position")]
 list_of_issues = issue_codebook["Renamed"]
-list_of_issue_topics = sorted(issue_codebook["Topic"].dropna().unique().tolist())
+
+list_of_issue_topics = issue_codebook["Topic"].dropna().unique().tolist()
+list_of_issue_topics = sorted([t for t in list_of_issue_topics if t != "Other"]) + ["Other"]
 
 topic_to_list_of_issue_map = (
     issue_codebook.groupby("Topic")["Description"]

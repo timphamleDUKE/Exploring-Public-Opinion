@@ -6,6 +6,7 @@ from functions.density import densityGraph
 set_logo()
 
 st.title("Affective Polarization")
+st.markdown("<hr style='margin-top: 0.5rem; margin-bottom: 2rem;'>", unsafe_allow_html=True)
 
 with st.sidebar:
     st.title("Customize:")
@@ -61,5 +62,5 @@ expander.header("Dataframe:")
 expander.write(df)
 
 # Caption
-st.caption("These plots use an approximate method for density estimation and do not compute standard errors using Taylor series linearization as recommended by ANES for formal inference.")
+st.caption("This graph uses survey weights to represent population-level transitions between party self-placement and responses. However, it does not calculate standard errors using Taylor series linearization as recommended by ANES for formal inference.")
 

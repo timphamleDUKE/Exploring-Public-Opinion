@@ -99,8 +99,8 @@ def sankeyGraph(df, question, group, use_weights = True):
         #     font = dict(size = 20))
     )
 
-    fig.add_annotation(text = "Ideology (Source)", x = 0.01, y = 1.05, xanchor="left", showarrow = False, font = dict(size = 15))
-    fig.add_annotation(text = "Answer Choices", x = 1, y = 1.05, xanchor="right", showarrow = False, font = dict(size = 15))
+    # fig.add_annotation(text = "Ideology (Source)", x = 0.01, y = 1.05, xanchor="left", showarrow = False, font = dict(size = 15))
+    # fig.add_annotation(text = "Answer Choices", x = 1, y = 1.05, xanchor="right", showarrow = False, font = dict(size = 15))
 
 
     return fig
