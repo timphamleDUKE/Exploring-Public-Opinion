@@ -29,18 +29,6 @@ anes_2024_clean <- read_csv("../data/anes_2024_clean.csv")
 anes_2024_raw <- read_csv("../data/anes_2024_raw.csv")
 ```
 
-```{r}
-anes_2024_raw |>
-  count(V240002a) |>
-  mutate(V240002a = case_when(
-    V240002a == 1 ~ "Face-to-face (FTF)",
-    V240002a == 2 ~ "Internet (WEB)",
-    V240002a == 3 ~ "Paper (PAPI)", 
-    V240002a == 4 ~ "Phone"
-  ))
-```
-
-
 # Issue Position
 
 ## Bar Charts
@@ -52,55 +40,13 @@ anes_2024_clean |>
   count(poli_party_self_7pt)
 
 anes_2024_clean |>
-  filter(poli_party_self_7pt > 0) |>
-  ggplot(aes(x = poli_party_self_7pt)) +
-  geom_bar()
+  count(poli_party_reg)
 
 anes_2024_clean |>
-  filter(lib_con_7pt > 0) |>
-  filter(lib_con_7pt < 90) |>
-  ggplot(aes(x = lib_con_7pt)) +
-  geom_bar()
+  count(lib_con_7pt)
 
 anes_2024_clean |>
-  filter(gun_difficulty > 0) |>
-  filter(poli_party_reg > 0) |>
-  filter(poli_party_reg < 5) |>
-  mutate(
-  gun_difficulty = case_when(
-    gun_difficulty == 1 ~ "More difficult", 
-    gun_difficulty == 2 ~ "Easier", 
-    gun_difficulty == 3 ~ "Keep these rules about the same"
-  ),
-  gun_difficulty = factor(gun_difficulty, levels = c(
-    "Easier", 
-    "Keep these rules about the same", 
-    "More difficult"
-  )),
-  poli_party_reg = case_when(
-    poli_party_reg == 1 ~ "Democratic party",
-    poli_party_reg == 2 ~ "Republican party",
-    poli_party_reg == 4 ~ "None or independent"
-  ), 
-  poli_party_reg = factor(poli_party_reg, levels = c(
-    "None or independent",
-    "Republican party",
-    "Democratic party"
-  ))
-  ) |>
-  ggplot(aes(y = poli_party_reg, fill = gun_difficulty)) +
-  geom_bar(position = "fill") +
-  theme_minimal() +
-  scale_x_continuous(labels = label_percent()) +
-  labs(
-    title = "Do you think the federal government should make it more
-difficult for people to buy a gun than it is now, make it easier
-for people to buy a gun, or keep these rules about the same
-as they are now?", 
-  x = "Percentage of Respondents", 
-  y = "Respondent's Registered Political Party", 
-  fill = "Response"
-  ) 
+  count(lib_con_2pt)
 ```
 
 ```{r}
@@ -197,25 +143,7 @@ anes_2024_clean |>
     fill = "Response"
   ) +
   theme_minimal() +
-  theme(legend.position = "bottom")
-
-
-anes_2024_clean |>
-  filter(between(gun_background_checks, 1, 7)) |>
-  filter(poli_party_reg %in% c(1, 2, 4)) |>
-  mutate(
-    party = case_when(
-      poli_party_reg == 1 ~ "Democrat",
-      poli_party_reg == 2 ~ "Republican",
-      poli_party_reg == 4 ~ "None or independent"
-    )
-  ) |>
-  group_by(party) |>
-  summarise(
-    mean_position = mean(gun_background_checks),
-    sd_position = sd(gun_background_checks),
-    n = n()
-  )
+  theme(legend.position = "none")
 ```
 
 ## Mirror Plots
@@ -540,52 +468,21 @@ anes_2024_clean |>
 anes_2024_clean |>
   mutate(
     party = case_when(
-      poli_party_reg == 1 ~ "Democratic",
-      poli_party_reg == 2 ~ "Republican",
-      TRUE ~ NA
-    )
-  ) |>
-  filter(
-    !is.na(post_full),
-    !is.na(party),
-    party %in% c("Democratic", "Republican"),
-    maga_thermometer >= 0 & maga_thermometer <= 100
-  ) |>
-  ggplot(aes(x = maga_thermometer, color = party, fill = party)) +
-  geom_density(alpha = 0.3) +
-  scale_fill_manual(values = c(Democratic = "blue", Republican = "red")) +
-  scale_color_manual(values = c(Democratic = "blue", Republican = "red")) +
-  scale_x_continuous(
-    breaks = seq(0, 100, by = 20),
-    limits = c(0, 100)
-  ) +
-  labs(
-    title = "Overlayed Density of MAGA Thermometer Ratings by Party",
-    x = "Thermometer Rating (0–100)",
-    y = "Density", 
-    fill = "Party", 
-    color = "Party"
-  ) +
-  theme_minimal()
-
-anes_2024_clean |>
-  mutate(
-    party = case_when(
       lib_con_7pt %in% c(1, 2, 3) ~ "Liberal",
       lib_con_7pt %in% c(5, 6, 7) ~ "Conservative",
-      lib_con_7pt == 4 ~ "Independent"
+      lib_con_7pt == 4 ~ "Independent", 
+      TRUE ~ "Other"
     )
   ) |>
   filter(
     !is.na(post_full),
     !is.na(party),
-    party %in% c("Liberal", "Conservative"),
     maga_thermometer >= 0 & maga_thermometer <= 100
   ) |>
   ggplot(aes(x = maga_thermometer, color = party, fill = party)) +
   geom_density(alpha = 0.3) +
-  scale_fill_manual(values = c(Liberal = "blue", Conservative = "red")) +
-  scale_color_manual(values = c(Liberal = "blue", Conservative = "red")) +
+  scale_fill_manual(values = c(Liberal = "blue", Conservative = "red", Independent = "darkgreen", Other = "gray")) +
+  scale_color_manual(values = c(Liberal = "blue", Conservative = "red", Independent = "darkgreen", Other = "gray")) +
   scale_x_continuous(
     breaks = seq(0, 100, by = 20),
     limits = c(0, 100)
@@ -599,6 +496,36 @@ anes_2024_clean |>
   ) +
   theme_minimal()
 
+
+anes_2024_clean |>
+  mutate(
+    party = case_when(
+      lib_con_7pt %in% c(1, 2, 3) ~ "Liberal",
+      lib_con_7pt %in% c(5, 6, 7) ~ "Conservative",
+      lib_con_7pt == 4 ~ "Independent", 
+      TRUE ~ "Other"
+    )
+  ) |>
+  filter(
+    !is.na(post_full),
+    !is.na(party),
+    maga_thermometer >= 0 & maga_thermometer <= 100
+  ) |>
+  ggplot(aes(x = maga_thermometer, y = party, fill = party)) +
+  geom_density_ridges(alpha = 0.6, scale = 1.2, color = "white") +
+  scale_fill_manual(values = c(Liberal = "blue", Conservative = "red", Independent = "darkgreen", Other = "gray")) +
+  scale_x_continuous(
+    breaks = seq(0, 100, by = 20),
+    limits = c(0, 100)
+  ) +
+  labs(
+    title = "Distribution of MAGA Thermometer Ratings by Political Identification",
+    x = "Thermometer Rating (0–100)",
+    y = NULL, 
+    fill = "Political ID"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
 ```
 
 # Weights
