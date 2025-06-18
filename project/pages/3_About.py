@@ -1,57 +1,79 @@
-
 import streamlit as st
+import base64
 import os
+from functions.dictionaries import set_logo
 
-st.set_page_config(page_title="About the Authors", layout="wide")
+set_logo()
 
-# Header
-st.markdown(
-    "<h1 style='font-size: 40px; margin-bottom: 0;'>About the Authors</h1>",
-    unsafe_allow_html=True
-)
 
-st.markdown(
-    """
-<p style='font-size:18px; line-height:1.6;'>
-This tool was created as part of a research collaboration with the <strong>Duke University Polarization Lab</strong>,
-focusing on how survey wording affects perceived political polarization.
-</p>
-<hr style='margin-top:0;'>
-""",
-    unsafe_allow_html=True
-)
+# ---------- Helper to embed images as base64 ----------
+def base64_image(image_path):
+    with open(image_path, "rb") as f:
+        data = f.read()
+        return base64.b64encode(data).decode()
 
-# Columns for author cards
+# ---------- Author Card Function ----------
+def author_card(image_path, name, class_year, major, school, linkedin_url):
+    if os.path.exists(image_path):
+        encoded_image = base64_image(image_path)
+        st.markdown(f"""
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <a href="{linkedin_url}" target="_blank" style="text-decoration: none; color: inherit;">
+                <img src="data:image/png;base64,{encoded_image}"
+                     style="width: 240px; height: 240px; object-fit: cover;
+                            border: 2px solid #31333F; border-radius: 0;">
+                <div style="margin-top: 1rem;">
+                    <strong style="font-size: 18px;">{name}</strong><br>
+                    <span style="font-size: 16px;">{class_year}</span><br>
+                    <span style="font-size: 16px;">{major}</span><br>
+                    <span style="font-size: 16px;">{school}</span>
+                </div>
+            </a>
+        </div>
+        """, unsafe_allow_html=True)
+
+# ---------- Page Title ----------
+st.markdown("<h1 style='text-align: left;'>About Us</h1>", unsafe_allow_html=True)
+st.markdown("<hr style='margin-top: 0.5rem; margin-bottom: 2rem;'>", unsafe_allow_html=True)
+
+# ---------- Author Row ----------
 col1, col2, col3 = st.columns(3)
 
-def author_card(image_path, name, link):
-    if os.path.exists(image_path):
-        st.image(image_path, caption="", width=180)
-    st.markdown(
-        f"<p style='font-size:16px; text-align: center;'><a href='{link}' target='_blank'><strong>{name}</strong></a></p>",
-        unsafe_allow_html=True
+with col1:
+    author_card(
+        image_path="images/AF_cropped.png",
+        name="Alexa Fahrer",
+        class_year="Class of 2026",
+        major="Public Policy & Statistical Science",
+        school="Duke University",
+        linkedin_url="https://www.linkedin.com/in/alexa-fahrer-138456133/"
     )
 
-with col1:
-    author_card("images/AF.jpg", "Alexa Fahrer", "https://www.linkedin.com/in/alexa-fahrer-138456133/")
-
 with col2:
-    author_card("images/TL.jpg", "Tim Le", "https://www.li  nkedin.com/in/tim-le-836296283/")
+    author_card(
+        image_path="images/TL_cropped.png",
+        name="Tim Le",
+        class_year="Class of 2028",
+        major="Computer Science & Statistical Science",
+        school="Duke University",
+        linkedin_url="https://www.linkedin.com/in/tim-le-836296283/"
+    )
 
 with col3:
-    author_card("images/JJ.jpeg", "Joie Jacobs", "https://www.linkedin.com/in/joie-jacobs-09801b332/")
+    author_card(
+        image_path="images/JJ_cropped.png",
+        name="Joie Jacobs",
+        class_year="Class of 2028",
+        major="Accounting and English",
+        school="North Carolina Central University",
+        linkedin_url="https://www.linkedin.com/in/joie-jacobs-09801b332/"
+    )
 
-# Closing description
-st.markdown(
-    """
-<p style='font-size:18px; line-height:1.6;'>
-We each contributed to the design, research, and development of the Survey Navigator with the goal of making public opinion data more accessible, interpretable, and interactive.
+# ---------- Footer ----------
+st.markdown("<hr style='margin-top: 2rem;'>", unsafe_allow_html=True)
+st.markdown("""
+<p style='font-size:18px; line-height:1.6; text-align: Left;'>
+This project was created as part of a research collaboration with the <strong>Duke University Polarization Lab</strong>.<br>
+We aimed to make public opinion data more accessible, interpretable, and interactive.
 </p>
-
-<p style='font-size:18px; line-height:1.6;'>
-For questions or feedback, please reach out through the <a href='https://www.polarizationlab.com/' target='_blank'>Polarization Lab</a>.
-</p>
-""",
-    unsafe_allow_html=True
-)
-
+""", unsafe_allow_html=True)

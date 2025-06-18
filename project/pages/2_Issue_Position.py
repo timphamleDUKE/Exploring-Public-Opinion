@@ -15,7 +15,7 @@ with st.sidebar:
     issue_question = st.selectbox("Issue Question", list_of_issues, index = 0)
     issue_question = description_to_renamed.get(issue_question)
 
-    lib_con_pt = st.radio("Groups", ("Liberal/Conservative 2-Point Scale", "Liberal/Conservative 7-Point Scale"))
+    lib_con_pt = st.radio("Groups", ("Lib/Con 2-Point Scale", "Lib/Con 7-Point Scale"))
 
 sankey_graph = (sankeyGraph(df, issue_question, lib_con_pt))
 
@@ -25,12 +25,12 @@ st.markdown(f"### {description_map.get(issue_question)}")
 st.plotly_chart(sankey_graph, use_container_width=True)
 
 # Expander
-expander = st.expander("See More")
+expander = st.expander("Details")
 
 full_question = full_description_map.get(issue_question)
 
 if pd.notna(full_question):
-    expander.header("Full Question:")
+    expander.header("Full Question from ANES:")
     expander.write(full_question)
 
 expander.header("Dataframe:")

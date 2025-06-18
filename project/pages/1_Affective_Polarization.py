@@ -17,14 +17,17 @@ with st.sidebar:
 
     thermometer_question = description_to_renamed.get(thermometer_question)
 
-    st.text("Groups")
+    st.markdown(
+        '<div style="font-size: 0.875rem; font-weight: 400; margin-bottom: 0.5rem;">Groups</div>',
+        unsafe_allow_html=True
+    )
     republican_check = st.checkbox("Republican Party", value = True)
     democratic_check = st.checkbox("Democratic Party", value = True)
     other_check = st.checkbox("Other", value = False)
     na_check = st.checkbox("N/A", value = False)
 
-    st.text("Compare")
-    compare_weight = st.toggle("Compare Weighted/Unweighted", value = False)
+    # st.text("Compare")
+    # compare_weight = st.toggle("Compare Weighted/Unweighted", value = False)
 
 list_of_groups = []
 if republican_check:
@@ -46,12 +49,12 @@ st.markdown(f"### {description_map.get(thermometer_question)}")
 st.plotly_chart(density_graph, use_container_width=True)
 
 # Expander
-expander = st.expander("See More")
+expander = st.expander("Details")
 
 full_question = full_description_map.get(thermometer_question)
 
 if pd.notna(full_question):
-    expander.header("Full Question:")
+    expander.header("Full Question from ANES:")
     expander.write(full_question)
 
 expander.header("Dataframe:")

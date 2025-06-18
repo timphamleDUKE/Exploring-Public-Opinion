@@ -4,13 +4,45 @@ import streamlit as st
 # Setting logo
 def set_logo():
     logo = "images/logo-black.PNG"
-    data_plus_logo = "images/data+.png"
 
     st.logo(
         image=logo,
         icon_image=logo,
+        link = "https://www.polarizationlab.com/",
         size = "large"
     )
+
+    st.set_page_config(
+        layout = "wide"
+    )
+
+    # Size of sidebar
+    st.markdown("""
+        <style>
+            [data-testid="stSidebar"] {
+                width: 400px;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+
+    # Size of logo
+    st.markdown(
+    """
+    <style>
+      img[data-testid="stLogo"] {
+          height: 50px !important;
+          width: auto;
+      }
+      div[data-testid="stSidebarHeader"] > img,
+      div[data-testid="collapsedControl"] > img {
+          height: 50px !important;
+          width: auto;
+      }
+    </style>
+    """,
+    unsafe_allow_html=True
+    )
+
 
 # Dataframe
 df = pd.read_csv("../data/anes_2024_clean.csv")

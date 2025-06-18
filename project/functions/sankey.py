@@ -8,7 +8,7 @@ def sankeyGraph(df, question, group, use_weights = True):
     Create a Sankey diagram with optional survey-weighted flows.
     """
 
-    if group == "Liberal/Conservative 2-Point Scale":
+    if group == "Lib/Con 2-Point Scale":
         source_col = "lib_con_2pt"
         lib_con_map = lib_con_map_2pt
         ideology_colors = lib_con_2pt
