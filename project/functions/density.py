@@ -5,7 +5,7 @@ from scipy.stats import gaussian_kde
 from functions.dictionaries import *
 from functions.weights import get_anes_weighted_density_data
 
-def densityGraph(df, question, groups, use_weights = True):
+def densityGraph(df, question, groups, group, use_weights = True):
     """
     Create density graph with optional ANES survey weights
     
@@ -23,28 +23,32 @@ def densityGraph(df, question, groups, use_weights = True):
         Method for applying weights ("replication", "bootstrap", or "simple")
     """
 
-    # # Make party labels
-    # df["party"] = df["poli_party_reg"].map({
-    #     1: "Democratic Party",
-    #     2: "Republican Party",
-    #     4: "Other",
-    #     5: "Other",
-    #     -8: "Other",
-    #     -9: "N/A"
-    # }).fillna("N/A")
-
-    df["party"] = df["lib_con_7pt"].map({
-        1: "Liberal",
-        2: "Liberal",
-        3: "Liberal",
-        4: "Moderate",
-        5: "Conservative",
-        6: "Conservative",
-        7: "Conservative",
-        99: "Other",
-        -4: "Other",
-        -9: "Other"
-    }).fillna("N/A")
+    if group == "Ideological Groups":
+        df["party"] = df["lib_con_7pt"].map({
+                1: "Liberal",
+                2: "Liberal",
+                3: "Liberal",
+                4: "Moderate",
+                5: "Conservative",
+                6: "Conservative",
+                7: "Conservative",
+                99: "Other",
+                -4: "Other",
+                -9: "Other"
+            }).fillna("N/A")
+        colors = ideological_colors
+        fill_colors = ideological_fill_colors
+    elif group == "Political Groups":
+        df["party"] = df["poli_party_reg"].map({
+            1: "Democratic Party",
+            2: "Republican Party",
+            4: "Other",
+            5: "Other",
+            -8: "Other",
+            -9: "N/A"
+        }).fillna("N/A")
+        colors = political_colors
+        fill_colors = political_fill_colors
 
     # Filter the valid data
     df = df[
@@ -136,7 +140,7 @@ def densityGraph(df, question, groups, use_weights = True):
     return fig
 
 # Additional function for comparing weighted vs unweighted
-def densityGraphComparison(df, question, groups):
+def densityGraphComparison(df, question, groups, group):
     """
     Create side-by-side comparison of weighted vs unweighted density plots
     """

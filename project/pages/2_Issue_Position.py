@@ -16,7 +16,7 @@ with st.sidebar:
     issue_question = st.selectbox("Issue Question", list_of_issues, index = 0)
     issue_question = description_to_renamed.get(issue_question)
 
-    lib_con_pt = st.radio("Groups", ("Lib/Con 2-Point Scale", "Lib/Con 7-Point Scale"))
+    lib_con_pt = st.radio("Groups", ("Lib/Con 2-Point Scale", "Lib/Con 7-Point Scale", "Political Party"))
 
 sankey_graph = (sankeyGraph(df, issue_question, lib_con_pt))
 

@@ -76,28 +76,28 @@ topic_to_list_of_issue_map = (
 )
 
 # List of colors based on group by
-colors = {
+political_colors = {
     "Democratic Party": "blue",
     "Republican Party": "red",
     "Other": "green",
     "N/A": "rgb(141, 142, 147)"
 }
 
-fill_colors = {
+political_fill_colors = {
     "Democratic Party": "rgba(0, 0, 255, 0.3)",     # Blue
     "Republican Party": "rgba(255, 0, 0, 0.3)",     # Red
     "Other": "rgba(0, 128, 0, 0.3)",  # Green
     "N/A": "rgba(141, 142, 147, 0.3)"
 }
 
-colors = {
+ideological_colors = {
     "Liberal": "blue",
     "Conservative": "red",
     "Moderate": "rgb(141, 142, 147)",
     "Other": "green"
 }
 
-fill_colors = {
+ideological_fill_colors = {
     "Liberal": "rgba(0, 0, 255, 0.3)",     # Blue
     "Conservative": "rgba(255, 0, 0, 0.3)",     # Red
     "Moderate": "rgba(141, 142, 147, 0.3)",  # Green
@@ -121,7 +121,7 @@ full_description_map = dict(zip(codebook["Renamed"], codebook["Original Question
 
 description_to_renamed = dict(zip(codebook["Description"], codebook["Renamed"]))
 
-# Ideology color mappin
+# Sankey Color Mapping
 lib_con_2pt = {
     1: "rgba(0,0,255,0.3)",
     2: "rgba(255,0,0,0.3)"
@@ -151,6 +151,17 @@ lib_con_map_7pt = {
     6: "Conservative",
     7: "Extremely Conservative"
 }
+
+political_map = {
+    1: "Democratic Party",
+    2: "Republican Party"
+}
+
+political_colors_numbered = {
+    1: "rgba(0, 0, 255, 0.3)", # Blue
+    2: "rgba(255, 0, 0, 0.3)" # Red
+}
+
 
 def find_weight_col(question):
     if codebook[codebook["Renamed"] == question]["Pre/Post"].iloc[0] == "Pre":
