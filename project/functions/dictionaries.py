@@ -67,7 +67,7 @@ issue_codebook = codebook[(codebook["Category"] == "Issue Position")]
 list_of_issues = issue_codebook["Renamed"]
 
 list_of_issue_topics = issue_codebook["Topic"].dropna().unique().tolist()
-list_of_issue_topics = sorted([t for t in list_of_issue_topics if t != "Other"]) + ["Other"]
+list_of_issue_topics = sorted([t for t in list_of_issue_topics if t != "Other"])
 
 topic_to_list_of_issue_map = (
     issue_codebook.groupby("Topic")["Description"]
