@@ -90,11 +90,64 @@ anes_2024_clean |>
   scale_x_continuous(labels = label_percent()) +
   scale_fill_brewer(palette = "RdBu") +
   labs(
-    title = "Opinions on Gun Background Checks by Party", 
+    title = "Do you think the federal government should make it more
+difficult for people to buy a gun than it is now, make it easier
+for people to buy a gun, or keep these rules about the same?",
     x = "Percentage", 
     y = "Political Party", 
     fill = "Response"
   ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+
+
+anes_2024_clean |>
+  filter(gun_background_checks > 0) |>
+  filter(poli_party_reg %in% c(1, 2, 4)) |>
+  mutate(
+  gun_background_checks = case_when(
+      gun_background_checks == 1 ~ "Favor a great deal",
+      gun_background_checks == 2 ~ "Favor moderately",
+      gun_background_checks == 3 ~ "Favor a little",
+      gun_background_checks == 4 ~ "Neither",
+      gun_background_checks == 5 ~ "Oppose a little",
+      gun_background_checks == 6 ~ "Oppose moderately",
+      gun_background_checks == 7 ~ "Oppose a great deal"
+    ),
+    gun_background_checks = factor(gun_background_checks, levels = c(
+      "Oppose a great deal",
+      "Oppose moderately",
+      "Oppose a little",
+      "Neither",
+      "Favor a little",
+      "Favor moderately",
+      "Favor a great deal"
+    )),
+  poli_party_reg = case_when(
+    poli_party_reg == 1 ~ "Democratic party",
+    poli_party_reg == 2 ~ "Republican party",
+    poli_party_reg == 4 ~ "None or independent"
+  ), 
+  poli_party_reg = factor(poli_party_reg, levels = c(
+    "Republican party",
+    "None or independent",
+    "Democratic party"
+  ))
+  ) |>
+  ggplot(aes(y = gun_background_checks, fill = poli_party_reg)) +
+  geom_bar(position = "fill") +
+  scale_x_continuous(labels = label_percent()) +
+  labs(
+    title = "Do you think the federal government should make it more
+difficult for people to buy a gun than it is now, make it easier
+for people to buy a gun, or keep these rules about the same?",
+    x = "Percentage",
+    y = "Response",
+    fill = "Political Party"
+  ) +
+  scale_fill_manual(values = c("Democratic party" = "blue", 
+                               "Republican party" = "red", "None or independent" = "gray")) +
   theme_minimal() +
   theme(legend.position = "bottom")
 
@@ -137,10 +190,86 @@ anes_2024_clean |>
   scale_x_continuous(labels = label_percent()) +
   scale_fill_brewer(palette = "RdBu") +
   labs(
-    title = "Opinions on Gun Background Checks by Party",
+    title = "Do you think the federal government should make it more
+difficult for people to buy a gun than it is now, make it easier
+for people to buy a gun, or keep these rules about the same?",
     x = "Percentage",
     y = NULL,
     fill = "Response"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+
+
+anes_2024_clean |>
+  filter(abortion > 0 & poli_party_reg %in% c(1, 2, 4)) |>
+  mutate(abortion = as_factor(abortion),
+         abortion = case_when(
+           abortion == 1 ~ "By law, abortion should never be permitted",
+           abortion == 2 ~ "The law should permit abortion only in case of rape, 
+           incest, or when the woman’s life is in danger", 
+           abortion == 3 ~ "The law should permit abortion other than for 
+           rape/incest/danger to woman but only after need clearly established", 
+           abortion == 4 ~ "By law, a woman should always be able to obtain an 
+           abortion as a matter of personal choice", 
+           abortion == 5 ~ "Other"
+         ),
+         poli_party_reg = as_factor(poli_party_reg), 
+         poli_party_reg = case_when(
+          poli_party_reg == 1 ~ "Democrat",
+          poli_party_reg == 4 ~ "None or independent",
+          poli_party_reg == 2 ~ "Republican"
+    )) |>
+  count(poli_party_reg, abortion) |>
+  group_by(poli_party_reg) |>
+  mutate(percent = n / sum(n)) |>
+  ggplot(aes(x = percent, y = abortion, fill = abortion)) +
+  geom_bar(stat = "identity", position = "stack") +
+  facet_wrap(~ poli_party_reg, nrow = 1) +
+  scale_x_continuous(labels = label_percent()) +
+  labs(
+    title = "There has been some discussion about abortion 
+    during recent years. Which one of the opinions on this
+    page best agrees with your view?",
+    x = "Percentage",
+    y = NULL
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+
+
+anes_2024_clean |>
+  filter(abortion > 0 & poli_party_reg %in% c(1, 2, 4)) |>
+  mutate(abortion = as_factor(abortion),
+         abortion = case_when(
+           abortion == 1 ~ "By law, abortion should never be permitted",
+           abortion == 2 ~ "The law should permit abortion only in case of rape, 
+           incest, or when the woman’s life is in danger", 
+           abortion == 3 ~ "The law should permit abortion other than for rape/incest/danger 
+           to woman but only after need clearly established", 
+           abortion == 4 ~ "By law, a woman should always be able to obtain an 
+           abortion as a matter of personal choice", 
+           abortion == 5 ~ "Other"
+         ),
+         poli_party_reg = as_factor(poli_party_reg), 
+         poli_party_reg = case_when(
+          poli_party_reg == 1 ~ "Democrat",
+          poli_party_reg == 4 ~ "None or independent",
+          poli_party_reg == 2 ~ "Republican"
+    )) |>
+  ggplot(aes(y = abortion, fill = poli_party_reg)) +
+  geom_bar(position = "fill") +
+  scale_x_continuous(labels = label_percent()) +
+  scale_fill_manual(values = c("Democrat" = "blue", 
+                               "Republican" = "red", "None or independent" = "gray")) +
+  labs(
+    title = "There has been some discussion about abortion 
+    during recent years. Which one of the opinions on this
+    page best agrees with your view?",
+    x = "Percentage",
+    y = NULL
   ) +
   theme_minimal() +
   theme(legend.position = "none")
