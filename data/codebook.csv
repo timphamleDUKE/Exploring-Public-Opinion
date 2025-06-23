@@ -868,7 +868,7 @@ How strongly do you [favor / oppose] it? [A great deal, moderately, or a little 
 5. A lot worse","Does the increasing number of people of many different races and ethnic groups in the United States make this country a better place to live, a worse place to live, or does it make no difference?
 Does it make it [a lot better or a little better / a little better or a lot better]? / Does it make it [a lot worse or a little worse / a little worse or a lot worse]?
 "
-2024,V242350,Post,federal_min_wage,Issue Position,"Economy, Budget, and Taxes","Should the federal minimum wage be [raised, kept the same, lowered but not eliminated, or eliminated altogether / eliminated altogether, lowered but not eliminated, kept the same, or raised]?","-9. Refused
+2024,V242350,Post,federal_min_wage,Issue Position,"Economy, Budget, and Taxes","Should the federal minimum wage be raised, kept the same, lowered but not eliminated, or eliminated altogether?","-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
 -6. No post interview
@@ -877,7 +877,7 @@ Does it make it [a lot better or a little better / a little better or a lot bett
 1. Raised
 2. Kept the same
 3. Lowered
-4. Eliminated",
+4. Eliminated","Should the federal minimum wage be [raised, kept the same, lowered but not eliminated, or eliminated altogether / eliminated altogether, lowered but not eliminated, kept the same, or raised]?"
 2024,V242353x,Post,budget_healthcare,Issue Position,"Social Welfare, Healthcare, and Education","Do you favor an increase, decrease, or no change in government spending to help people pay for health insurance when people can’t pay for it all themselves?","-7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
