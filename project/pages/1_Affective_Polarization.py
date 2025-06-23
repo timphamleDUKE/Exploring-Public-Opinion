@@ -9,7 +9,7 @@ st.title("Affective Polarization")
 st.markdown("<hr style='margin-top: 0.5rem; margin-bottom: 2rem;'>", unsafe_allow_html=True)
 
 with st.sidebar:
-    st.title("Customize:")
+    st.title("Please Select:")
 
     
     topic = st.selectbox("Topic", list_of_thermometer_topics, index = 2)
@@ -32,8 +32,6 @@ with st.sidebar:
     moderate_check = st.checkbox("Moderate", value = False)
     other_check = st.checkbox("Other", value = False)
 
-    # st.text("Compare")
-    # compare_weight = st.toggle("Compare Weighted/Unweighted", value = False)
 
 list_of_groups = []
 # if republican_check:
