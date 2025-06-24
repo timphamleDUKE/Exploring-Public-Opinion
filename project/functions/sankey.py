@@ -1,6 +1,6 @@
 import numpy as np
 import plotly.graph_objects as go
-from functions.dictionaries import lib_con_map_2pt, lib_con_map_7pt, lib_con_2pt, lib_con_7pt, find_weight_col, find_answer_choices, description_map
+from functions.dictionaries import lib_con_map_2pt, lib_con_map_7pt, lib_con_2pt, lib_con_7pt, find_weight_col, find_answer_choices, political_map, political_colors_numbered
 from functions.weights import SurveyDesign
 import streamlit as st
 
@@ -13,10 +13,15 @@ def sankeyGraph(df, question, group, use_weights = True):
         source_col = "lib_con_2pt"
         lib_con_map = lib_con_map_2pt
         ideology_colors = lib_con_2pt
-    else:
+    elif group == "Lib/Con 7-Point Scale":
         source_col = "lib_con_7pt"
         lib_con_map = lib_con_map_7pt
         ideology_colors = lib_con_7pt
+    else:
+        source_col = "poli_party_reg"
+        lib_con_map = political_map
+        ideology_colors = political_colors_numbered
+
 
     target_col = question
 
@@ -33,10 +38,17 @@ def sankeyGraph(df, question, group, use_weights = True):
         df[weight_col] = 1  # treat all weights as 1
 
     # Filter valid values
-    df = df[
-        (df[source_col].between(1, 7)) &
-        (df[target_col].between(0, 7))
-    ]
+
+    if group == "Political Party":
+        df = df[
+            (df[source_col].between(1, 2)) &
+            (df[target_col].between(0, 7))
+        ]
+    else:
+        df = df[
+            (df[source_col].between(1, 7)) &
+            (df[target_col].between(0, 7))
+        ]
 
     # Weighted flow counts
     flow_df = (

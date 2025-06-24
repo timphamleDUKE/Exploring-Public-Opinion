@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from functions.sidebar import ideological_check, political_check, list_of_groups_check
 from functions.dictionaries import set_logo, list_of_thermometer_topics, topic_to_list_of_thermometer_map, df, description_map, full_description_map, description_to_renamed
 from functions.density import densityGraph
 
@@ -9,7 +10,7 @@ st.title("Affective Polarization")
 st.markdown("<hr style='margin-top: 0.5rem; margin-bottom: 2rem;'>", unsafe_allow_html=True)
 
 with st.sidebar:
-    st.title("Customize:")
+    st.title("Please Select:")
 
     
     topic = st.selectbox("Topic", list_of_thermometer_topics, index = 2)
@@ -18,49 +19,24 @@ with st.sidebar:
 
     thermometer_question = description_to_renamed.get(thermometer_question)
 
+    group = st.radio(
+        "Groups",
+        ["Ideological Groups", "Political Groups"]
+    )   
+
     st.markdown(
-        '<div style="font-size: 0.875rem; font-weight: 400; margin-bottom: 0.5rem;">Groups</div>',
+        '<div style="font-size: 0.875rem; font-weight: 400; margin-bottom: 0.5rem;">Options</div>',
         unsafe_allow_html=True
     )
-    # republican_check = st.checkbox("Republican Party", value = True)
-    # democratic_check = st.checkbox("Democratic Party", value = True)
-    # other_check = st.checkbox("Other", value = False)
-    # na_check = st.checkbox("N/A", value = False)
 
-    liberal_check = st.checkbox("Liberal", value = True)
-    conservative_check = st.checkbox("Conservative", value = True)
-    moderate_check = st.checkbox("Moderate", value = False)
-    other_check = st.checkbox("Other", value = False)
+    if group == "Ideological Groups":
+        checks = ideological_check()
+    else:
+        checks = political_check()
+    
+list_of_groups = list_of_groups_check(group, checks)
 
-    # st.text("Compare")
-    # compare_weight = st.toggle("Compare Weighted/Unweighted", value = False)
-
-list_of_groups = []
-# if republican_check:
-#     list_of_groups.append("Republican Party")
-
-# if democratic_check:
-#     list_of_groups.append("Democratic Party")
-
-# if other_check:
-#     list_of_groups.append("Other")
-
-# if na_check:
-#     list_of_groups.append("N/A")
-
-if liberal_check:
-    list_of_groups.append("Liberal")
-
-if conservative_check:
-    list_of_groups.append("Conservative")
-
-if moderate_check:
-    list_of_groups.append("Moderate")
-
-if other_check:
-    list_of_groups.append("Other")
-
-density_graph = (densityGraph(df, thermometer_question, list_of_groups))
+density_graph = (densityGraph(df, thermometer_question, list_of_groups, group))
 
 # democratic_graph = (densityGraph(df, "democrat_thermometer_pre", ("Republican Party", "Democratic Party")))
 # republican_graph = (densityGraph(df, "republican_thermometer_pre", ("Republican Party", "Democratic Party")))
