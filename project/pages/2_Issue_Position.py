@@ -1,12 +1,13 @@
 import streamlit as st
 import pandas as pd
+import holoviews as hv
 from functions.dictionaries import set_logo, list_of_issue_topics, topic_to_list_of_issue_map, description_to_renamed, df, description_map, full_description_map
-from functions.sankey import sankeyGraph
+from functions.sankey import sankeyGraph, display_sankey_streamlit_bokeh
+
 
 set_logo()
 
 st.title("Issue Position")
-st.markdown("<hr style='margin-top: 0.5rem; margin-bottom: 2rem;'>", unsafe_allow_html=True)
 
 with st.sidebar:
     st.title("Customize:")
@@ -23,7 +24,18 @@ sankey_graph = (sankeyGraph(df, issue_question, lib_con_pt))
 # Display plots
 
 st.markdown(f"### {description_map.get(issue_question)}")
-st.plotly_chart(sankey_graph, use_container_width=True)
+
+try:
+    st.pyplot(sankey_graph, use_container_width=True)
+except:
+    try:
+        st.plotly_chart(sankey_graph, use_container_width=True)
+    except:
+        bokeh_plot = hv.render(sankey_graph)
+        display_sankey_streamlit_bokeh(df, issue_question, lib_con_pt)
+
+
+
 
 # Expander
 expander = st.expander("Details")
@@ -33,9 +45,6 @@ full_question = full_description_map.get(issue_question)
 if pd.notna(full_question):
     expander.header("Full Question from ANES:")
     expander.write(full_question)
-
-expander.header("Dataframe:")
-expander.write(df)
 
 # Caption
 st.caption("This graph uses survey weights to represent population-level transitions between party self-placement and responses. However, it does not calculate standard errors using Taylor series linearization as recommended by ANES for formal inference.")

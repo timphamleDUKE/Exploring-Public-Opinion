@@ -78,37 +78,37 @@ de,Variable Code,Pre/Post,Renamed,Category,Topic,Description,Answer Choices,Orig
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize",
-2024,V241156,Pre,harris_thermometer_pre,Feeling Thermometer,Presidential Candidates,How would you rate: Kamala Harris,"-9. Refused
+2024,V241156,Pre,harris_thermometer_pre,Feeling Thermometer,Presidential Candidates,How would you rate: Kamala Harris (Pre-Election),"-9. Refused
 -8. Don’t know",
-2024,V242125,Post,harris_thermometer_post,Feeling Thermometer,Presidential Candidates,How would you rate: Kamala Harris,"-9. Refused
+2024,V242125,Post,harris_thermometer_post,Feeling Thermometer,Presidential Candidates,How would you rate: Kamala Harris (Post-Election),"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize",
-2024,V241157,Pre,trump_thermometer_pre,Feeling Thermometer,Presidential Candidates,How would you rate: Donald Trump,"-9. Refused
+2024,V241157,Pre,trump_thermometer_pre,Feeling Thermometer,Presidential Candidates,How would you rate: Donald Trump (Pre-Election),"-9. Refused
 -8. Don’t know
 -1. Inapplicable",
-2024,V242126,Post,trump_thermometer_post,Feeling Thermometer,Presidential Candidates,How would you rate: Donald Trump,"-9. Refused
+2024,V242126,Post,trump_thermometer_post,Feeling Thermometer,Presidential Candidates,How would you rate: Donald Trump (Post-Election),"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize",
-2024,V241158,Pre,biden_thermometer_pre,Feeling Thermometer,Presidential Candidates,How would you rate: Joe Biden,"-9. Refused
+2024,V241158,Pre,biden_thermometer_pre,Feeling Thermometer,Presidential Candidates,How would you rate: Joe Biden (Pre-Election),"-9. Refused
 -8. Don’t know",
-2024,V242136,Post,biden_thermometer_post,Feeling Thermometer,Presidential Candidates,How would you rate: Joe Biden,"-9. Refused
+2024,V242136,Post,biden_thermometer_post,Feeling Thermometer,Presidential Candidates,How would you rate: Joe Biden (Post-Election),"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
 999. Don’t recognize",
-2024,V241164,Pre,vance_thermometer_pre,Feeling Thermometer,Vice-Presidential Candidates,How would you rate: J.D. Vance,"-9. Refused
+2024,V241164,Pre,vance_thermometer_pre,Feeling Thermometer,Vice-Presidential Candidates,How would you rate: J.D. Vance (Pre-Election),"-9. Refused
 -8. Don’t know",
-2024,V242135,Post,vance_thermometer_post,Feeling Thermometer,Vice-Presidential Candidates,How would you rate: J.D. Vance,"-9. Refused
+2024,V242135,Post,vance_thermometer_post,Feeling Thermometer,Vice-Presidential Candidates,How would you rate: J.D. Vance (Post-Election),"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
