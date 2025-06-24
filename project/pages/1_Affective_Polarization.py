@@ -10,7 +10,7 @@ st.title("Affective Polarization")
 st.markdown("<hr style='margin-top: 0.5rem; margin-bottom: 2rem;'>", unsafe_allow_html=True)
 
 with st.sidebar:
-    st.title("Customize:")
+    st.title("Please Select:")
 
     
     topic = st.selectbox("Topic", list_of_thermometer_topics, index = 2)
