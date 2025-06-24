@@ -85,12 +85,3 @@ with col2:
             """)
         
         st.markdown("</div>", unsafe_allow_html=True)
-
-# Add spacing before the ABOUT section
-st.markdown("<br><br>", unsafe_allow_html=True)
-
-# ABOUT ANES DATA section
-st.markdown("""
-## ABOUT ANES DATA
-
-""")
