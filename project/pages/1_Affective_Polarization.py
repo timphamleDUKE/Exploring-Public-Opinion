@@ -11,7 +11,7 @@ st.title("Affective Polarization")
 with st.sidebar:
     st.title("Please Select:")
 
-    topic = st.selectbox("Topic", list_of_thermometer_topics, index=2)
+    topic = st.selectbox("Topic", list_of_thermometer_topics, index=0)
     list_of_thermometer = topic_to_list_of_thermometer_map.get(topic)
 
     thermometer_question = st.selectbox("Thermometer Question", list_of_thermometer, index=0)
@@ -124,7 +124,7 @@ full_question = full_description_map.get(thermometer_question)
 
 if pd.notna(full_question):
     with st.expander("Details"):
-        st.header("Full Question from ANES:")
+        st.subheader("Full Question from ANES:")
         st.write(full_question)
 
 # Caption
