@@ -4,7 +4,8 @@ import os
 from functions.dictionaries import set_logo
 
 set_logo()
-
+st.title("About Us")
+st.divider()
 
 # ---------- Helper to embed images as base64 ----------
 def base64_image(image_path):
@@ -31,10 +32,6 @@ def author_card(image_path, name, class_year, major, school, linkedin_url):
             </a>
         </div>
         """, unsafe_allow_html=True)
-
-# ---------- Page Title ----------
-st.markdown("<h1 style='text-align: left;'>About Us</h1>", unsafe_allow_html=True)
-st.markdown("<hr style='margin-top: 0.5rem; margin-bottom: 2rem;'>", unsafe_allow_html=True)
 
 # ---------- Author Row ----------
 col1, col2, col3 = st.columns(3)
@@ -69,11 +66,8 @@ with col3:
         linkedin_url="https://www.linkedin.com/in/joie-jacobs-09801b332/"
     )
 
-# ---------- Footer ----------
-st.markdown("<hr style='margin-top: 0.01rem;'>", unsafe_allow_html=True)
-st.markdown("""
-<p style='font-size:18px; line-height:1.6; text-align: Left;'>
-This project was created as part of a research collaboration with the <strong>Duke University Polarization Lab</strong>.<br>
-We aimed to make public opinion data more accessible, interpretable, and interactive.
-</p>
-""", unsafe_allow_html=True)
+st.divider()
+st.markdown(
+    "This project was created as part of a research collaboration with the "
+    "[**Duke University Polarization Lab**](https://www.polarizationlab.com/)."
+)
