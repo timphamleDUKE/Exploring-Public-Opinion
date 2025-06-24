@@ -39,8 +39,6 @@ with col1:
         
         with ap_col2:
             st.markdown("""
-            **Analysis Overview**
-            
             Explore emotional and affective dimensions of political polarization.
             
             • Sentiment patterns  
@@ -78,8 +76,6 @@ with col2:
         
         with ip_col2:
             st.markdown("""
-            **Analysis Overview**
-            
             Analyze political positions on key issues.
             
             • Policy preferences  
