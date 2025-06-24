@@ -3,85 +3,55 @@ from functions.dictionaries import set_logo
 
 set_logo()
 st.title("Home")
-st.markdown("<hr style='margin-top: 0.5rem; margin-bottom: 2rem;'>", unsafe_allow_html=True)
+st.divider()
 
-# Text section at the top
+# Intro Text
 st.markdown("""
-**This project explores how American voters are often more aligned in their views than they might believe.** 
+**This project explores how American voters are often more aligned in their views than they might believe.**  
 We show that despite emotional divides, their underlying opinions are surprisingly similar.
 """)
 
-# Create two columns for the boxes
+def explore_card(title, image_path, description_text, button_key, page_path):
+    with st.container(border=True):
+        if st.button(title, key=button_key, use_container_width=True):
+            st.switch_page(page_path)
+
+        col1, col2 = st.columns([1, 2])
+        with col1:
+            st.image(image_path, use_container_width=True)
+        with col2:
+            st.markdown(description_text)
+
 col1, col2 = st.columns(2)
 
-# AP Box
 with col1:
-    # Use st.container with border and styling
-    with st.container(border=True):
-        st.markdown("""
-        <div style="
-            background-color: #f8f9fa;
-            border-radius: 5px;
-        ">
-        """, unsafe_allow_html=True)
-        
-        # Add centered clickable title with custom styling
-        if st.button("Affective Polarization", 
-                    key="ap_button", 
-                    use_container_width=True):
-            st.switch_page("pages/1_Affective_Polarization.py")
-        
-        # Create columns inside the container
-        ap_col1, ap_col2 = st.columns([1, 2])
-        
-        with ap_col1:
-            st.image("images/AP logo.png", use_container_width=True)
-        
-        with ap_col2:
-            st.markdown("""
-            Explore emotional and affective dimensions of political polarization.
-            
-            • Sentiment patterns  
-            • Emotional responses  
-            • Affective divides  
-            • Partisan feelings
-            """)
-        
-        st.markdown("</div>", unsafe_allow_html=True)
+    explore_card(
+        title="Affective Polarization",
+        image_path="images/AP logo.png",
+        description_text="""
+Explore emotional and affective dimensions of political polarization.
 
-# IP Box
+• Sentiment patterns  
+• Emotional responses  
+• Affective divides  
+• Partisan feelings
+""",
+        button_key="ap_button",
+        page_path="pages/1_Affective_Polarization.py"
+    )
+
 with col2:
-    # Use st.container with border and styling
-    with st.container(border=True):
-        st.markdown("""
-        <div style="
-            background-color: #f8f9fa;
-            border-radius: 5px;
-        ">
-        """, unsafe_allow_html=True)
-        
+    explore_card(
+        title="Issue Position",
+        image_path="images/IP logo.png",
+        description_text="""
+Analyze political positions on key issues.
 
-        
-        # Add centered clickable title with custom styling
-        if st.button("Issue Position", 
-                    key="ip_button", 
-                    use_container_width=True):
-            st.switch_page("pages/2_Issue_Position.py")
-        
-        # Create columns inside the container
-        ip_col1, ip_col2 = st.columns([1, 2])
-        
-        with ip_col1:
-            st.image("images/IP logo.png", use_container_width=True)
-        
-        with ip_col2:
-            st.markdown("""
-            Analyze political positions on key issues.
-            
-            • Policy preferences  
-            • Issue stances  
-            • Position clustering  
-            • Ideological mapping
-            """)
-        
-        st.markdown("</div>", unsafe_allow_html=True)
+• Policy preferences  
+• Issue stances  
+• Position clustering  
+• Ideological mapping
+""",
+        button_key="ip_button",
+        page_path="pages/2_Issue_Position.py"
+    )
