@@ -34,8 +34,5 @@ if pd.notna(full_question):
     expander.header("Full Question from ANES:")
     expander.write(full_question)
 
-expander.header("Dataframe:")
-expander.write(df)
-
 # Caption
 st.caption("This graph uses survey weights to represent population-level transitions between party self-placement and responses. However, it does not calculate standard errors using Taylor series linearization as recommended by ANES for formal inference.")
