@@ -26,9 +26,10 @@ with col1:
         """, unsafe_allow_html=True)
         
         # Add centered clickable title with custom styling
-        if st.button("Affective Polarization", 
+        if st.button("AFFECTIVE POLARIZATION", 
                     key="ap_button", 
-                    use_container_width=True):
+                    use_container_width=True,
+                     type="primary"):
             st.switch_page("pages/1_Affective_Polarization.py")
         
         # Create columns inside the container
@@ -39,14 +40,9 @@ with col1:
         
         with ap_col2:
             st.markdown("""
-            **Analysis Overview**
-            
-            Explore emotional and affective dimensions of political polarization.
-            
-            • Sentiment patterns  
-            • Emotional responses  
-            • Affective divides  
-            • Partisan feelings
+            **How warmly or coldly do Americans feel about people on the other side?
+          Track emotional responses by political identity over time.**
+
             """)
         
         st.markdown("</div>", unsafe_allow_html=True)
@@ -65,9 +61,10 @@ with col2:
 
         
         # Add centered clickable title with custom styling
-        if st.button("Issue Position", 
+        if st.button("ISSUE POSITION", 
                     key="ip_button", 
-                    use_container_width=True):
+                    use_container_width=True,
+                     type="primary"):
             st.switch_page("pages/2_Issue_Position.py")
         
         # Create columns inside the container
@@ -78,23 +75,11 @@ with col2:
         
         with ip_col2:
             st.markdown("""
-            **Analysis Overview**
+            **Where do people stand on topics like immigration, healthcare, and the economy?**
             
-            Analyze political positions on key issues.
-            
-            • Policy preferences  
-            • Issue stances  
-            • Position clustering  
-            • Ideological mapping
             """)
         
         st.markdown("</div>", unsafe_allow_html=True)
 
 # Add spacing before the ABOUT section
 st.markdown("<br><br>", unsafe_allow_html=True)
-
-# ABOUT ANES DATA section
-st.markdown("""
-## ABOUT ANES DATA
-
-""")
