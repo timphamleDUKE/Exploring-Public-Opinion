@@ -10,18 +10,14 @@ st.title("Affective Polarization")
 
 with st.sidebar:
     st.title("Please Select:")
-
     
     topic = st.selectbox("Topic", list_of_thermometer_topics, index = 2)
     list_of_thermometer = topic_to_list_of_thermometer_map.get(topic)
-    thermometer_question = st.selectbox("Thermometer Question", list_of_thermometer, index = 0)
 
+    thermometer_question = st.selectbox("Thermometer Question", list_of_thermometer, index = 0)
     thermometer_question = description_to_renamed.get(thermometer_question)
 
-    group = st.radio(
-        "Groups",
-        ["Ideological Groups", "Political Groups"]
-    )   
+    group = st.radio("Groups", ["Ideological Groups", "Political Groups"])   
 
     st.markdown(
         '<div style="font-size: 0.875rem; font-weight: 400; margin-bottom: 0.5rem;">Options</div>',
@@ -37,18 +33,44 @@ list_of_groups = list_of_groups_check(group, checks)
 
 density_graph = (densityGraph(df, thermometer_question, list_of_groups, group))
 
-# democratic_graph = (densityGraph(df, "democrat_thermometer_pre", ("Republican Party", "Democratic Party")))
-# republican_graph = (densityGraph(df, "republican_thermometer_pre", ("Republican Party", "Democratic Party")))
+# Tabs
+democratic_graph = densityGraph(df, "democrat_thermometer_pre", ("Republican Party", "Democratic Party"), group="Political Groups")
+republican_graph = densityGraph(df, "republican_thermometer_pre", ("Republican Party", "Democratic Party"), group="Political Groups")
+liberal_graph = densityGraph(df, "liberals_thermometer", ("Liberal", "Conservative"), group="Ideological Groups")
+conservative_graph = densityGraph(df, "conservatives_thermometer", ("Liberal", "Conservative"), group="Ideological Groups")
+harris_graph = densityGraph(df, "harris_thermometer_pre", ("Republican Party", "Democratic Party"), group="Political Groups")
+trump_graph = densityGraph(df, "trump_thermometer_pre", ("Republican Party", "Democratic Party"), group="Political Groups")
 
-# col1, col2 = st.columns(2)
+tab1, tab2, tab3 = st.tabs(["Parties", "Ideologies", "Candidates"])
 
-# with col1:
-#     st.write(democratic_graph)
-# with col2:
-#     st.write(republican_graph)
+with tab1:
+    st.subheader("Thermometer Ratings: Democratic & Republican Parties")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.plotly_chart(democratic_graph, use_container_width=True, key="dem_chart")
+    with col2:
+        st.plotly_chart(republican_graph, use_container_width=True, key="rep_chart")
+
+with tab2:
+    st.subheader("Thermometer Ratings: Liberals & Conservatives")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.plotly_chart(liberal_graph, use_container_width=True, key="lib_chart")
+    with col2:
+        st.plotly_chart(conservative_graph, use_container_width=True, key="cons_chart")
+
+with tab3:
+    st.subheader("Thermometer Ratings: Presidential Candidates")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.plotly_chart(harris_graph, use_container_width=True, key="harris_chart")
+    with col2:
+        st.plotly_chart(trump_graph, use_container_width=True, key="trump_chart")
 
 
 # Display plots
+st.divider()
+st.header("Thermometer Questions")
 st.markdown(f"### {description_map.get(thermometer_question)}")
 st.plotly_chart(density_graph, use_container_width=True)
 
@@ -61,5 +83,4 @@ if pd.notna(full_question):
     expander.header("Full Question from ANES:")
     expander.write(full_question)
 
-# Caption
 st.caption("This graph uses survey weights to represent population-level transitions between party self-placement and responses. However, it does not calculate standard errors using Taylor series linearization as recommended by ANES for formal inference.")
