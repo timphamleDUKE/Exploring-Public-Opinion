@@ -5,7 +5,6 @@ set_logo()
 st.title("Home")
 st.divider()
 
-# Intro Text
 st.markdown("""
 **This project explores how American voters are often more aligned in their views than they might believe.**  
 We show that despite emotional divides, their underlying opinions are surprisingly similar.
