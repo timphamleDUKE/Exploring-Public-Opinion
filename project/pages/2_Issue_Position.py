@@ -6,7 +6,6 @@ from functions.sankey import sankeyGraph
 set_logo()
 
 st.title("Issue Position")
-st.markdown("<hr style='margin-top: 0.5rem; margin-bottom: 2rem;'>", unsafe_allow_html=True)
 
 with st.sidebar:
     st.title("Customize:")

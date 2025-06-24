@@ -7,7 +7,6 @@ from functions.density import densityGraph
 set_logo()
 
 st.title("Affective Polarization")
-st.markdown("<hr style='margin-top: 0.5rem; margin-bottom: 2rem;'>", unsafe_allow_html=True)
 
 with st.sidebar:
     st.title("Please Select:")
