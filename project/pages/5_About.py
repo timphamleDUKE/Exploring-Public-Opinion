@@ -1,22 +1,20 @@
 import streamlit as st
+import pandas as pd
 import base64
 import os
-from functions.dictionaries import set_logo, df
+from functions.dictionaries import set_logo
 
 set_logo()
-
-# ---------- About the Data Section ----------
 st.title("About")
 
 # Tabs
 tab1, tab2 = st.tabs(["The Data", "Us"])
 
-# ---------- Tab 1: The Data ----------
+# Tab 1: The Data
+df = pd.read_csv("../data/anes_2024_clean.csv")
 with tab1:
-    # Show the dataframe
     st.write(df)
-    
-    # Create two columns for metadata description and logo
+
     col1, col2 = st.columns([3, 1])
     
 with col1:
@@ -35,7 +33,6 @@ with col1:
     with col2:
         st.image("images/Anes Logo.png", use_container_width=True)
     
-    # ---------- Footer for Tab 1 ----------
     st.divider()
     st.markdown(
         "This project was created as part of a research collaboration with the "
@@ -43,17 +40,13 @@ with col1:
         "using data from the [**American National Election Studies**](https://electionstudies.org/)."
     )
 
-# ---------- Tab 2: Us (Team) ----------
+# Tab 2: Us
 with tab2:
-    # ---------- Authors Section ----------
-    st.divider()
-    
-    # ---------- Helper to embed images as base64 ----------
+
     def base64_image(image_path):
         with open(image_path, "rb") as f:
             return base64.b64encode(f.read()).decode()
     
-    # ---------- Author Card Function ----------
     def author_card(image_path, name, class_year, major, school, linkedin_url):
         if not os.path.exists(image_path):
             return
@@ -75,7 +68,6 @@ with tab2:
         """
         st.markdown(html, unsafe_allow_html=True)
     
-    # ---------- Authors Data ----------
     authors = [
         {
             "image_path": "images/AF_cropped.png",
@@ -111,13 +103,11 @@ with tab2:
         }
     ]
     
-    # ---------- Display Author Cards ----------
     cols = st.columns(len(authors))
     for col, author in zip(cols, authors):
         with col:
             author_card(**author)
     
-    # ---------- Footer for Tab 2 ----------
     st.divider()
     st.markdown(
         "This project was created as part of a research collaboration with the "
