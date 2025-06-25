@@ -1,8 +1,6 @@
 import pandas as pd
 import numpy as np
 from scipy.stats import gaussian_kde
-from sklearn.utils import resample
-import streamlit as st
 from functions.dictionaries import find_weight_col
 
 class SurveyDesign:
@@ -97,7 +95,6 @@ def weighted_kde(values, weights=None, bandwidth=None):
     indices = np.random.choice(len(values), size=len(values)*2, p=weights, replace=True)
     resampled = values[indices]
     return gaussian_kde(resampled, bw_method=bandwidth)
-
 
 
 def apply_svy_density(df, variable, weight_col, group_var=None, strata_col="full_var_stratum", psu_col="full_var_psu", method="bootstrap", seed=None):
