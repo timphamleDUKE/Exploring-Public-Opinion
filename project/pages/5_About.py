@@ -112,5 +112,5 @@ with tab2:
     st.markdown(
         "This project was created as part of a research collaboration with the "
         "[**Duke University Polarization Lab**](https://www.polarizationlab.com/) "
-        "using data from the [**American National Election Studies**](https://electionstudies.org/)."
+        "using data from [**American National Election Studies**](https://electionstudies.org/)."
     )
