@@ -7,15 +7,27 @@ from functions.sankey import sankeyGraph, display_sankey_streamlit_bokeh
 set_logo()
 st.title("Issue Position")
 
-with st.sidebar:
-    st.title("Customize:")
-    
+col1, col2 = st.columns([1, 2])
+
+with col1:
     topic = st.selectbox("Topic", list_of_issue_topics, index=0)
-    list_of_issues = topic_to_list_of_issue_map.get(topic)
-    issue_question = st.selectbox("Issue Question", list_of_issues, index=0)
-    issue_question = description_to_renamed.get(issue_question)
-    
-    lib_con_pt = st.radio("Groups", ("Lib/Con 2-Point Scale", "Lib/Con 7-Point Scale", "Political Party"))
+
+list_of_issues = topic_to_list_of_issue_map.get(topic)
+
+with col2:
+    dropdown_issue_question = st.selectbox("Issue Question", list_of_issues, index=0)
+
+issue_question = description_to_renamed.get(dropdown_issue_question)
+lib_con_pt = st.radio("Groups", ("Lib/Con 2-Point Scale", "Lib/Con 7-Point Scale", "Political Party"))
+
+#with st.sidebar:
+#    st.title("Customize:")
+#    
+#    topic = st.selectbox("Topic", list_of_issue_topics, index=0)
+#    list_of_issues = topic_to_list_of_issue_map.get(topic)
+#    issue_question = st.selectbox("Issue Question", list_of_issues, index=0)
+#    issue_question = description_to_renamed.get(issue_question)    
+#    lib_con_pt = st.radio("Groups", ("Lib/Con 2-Point Scale", "Lib/Con 7-Point Scale", "Political Party"))
 
 # Filter data to only include valid responses (>= 1)
 df_filtered = df[df[issue_question] >= 1].copy()

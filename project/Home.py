@@ -5,8 +5,7 @@ from functions.dictionaries import set_logo
 st.set_page_config(
     page_title="Survey Navigator - Home",
     page_icon="📊",  # Keep this for browser tab - it's functional, not decorative
-    layout="wide",
-    initial_sidebar_state="collapsed"
+    layout="wide"
 )
 
 # Custom CSS for enhanced styling
