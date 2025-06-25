@@ -99,11 +99,13 @@ def sankeyGraph(df, question, group):
             edge_line_width=1,
             label_text_font_size='12pt',
             node_padding=50,
-            tools=['hover'],
+            tools=['hover'],           # Only keep hover tool
+            active_tools=[],           # Disable default active tools like box zoom
             bgcolor='white',
-            show_values = False
+            show_values=False
         )
     )
+
     
     # Add custom hover tool information
     sankey = sankey.opts(
