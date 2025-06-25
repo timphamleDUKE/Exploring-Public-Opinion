@@ -14,7 +14,7 @@ with st.sidebar:
     topic = st.selectbox("Topic", list_of_thermometer_topics, index=0)
     list_of_thermometer = topic_to_list_of_thermometer_map.get(topic)
 
-    thermometer_question = st.selectbox("Thermometer Question", list_of_thermometer, index=0)
+    thermometer_question = st.selectbox("How would you rate:", list_of_thermometer, index=0)
     thermometer_question = description_to_renamed.get(thermometer_question)
 
     group = st.radio("Groups", ["Ideological Groups", "Political Groups"])
