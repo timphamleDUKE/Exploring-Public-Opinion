@@ -71,7 +71,7 @@ conservative_graph = densityGraph(
     title=description_map.get("conservatives_thermometer")
 )
 
-harris_graph = densityGraph(
+harris_graph_pre = densityGraph(
     df,
     "harris_thermometer_pre",
     ("Republican Party", "Democratic Party"),
@@ -79,12 +79,28 @@ harris_graph = densityGraph(
     title=description_map.get("harris_thermometer_pre")
 )
 
-trump_graph = densityGraph(
+harris_graph_post = densityGraph(
+    df,
+    "harris_thermometer_post",
+    ("Republican Party", "Democratic Party"),
+    group="Political Groups",
+    title=description_map.get("harris_thermometer_post")
+)
+
+trump_graph_pre = densityGraph(
     df,
     "trump_thermometer_pre",
     ("Republican Party", "Democratic Party"),
     group="Political Groups",
     title=description_map.get("trump_thermometer_pre")
+)
+
+trump_graph_post = densityGraph(
+    df,
+    "trump_thermometer_post",
+    ("Republican Party", "Democratic Party"),
+    group="Political Groups",
+    title=description_map.get("trump_thermometer_post")
 )
 
 # Tabs
@@ -110,9 +126,11 @@ with tab3:
     st.subheader("Thermometer Ratings: Presidential Candidates")
     col1, col2 = st.columns(2)
     with col1:
-        st.plotly_chart(harris_graph, use_container_width=True, key="harris_chart")
+        st.plotly_chart(harris_graph_pre, use_container_width=True, key="harris_chart_pre")
+        st.plotly_chart(harris_graph_post, use_container_width=True, key="harris_chart_post")
     with col2:
-        st.plotly_chart(trump_graph, use_container_width=True, key="trump_chart")
+        st.plotly_chart(trump_graph_pre, use_container_width=True, key="trump_chart_pre")
+        st.plotly_chart(trump_graph_post, use_container_width=True, key="trump_chart_post")
 
 # Display Plot
 st.divider()
