@@ -1,6 +1,6 @@
 import numpy as np
 import holoviews as hv
-from holoviews import opts
+from holoviews import opts, dim
 import pandas as pd
 from functions.dictionaries import lib_con_map_2pt, lib_con_map_7pt, lib_con_2pt, lib_con_7pt, find_weight_col, find_answer_choices, political_map, political_colors_numbered
 from functions.weights import SurveyDesign
@@ -81,6 +81,9 @@ def sankeyGraph(df, question, group):
     # Create HoloViews Sankey diagram
     sankey = hv.Sankey(sankey_df, kdims=['Source', 'Target'], vdims=['Value', 'Percent', 'Color'])
     
+    all_nodes = list(sankey_df['Source'].unique()) + list(sankey_df['Target'].unique())
+    unique_nodes = list(set(all_nodes))
+
     # Apply styling options
     sankey = sankey.opts(
         opts.Sankey(
@@ -88,17 +91,18 @@ def sankeyGraph(df, question, group):
             height=200,
             edge_color='Color',
             edge_alpha=1,
-            node_color='white',
-            node_fill_color = "white",
+            node_color=dim('Source').categorize({node: '#ececec' for node in unique_nodes}),
+            node_fill_color=dim('Source').categorize({node: '#ececec' for node in unique_nodes}),
             node_alpha=1.0,
             node_fill_alpha=1.0,
             node_line_color='black',
-            node_line_width=0.5,
-            edge_line_width=2,
+            node_line_width=0.25,
+            edge_line_width=1,
             label_text_font_size='12pt',
             node_padding=50,
             tools=['hover'],
-            bgcolor='white'
+            bgcolor='white',
+            show_values = False
         )
     )
     
