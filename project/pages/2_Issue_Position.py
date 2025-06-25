@@ -49,7 +49,7 @@ expander = st.expander("Details")
 full_question = full_description_map.get(issue_question)
 
 if pd.notna(full_question):
-    expander.header("Full Question from ANES:")
+    expander.subheader("Full Question from ANES:")
     expander.write(full_question)
 
 # Caption
