@@ -1,7 +1,9 @@
 import streamlit as st
 import pandas as pd
+import holoviews as hv
 from functions.dictionaries import set_logo, list_of_issue_topics, topic_to_list_of_issue_map, description_to_renamed, df, description_map, full_description_map
-from functions.sankey import sankeyGraph
+from functions.sankey import sankeyGraph, display_sankey_streamlit_bokeh
+
 
 set_logo()
 
@@ -22,7 +24,18 @@ sankey_graph = (sankeyGraph(df, issue_question, lib_con_pt))
 # Display plots
 
 st.markdown(f"### {description_map.get(issue_question)}")
-st.plotly_chart(sankey_graph, use_container_width=True)
+
+try:
+    st.pyplot(sankey_graph, use_container_width=True)
+except:
+    try:
+        st.plotly_chart(sankey_graph, use_container_width=True)
+    except:
+        bokeh_plot = hv.render(sankey_graph)
+        display_sankey_streamlit_bokeh(df, issue_question, lib_con_pt)
+
+
+
 
 # Expander
 expander = st.expander("Details")

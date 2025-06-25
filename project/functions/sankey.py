@@ -1,12 +1,17 @@
 import numpy as np
-import plotly.graph_objects as go
+import holoviews as hv
+from holoviews import opts
+import pandas as pd
 from functions.dictionaries import lib_con_map_2pt, lib_con_map_7pt, lib_con_2pt, lib_con_7pt, find_weight_col, find_answer_choices, political_map, political_colors_numbered
 from functions.weights import SurveyDesign
 import streamlit as st
 
-def sankeyGraph(df, question, group, use_weights = True):
+# Enable bokeh backend for HoloViews
+hv.extension('bokeh')
+
+def sankeyGraph(df, question, group):
     """
-    Create a Sankey diagram with optional survey-weighted flows.
+    Create a Sankey diagram with optional survey-weighted flows using HoloViews.
     """
 
     if group == "Lib/Con 2-Point Scale":
@@ -22,23 +27,15 @@ def sankeyGraph(df, question, group, use_weights = True):
         lib_con_map = political_map
         ideology_colors = political_colors_numbered
 
-
     target_col = question
 
     # Clean data using SurveyDesign if weights are enabled
-
     weight_col = find_weight_col(question)
 
-
-    if use_weights:
-        design = SurveyDesign(df, weight = "post_full", strata = "full_var_stratum", psu = "full_var_psu")
-        df = design.df
-    else:
-        df = df.copy()
-        df[weight_col] = 1  # treat all weights as 1
+    design = SurveyDesign(df, weight="post_full", strata="full_var_stratum", psu="full_var_psu")
+    df = design.df
 
     # Filter valid values
-
     if group == "Political Party":
         df = df[
             (df[source_col].between(1, 2)) &
@@ -54,71 +51,117 @@ def sankeyGraph(df, question, group, use_weights = True):
     flow_df = (
         df[[source_col, target_col, weight_col]]
         .dropna()
-        .groupby([source_col, target_col], as_index = False)
-        .agg(count = (weight_col, "sum"))
+        .groupby([source_col, target_col], as_index=False)
+        .agg(count=(weight_col, "sum"))
     )
 
     # Label mapping
-    source_keys = sorted(flow_df[source_col].unique())
-    sources = [lib_con_map[int(k)] for k in source_keys]
-
     answer_choice_map = find_answer_choices(question)
-    target_keys = sorted(flow_df[target_col].unique())
-    targets = [answer_choice_map[int(k)] for k in target_keys]
-    # targets = flow_df[target_col].astype(str).unique().tolist()
-    labels = sources + targets
 
-    x_coords = [0] * len(sources) + [1] * len(targets)
-    y_coords = list(np.linspace(0.05, 0.95, len(sources))) + list(np.linspace(0.05, 0.95, len(targets)))
+    # Create the data structure for HoloViews Sankey
+    # HoloViews expects (source, target, value) tuples
+    sankey_data = []
+    
+    total = flow_df["count"].sum()
+    
+    for _, row in flow_df.iterrows():
+        source_label = lib_con_map[int(row[source_col])]
+        target_label = answer_choice_map[int(row[target_col])]
+        value = row["count"]
+        percent = (value / total) * 100
+        
+        # Get color for this flow based on source ideology
+        color = ideology_colors[int(row[source_col])]
+        
+        sankey_data.append((source_label, target_label, value, percent, color))
 
-    label_indices = {label: idx for idx, label in enumerate(labels)}
-    source_indices = flow_df[source_col].map(lambda x: label_indices[lib_con_map[int(x)]]).tolist()
+    # Convert to DataFrame for HoloViews
+    sankey_df = pd.DataFrame(sankey_data, columns=['Source', 'Target', 'Value', 'Percent', 'Color'])
 
-
-    target_indices = flow_df[target_col].map(lambda t: label_indices[answer_choice_map[int(t)]]).tolist()
-
-    values = flow_df["count"].tolist()
-
-    link_colors = [ideology_colors[int(k)] for k in flow_df[source_col]]
-
-    total = sum(values)
-    percentages = [v / total * 100 for v in values]
-    flow_df["percent"] = np.round(percentages, 2)
-
-
-    sankey = go.Sankey(
-        node = dict(
-            label = labels,
-            x = x_coords,
-            y = y_coords,
-            pad = 70,
-            thickness = 20,
-            line = dict(color = "black", width = 0.5),
-            color = "white"
-        ),
-        link = dict(
-            source = source_indices,
-            target = target_indices,
-            value = values,
-            color = link_colors,
-            customdata = flow_df[["percent"]],
-            hovertemplate="%{source.label} → %{target.label}<br>Percent: %{customdata[0]:.2f}%<extra></extra>"
+    # Create HoloViews Sankey diagram
+    sankey = hv.Sankey(sankey_df, kdims=['Source', 'Target'], vdims=['Value', 'Percent', 'Color'])
+    
+    # Apply styling options
+    sankey = sankey.opts(
+        opts.Sankey(
+            width=600,
+            height=200,
+            edge_color='Color',
+            edge_alpha=1,
+            node_color='white',
+            node_fill_color = "white",
+            node_alpha=1.0,
+            node_fill_alpha=1.0,
+            node_line_color='black',
+            node_line_width=0.5,
+            edge_line_width=2,
+            label_text_font_size='12pt',
+            node_padding=50,
+            tools=['hover'],
+            bgcolor='white'
         )
     )
     
-    fig = go.Figure(sankey)
-    fig.update_layout(
-        font = dict(size = 15, family = "Arial"),
-        margin = dict(l = 10, r = 10, t = 120, b = 50),
-        width = 600,   # or more
-        height = 450,   # increase if nodes/links overlap
-        # title = dict(
-        #     text = f"{description_map.get(question)}", 
-        #     font = dict(size = 20))
+    # Add custom hover tool information
+    sankey = sankey.opts(
+        opts.Sankey(
+            hover_tooltips=[
+                ('Flow', '@Source → @Target'),
+                ('Weighted Count', '@Value{0,0}'),
+                ('Percent', '@Percent{0.00}%')
+            ]
+        )
     )
 
-    # fig.add_annotation(text = "Ideology (Source)", x = 0.01, y = 1.05, xanchor="left", showarrow = False, font = dict(size = 15))
-    # fig.add_annotation(text = "Answer Choices", x = 1, y = 1.05, xanchor="right", showarrow = False, font = dict(size = 15))
+    return sankey
 
+# Alternative function that returns the plot in a format suitable for Streamlit
+def sankeyGraph_streamlit(df, question, group):
+    """
+    Create a Sankey diagram for Streamlit display.
+    Returns the bokeh plot object.
+    """
+    sankey = sankeyGraph(df, question, group)
+    
+    # Convert to bokeh plot for Streamlit
+    bokeh_plot = hv.render(sankey)
+    
+    return bokeh_plot
 
-    return fig
+# Function to display using streamlit-bokeh (correct import)
+def display_sankey_streamlit_bokeh(df, question, group):
+    """
+    Create and display a Sankey diagram using streamlit-bokeh.
+    """
+    try:
+        from streamlit_bokeh import streamlit_bokeh
+        
+        bokeh_plot = sankeyGraph_streamlit(df, question, group)
+        streamlit_bokeh(bokeh_plot, use_container_width=True)
+        
+    except ImportError:
+        st.error("streamlit-bokeh not installed. Please run: pip install streamlit-bokeh")
+        return None
+
+# Alternative function for HTML export to Streamlit
+def sankeyGraph_html(df, question, group):
+    """
+    Create a Sankey diagram and return as HTML for Streamlit display.
+    """
+    sankey = sankeyGraph(df, question, group)
+    
+    # Export as HTML
+    from bokeh.embed import file_html
+    from bokeh.resources import CDN
+    
+    bokeh_plot = hv.render(sankey)
+    html = file_html(bokeh_plot, CDN, "Sankey Diagram")
+    return html
+
+# Function to display using HTML components
+def display_sankey_html(df, question, group):
+    """
+    Create and display a Sankey diagram using HTML components.
+    """
+    html_plot = sankeyGraph_html(df, question, group)
+    st.components.v1.html(html_plot, height=500, scrolling=True)
