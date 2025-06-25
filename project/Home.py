@@ -68,24 +68,26 @@ def load_custom_css():
         line-height: 1.6;
     }
     
-    /* Card styling */
+    /* Enhanced card styling with subtle shadows and better spacing */
     .feature-card {
         background: white;
-        border-radius: 16px;
+        border-radius: 20px;
         padding: 2.5rem;
         margin-bottom: 1.5rem;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-        border: 1px solid #f0f2f6;
-        transition: all 0.3s ease;
+        box-shadow: 0 8px 32px rgba(102, 126, 234, 0.1);
+        border: 1px solid rgba(102, 126, 234, 0.1);
+        transition: all 0.4s ease;
         position: relative;
         overflow: hidden;
         height: 100%;
         text-align: center;
+        backdrop-filter: blur(10px);
     }
     
     .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        transform: translateY(-8px);
+        box-shadow: 0 20px 50px rgba(102, 126, 234, 0.15);
+        border-color: rgba(102, 126, 234, 0.2);
     }
     
     .feature-card::before {
@@ -94,8 +96,9 @@ def load_custom_css():
         top: 0;
         left: 0;
         right: 0;
-        height: 4px;
+        height: 5px;
         background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 20px 20px 0 0;
     }
     
     .card-title {
@@ -104,6 +107,10 @@ def load_custom_css():
         color: #2c3e50;
         margin-bottom: 1.5rem;
         letter-spacing: -0.5px;
+        background: linear-gradient(135deg, #2c3e50, #667eea);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
     }
     
     .card-description {
@@ -133,24 +140,36 @@ def load_custom_css():
         background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
     }
     
-    /* Stats section */
+    /* Enhanced stats section with modern glassmorphism */
     .stats-container {
-        background: #f8fafc;
-        border-radius: 16px;
+        background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,250,252,0.9));
+        border-radius: 20px;
         padding: 3rem 2rem;
         margin: 2rem 0;
         text-align: center;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+        box-shadow: 0 8px 32px rgba(102, 126, 234, 0.1);
     }
     
     .stat-item {
         padding: 1rem;
+        transition: transform 0.3s ease;
+    }
+    
+    .stat-item:hover {
+        transform: scale(1.05);
     }
     
     .stat-number {
         font-size: 3.5rem;
         font-weight: 700;
-        color: #667eea;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
         display: block;
+        text-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
     }
     
     .stat-label {
@@ -225,30 +244,38 @@ set_logo()
 def render_hero_section():
     st.markdown("""
     <div class="hero-container">
-        <h1 class="hero-title">Welcome!</h1>
+        <h1 class="hero-title">Welcome to the Survey Navigator!</h1>
     </div>
     """, unsafe_allow_html=True)
+
+def render_about_section():
+    st.markdown("## About Our Project", unsafe_allow_html=True)
+    st.markdown("""
+    This project analyzes the 2024 American National Election Study data to explore political polarization 
+    and public opinion patterns. Through interactive visualizations, we examine both affective polarization 
+    (how people feel about opposing parties) and issue positions (where Americans stand on key political topics).
+    """)
 
 # Enhanced stats section
 def render_stats_section():
     st.markdown("""
     <div class="stats-container">
         <div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
-            <div class="stat-item" title="Conducted before and after the 2024 election">
-                <span class="stat-number">Pre & Post</span>
-                <div class="stat-label">Election Surveys</div>
+            <div class="stat-item" title="Number of survey responses analyzed in this project">
+                <span class="stat-number">X,XXX</span>
+                <div class="stat-label">Responses Analyzed</div>
             </div>
-            <div class="stat-item" title="Continuous data collection since 1948">
-                <span class="stat-number">76 Years</span>
-                <div class="stat-label">Data Collection (1948-2024)</div>
+            <div class="stat-item" title="Political topics and issues examined">
+                <span class="stat-number">XX</span>
+                <div class="stat-label">Topics Examined</div>
             </div>
-            <div class="stat-item" title="Referenced in over 9,800 academic publications">
-                <span class="stat-number">9,800+</span>
-                <div class="stat-label">Academic Citations</div>
+            <div class="stat-item" title="Project development timeline">
+                <span class="stat-number">X Months</span>
+                <div class="stat-label">Project Duration</div>
             </div>
-            <div class="stat-item" title="Recognized as the highest quality election survey data">
-                <span class="stat-number">Gold Standard</span>
-                <div class="stat-label">Election Survey Data</div>
+            <div class="stat-item" title="Team members who contributed to this analysis">
+                <span class="stat-number">X</span>
+                <div class="stat-label">Team Members</div>
             </div>
         </div>
     </div>
@@ -395,7 +422,12 @@ def main():
     render_stats_section()
 
     # Section header for features
-    st.markdown("## Explore the Data")
+    st.markdown("""
+    <div style="text-align: center;">
+        <h2>Explore the Data</h2>
+    </div>
+    """, unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
     
     # Render feature cards
     render_feature_cards()
