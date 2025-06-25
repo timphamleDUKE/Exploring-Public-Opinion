@@ -56,33 +56,19 @@ if pd.notna(full_question):
 # Add vote count table
 expander.header("Response Counts by Party:")
 
-# Get answer choices for the current question
 answer_choices = find_answer_choices(issue_question)
 
-# Create vote count table using filtered data
 if lib_con_pt == "Political Party":
-    # Filter data for Republicans and Democrats with valid responses
     party_data = df_filtered[df_filtered['party_id'].isin(['Republican', 'Democrat'])].copy()
-    
-    # Create crosstab of party vs issue response and transpose to swap axes
     vote_counts = pd.crosstab(party_data['party_id'], party_data[issue_question], margins=True).T
-    
-    # Rename the index (response values) to descriptive labels
     if answer_choices:
         vote_counts.index = vote_counts.index.map(lambda x: f"{x}. {answer_choices.get(x, x)}" if x != 'All' and x in answer_choices else x)
-    
+ 
     expander.dataframe(vote_counts, use_container_width=True)
 else:
-    # For Lib/Con scales, show counts by ideology group
     ideology_col = 'lib_con_2pt' if lib_con_pt == "Lib/Con 2-Point Scale" else 'lib_con_7pt'
-    
-    # Filter out missing values and use already filtered data
     filtered_data = df_filtered.dropna(subset=[ideology_col, issue_question]).copy()
-    
-    # Create crosstab and transpose to swap axes
     vote_counts = pd.crosstab(filtered_data[ideology_col], filtered_data[issue_question], margins=True).T
-    
-    # Rename the index (response values) to descriptive labels
     if answer_choices:
         vote_counts.index = vote_counts.index.map(lambda x: f"{x}. {answer_choices.get(x, x)}" if x != 'All' and x in answer_choices else x)
     
