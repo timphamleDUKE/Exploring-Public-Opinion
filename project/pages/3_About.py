@@ -81,7 +81,7 @@ with tab2:
             "linkedin_url": "https://www.linkedin.com/in/alexa-fahrer-138456133/"
         },
         {
-            "image_path": "images/TL.jpg",
+            "image_path": "images/TL_cropped.png",
             "name": "Tim Le",
             "class_year": "Class of 2028",
             "major": "Computer Science & Statistical Science",
@@ -89,7 +89,7 @@ with tab2:
             "linkedin_url": "https://www.linkedin.com/in/tim-le-836296283/"
         },
         {
-            "image_path": "images/JJ.jpeg",
+            "image_path": "images/JJ_cropped.png",
             "name": "Joie Jacobs",
             "class_year": "Class of 2028",
             "major": "Accounting & Math",
