@@ -1,8 +1,7 @@
-import numpy as np
 import holoviews as hv
 from holoviews import opts, dim
 import pandas as pd
-from functions.dictionaries import lib_con_map_2pt, lib_con_map_7pt, lib_con_2pt, lib_con_7pt, find_weight_col, find_answer_choices, political_map, political_colors_numbered
+from functions.dictionaries import *
 from functions.weights import SurveyDesign
 import streamlit as st
 
