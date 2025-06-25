@@ -12,10 +12,6 @@ def set_logo():
         size = "large"
     )
 
-    st.set_page_config(
-        layout = "wide"
-    )
-
     # Size of sidebar
     st.markdown("""
         <style>
