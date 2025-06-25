@@ -1,5 +1,4 @@
 import streamlit as st
-import numpy as np
 import plotly.graph_objects as go
 from functions.dictionaries import *
 from functions.weights import get_anes_weighted_density_data

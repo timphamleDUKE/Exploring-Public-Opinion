@@ -12,10 +12,6 @@ def set_logo():
         size = "large"
     )
 
-    st.set_page_config(
-        layout = "wide"
-    )
-
     # Size of sidebar
     st.markdown("""
         <style>
@@ -48,15 +44,15 @@ def set_logo():
 df = pd.read_csv("../data/anes_2024_clean.csv")
 codebook = pd.read_csv("../data/codebook.csv")
 
+
 # List of thermometer questions
 thermometer_codebook = codebook[(codebook["Category"] == "Feeling Thermometer")]
 list_of_thermometer = thermometer_codebook["Renamed"]
 list_of_thermometer_topics = thermometer_codebook["Topic"].dropna().unique().tolist()
 list_of_thermometer_topics = sorted([t for t in list_of_thermometer_topics if t != "Other"]) + ["Other"]
 
-
 topic_to_list_of_thermometer_map = (
-    thermometer_codebook.groupby("Topic")["Description"]
+    thermometer_codebook.groupby("Topic")["Dropdown Text"]
     .apply(lambda x: x.dropna().tolist())
     .to_dict()
 )
@@ -118,8 +114,8 @@ target_label_map = {
 # Descriptions
 description_map = dict(zip(codebook["Renamed"], codebook["Description"]))
 full_description_map = dict(zip(codebook["Renamed"], codebook["Original Question"]))
-
 description_to_renamed = dict(zip(codebook["Description"], codebook["Renamed"]))
+dropdown_to_renamed = dict(zip(codebook["Dropdown Text"], codebook["Renamed"]))
 
 # Sankey Color Mapping
 
