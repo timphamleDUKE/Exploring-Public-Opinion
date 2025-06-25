@@ -282,6 +282,12 @@ def render_stats_section():
 FEATURE_CARDS = [
     {
         "title": "Affective Polarization",
+        "icon": """<svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 9V7c0-1.1-.9-2-2-2H6c-1.1 0-2 .9-2 2v2" stroke="#667eea" stroke-width="2"/>
+                    <path d="M4 15v2c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-2" stroke="#667eea" stroke-width="2"/>
+                    <circle cx="8" cy="12" r="3" fill="#764ba2"/>
+                    <circle cx="16" cy="12" r="3" fill="#667eea"/>
+                   </svg>""",
         "description": """
         Explore the emotional landscape of American politics. How warmly or coldly do 
         Americans feel about people on the other side? Track emotional responses by 
@@ -293,6 +299,14 @@ FEATURE_CARDS = [
     },
     {
         "title": "Issue Positions",
+        "icon": """<svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 17l6-6 4 4 8-8" stroke="#667eea" stroke-width="2" fill="none"/>
+                    <path d="M21 7v2l-8 8-4-4-6 6v-2" fill="#764ba2" opacity="0.3"/>
+                    <circle cx="3" cy="17" r="2" fill="#764ba2"/>
+                    <circle cx="9" cy="11" r="2" fill="#667eea"/>
+                    <circle cx="13" cy="15" r="2" fill="#764ba2"/>
+                    <circle cx="21" cy="7" r="2" fill="#667eea"/>
+                   </svg>""",
         "description": """
         Dive deep into where Americans actually stand on critical issues like immigration, 
         healthcare, and the economy. Uncover the nuanced positions that often get lost 
@@ -312,6 +326,7 @@ def render_feature_cards():
         with cols[idx]:
             st.markdown(f"""
             <div class="feature-card">
+                <div style="margin-bottom: 1rem;">{card['icon']}</div>
                 <h3 class="card-title">{card['title']}</h3>
                 <p class="card-description">{card['description']}</p>
             </div>
@@ -412,6 +427,14 @@ def main():
     # Add description text full width with minimal spacing
     st.markdown("""
     <div style="text-align: center; width: 100%; margin: 1rem auto;">
+        <div style="margin-bottom: 1rem;">
+            <svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="10" y="15" width="20" height="20" rx="3" fill="#667eea" opacity="0.7"/>
+                <rect x="35" y="10" width="20" height="25" rx="3" fill="#764ba2" opacity="0.7"/>
+                <rect x="60" y="12" width="20" height="23" rx="3" fill="#667eea" opacity="0.7"/>
+                <circle cx="95" cy="20" r="8" fill="#764ba2" opacity="0.7"/>
+            </svg>
+        </div>
         <p style="font-size: 1.2rem; color: #5a6c7d; line-height: 1.6; margin: 0.5rem 0;">
             This project analyzes the 2024 American National Election Study data to explore political polarization 
             and public opinion patterns. Through interactive visualizations, we examine both affective polarization 
@@ -424,9 +447,10 @@ def main():
     render_stats_section()
 
     # Section header for features
+    st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("""
     <div style="text-align: center;">
-        <h2>Explore Our Site</h2>
+        <h2 style="color: #3b4cb8; margin-bottom: 2rem;">Explore Our Site</h2>
     </div>
     """, unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
