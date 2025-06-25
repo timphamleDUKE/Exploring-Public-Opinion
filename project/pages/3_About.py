@@ -13,27 +13,30 @@ tab1, tab2 = st.tabs(["The Data", "Us"])
 # Tab 1: The Data
 df = pd.read_csv("../data/anes_2024_clean.csv")
 with tab1:
-    st.write(df)
-
     col1, col2 = st.columns([3, 1])
     
-with col1:
-    # Add metadata description
-    st.markdown("""  
-    The data used in this project come from the **American National Election Survey (ANES) 2024**, 
-    one of the most respected sources of public opinion data in the United States, a collaborative project between Stanford 
-    University and the University of Michigan.
-    
-    **Observations:** 5,521 respondents    &    **Variables:** 124
-    
-    The dataset includes detailed information on political attitudes, voting behavior, 
-    demographic characteristics, ideological self-placement, partisanship, and much more.
-    """)
-    
+    with col1:
+        # Add metadata description
+        st.markdown("""  
+        The data used in this project come from the **American National Election Survey (ANES) 2024**, 
+        one of the most respected sources of public opinion data in the United States, a collaborative project between Stanford 
+        University and the University of Michigan.
+        
+        **Observations:** 5,521 respondents    &    **Variables:** 124
+        
+        The dataset includes detailed information on political attitudes, voting behavior, 
+        demographic characteristics, ideological self-placement, partisanship, and much more.
+        """)
+        
     with col2:
         st.image("images/Anes Logo.png", use_container_width=True)
     
-    st.divider()
+    # Add space between text and dataframe
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Display dataframe at full width
+    st.write(df)
+    
     st.markdown(
         "This project was created as part of a research collaboration with the "
         "[**Duke University Polarization Lab**](https://www.polarizationlab.com/) "
@@ -78,7 +81,7 @@ with tab2:
             "linkedin_url": "https://www.linkedin.com/in/alexa-fahrer-138456133/"
         },
         {
-            "image_path": "images/TL_test.png",
+            "image_path": "images/TL.jpg",
             "name": "Tim Le",
             "class_year": "Class of 2028",
             "major": "Computer Science & Statistical Science",
@@ -86,7 +89,7 @@ with tab2:
             "linkedin_url": "https://www.linkedin.com/in/tim-le-836296283/"
         },
         {
-            "image_path": "images/JJ_test.png",
+            "image_path": "images/JJ.jpeg",
             "name": "Joie Jacobs",
             "class_year": "Class of 2028",
             "major": "Accounting & Math",
