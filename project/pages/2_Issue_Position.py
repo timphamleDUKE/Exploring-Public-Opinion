@@ -5,7 +5,6 @@ from functions.dictionaries import *
 from functions.sankey import sankeyGraph, display_sankey_streamlit_bokeh
 
 set_logo()
-
 st.title("Issue Position")
 
 with st.sidebar:
@@ -37,10 +36,9 @@ except:
 
 # Expander
 expander = st.expander("Details")
-
 full_question = full_description_map.get(issue_question)
 if pd.notna(full_question):
-    expander.header("Full Question from ANES:")
+    expander.subheader("Full Question from ANES:")
     expander.write(full_question)
 
 # Add vote count table

@@ -1,9 +1,9 @@
-de,Variable Code,Pre/Post,Renamed,Category,Topic,Description,Answer Choices,Original Question
-2024,V240107a,Pre,pre_full,Weights,,Pre full ANES sample (FTF + panel + web + PAPI),,
-2024,V240107b,Post,post_full,Weights,,Post full ANES sample (FTF + panel + web + PAPI),,
-2024,V240107c,,full_var_psu,Weights,,Full ANES sample variance PSU,,
-2024,V240107d,,full_var_stratum,Weights,,Full ANES sample variance stratum,,
-2024,V241458x,Pre,age_election_day,Social Characteristics,,Age (on election day),,
+Year,Variable Code,Pre/Post,Renamed,Category,Topic,Description,Answer Choices,Original Question,Dropdown Text
+2024,V240107a,Pre,pre_full,Weights,,Pre full ANES sample (FTF + panel + web + PAPI),,,
+2024,V240107b,Post,post_full,Weights,,Post full ANES sample (FTF + panel + web + PAPI),,,
+2024,V240107c,,full_var_psu,Weights,,Full ANES sample variance PSU,,,
+2024,V240107d,,full_var_stratum,Weights,,Full ANES sample variance stratum,,,
+2024,V241458x,Pre,age_election_day,Social Characteristics,,Age (on election day),,,
 2024,V241465x,Pre,educ,Social Characteristics,,What is the highest level of school you have completed or the highest degree you received?,"-9. Refused
 -8. Don’t know
 -4. Error
@@ -12,13 +12,13 @@ de,Variable Code,Pre/Post,Renamed,Category,Topic,Description,Answer Choices,Orig
 2. High school credential
 3. Some post-high school, no bachelor’s degree
 4. Bachelor’s degree
-5. Graduate degree",
+5. Graduate degree",,
 2024,v241461x,Pre,marriage,Social Characteristics,,"Are you now married, widowed, divorced, separated or never married?","-2. Missing in V241459 or V241460
 1. Married
 2. Widowed
 3. Divorced
 4. Separated
-5. Never married",
+5. Never married",,
 2024,V241567x,Pre,income,Social Characteristics,,Household income,"-9. Refused
 -5. Break off, sufficient partial
 -4. Error
@@ -27,7 +27,7 @@ de,Variable Code,Pre/Post,Renamed,Category,Topic,Description,Answer Choices,Orig
 3. $30,000 to $59,999
 4. $60,000 to $99,999
 5. $100,000 to $249,999
-6. $250,000 or more",
+6. $250,000 or more",,
 2024,V241422,Pre,religion,Social Characteristics,,"What is your present religion, if any?","-9. Refused
 -8. Don’t know
 -1. Inapplicable
@@ -42,13 +42,13 @@ de,Variable Code,Pre/Post,Renamed,Category,Topic,Description,Answer Choices,Orig
 9. Atheist
 10. Agnostic
 11. Something else
-12. Nothing in particular",
+12. Nothing in particular",,
 2024,V241551,Pre,gender,Social Characteristics,,What is your gender?,"-9. Refused
 -1. Inapplicable
 1. Man
 2. Woman
 3. Nonbinary
-4. Something else, please specify",
+4. Something else, please specify",,
 2024,V241501x,Pre,race_ethnicity,Social Characteristics,,"Race/ethnicity (self-identified)
 ","-9. Refused
 -8. Don’t know
@@ -58,63 +58,63 @@ de,Variable Code,Pre/Post,Renamed,Category,Topic,Description,Answer Choices,Orig
 3. Hispanic
 4. Asian or Native Hawaiian/other Pacific Islander, non-Hispanic
 5. Native American/Alaska Native or other race, non-Hispanic
-6. Multiple races, non-Hispanic",
+6. Multiple races, non-Hispanic",,
 2024,V241166,Pre,democrat_thermometer_pre,Feeling Thermometer,Parties,How would you rate: the Democratic Party,"-9. Refused
--8. Don’t know",
+-8. Don’t know",,The Democratic Party
 2024,V241167,Pre,republican_thermometer_pre,Feeling Thermometer,Parties,How would you rate: the Republican Party,"-9. Refused
 -8. Don’t know
--1. Inapplicable",
+-1. Inapplicable",,The Republican Party
 2024,V242139,Post,liberals_thermometer,Feeling Thermometer,Ideology,How would you rate: Liberals,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,Liberals
 2024,V242142,Post,conservatives_thermometer,Feeling Thermometer,Ideology,How would you rate: Conservatives,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,Conservatives
 2024,V241156,Pre,harris_thermometer_pre,Feeling Thermometer,Presidential Candidates,How would you rate: Kamala Harris (Pre-Election),"-9. Refused
--8. Don’t know",
+-8. Don’t know",,Kamala Harris (Pre-Election)
 2024,V242125,Post,harris_thermometer_post,Feeling Thermometer,Presidential Candidates,How would you rate: Kamala Harris (Post-Election),"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,Kamala Harris (Post-Election)
 2024,V241157,Pre,trump_thermometer_pre,Feeling Thermometer,Presidential Candidates,How would you rate: Donald Trump (Pre-Election),"-9. Refused
 -8. Don’t know
--1. Inapplicable",
+-1. Inapplicable",,Donald Trump (Pre-Election)
 2024,V242126,Post,trump_thermometer_post,Feeling Thermometer,Presidential Candidates,How would you rate: Donald Trump (Post-Election),"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,Donald Trump (Post-Election)
 2024,V241158,Pre,biden_thermometer_pre,Feeling Thermometer,Presidential Candidates,How would you rate: Joe Biden (Pre-Election),"-9. Refused
--8. Don’t know",
+-8. Don’t know",,Joe Biden (Pre-Election)
 2024,V242136,Post,biden_thermometer_post,Feeling Thermometer,Presidential Candidates,How would you rate: Joe Biden (Post-Election),"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,Joe Biden (Post-Election)
 2024,V241164,Pre,vance_thermometer_pre,Feeling Thermometer,Vice-Presidential Candidates,How would you rate: J.D. Vance (Pre-Election),"-9. Refused
--8. Don’t know",
+-8. Don’t know",,J.D. Vance (Pre-Election)
 2024,V242135,Post,vance_thermometer_post,Feeling Thermometer,Vice-Presidential Candidates,How would you rate: J.D. Vance (Post-Election),"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,J.D. Vance (Post-Election)
 2024,V242134,Post,walz_thermometer_post,Feeling Thermometer,Vice-Presidential Candidates,How would you rate: Tim Walz,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
@@ -122,70 +122,70 @@ de,Variable Code,Pre/Post,Renamed,Category,Topic,Description,Answer Choices,Orig
 -4. Error
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,Tim Walz
 2024,V242137,Post,christian_fundamentalists_thermometer,Feeling Thermometer,Religious Groups,How would you rate: Christian Fundamentalists,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,Christian Fundamentalists
 2024,V242138,Post,feminists_thermometer,Feeling Thermometer,Gender/Sex-Related Groups,How would you rate: Feminists,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,Feminists
 2024,V242140,Post,labor_unions_thermometer,Feeling Thermometer,Various Societal Groups,How would you rate: Labor unions,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,Labor unions
 2024,V242141,Post,big_business_thermometer,Feeling Thermometer,Various Societal Groups,How would you rate: Big business,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,Big business
 2024,V242143,Post,supreme_court_thermometer,Feeling Thermometer,Government,How would you rate: The U.S. Supreme Court,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,The U.S. Supreme Court
 2024,V242144,Post,lgbt_thermometer,Feeling Thermometer,Gender/Sex-Related Groups,How would you rate: Gay men and lesbians,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,Gay men and lesbians
 2024,V242145,Post,congress_thermometer,Feeling Thermometer,Government,How would you rate: Congress,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,Congress
 2024,V242146,Post,muslims_thermometer,Feeling Thermometer,Religious Groups,How would you rate: Muslims,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,Muslims
 2024,V242147,Post,christians_thermometer,Feeling Thermometer,Religious Groups,How would you rate: Christians,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,Christians
 2024,V242148,Post,maga_thermometer,Feeling Thermometer,Social Movements,How would you rate: MAGA movement,"-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
@@ -194,106 +194,105 @@ de,Variable Code,Pre/Post,Renamed,Category,Topic,Description,Answer Choices,Orig
 -4. Error
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,MAGA movement
 2024,V242149,Post,jews_thermometer,Feeling Thermometer,Religious Groups,How would you rate: Jews,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,Jews
 2024,V242150,Post,police_thermometer,Feeling Thermometer,Various Societal Groups,How would you rate: Police,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,Police
 2024,V242151,Post,transgender_thermometer,Feeling Thermometer,Gender/Sex-Related Groups,How would you rate: Transgender people,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,Transgender people
 2024,V242152,Post,blm_thermometer,Feeling Thermometer,Social Movements,How would you rate: Black Lives Matter movement,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,Black Lives Matter movement
 2024,V242153,Post,nra_thermometer,Feeling Thermometer,Other,How would you rate: The National Rifle Association (NRA),"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
-2024,V242154,Post,fbi_thermometer,Feeling Thermometer,Other,"How would you rate: The Federal Bureau of Investigation
-(FBI)","-9. Refused
+999. Don’t recognize",,The National Rifle Association (NRA)
+2024,V242154,Post,fbi_thermometer,Feeling Thermometer,Other,How would you rate: The Federal Bureau of Investigation (FBI),"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,The Federal Bureau of Investigation (FBI)
 2024,V242155,Post,rural_thermometer,Feeling Thermometer,Other,How would you rate: Rural Americans,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,Rural Americans
 2024,V242156,Post,planned_parenthood_thermometer,Feeling Thermometer,Other,How would you rate: Planned Parenthood,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable
 998. Don’t know (where to rate)
-999. Don’t recognize",
+999. Don’t recognize",,Planned Parenthood
 2024,V242514,Post,asian_thermometer,Feeling Thermometer,Racial/Ethnic Groups,How would you rate: Asian-Americans,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable","[Using the same thermometer scale which you used earlier in the interview, how would you rate: Asian-Americans
 
-Please enter the rating number in the number box. Ratings between 50 degrees and 100 degrees mean that you feel favorable and warm toward the group. Ratings between 0 degrees and 50 degrees mean that you don’t feel favorable toward the group and that you don’t care too much for that group. You would rate the group at the 50 degree mark if you don’t feel particularly warm or cold toward the group."
+Please enter the rating number in the number box. Ratings between 50 degrees and 100 degrees mean that you feel favorable and warm toward the group. Ratings between 0 degrees and 50 degrees mean that you don’t feel favorable toward the group and that you don’t care too much for that group. You would rate the group at the 50 degree mark if you don’t feel particularly warm or cold toward the group.",Asian-Americans
 2024,V242515,Post,hispanic_thermometer,Feeling Thermometer,Racial/Ethnic Groups,How would you rate: Hispanics,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable","[Using the same thermometer scale which you used earlier in the interview, how would you rate: Hispanics
 
-Please enter the rating number in the number box. Ratings between 50 degrees and 100 degrees mean that you feel favorable and warm toward the group. Ratings between 0 degrees and 50 degrees mean that you don’t feel favorable toward the group and that you don’t care too much for that group. You would rate the group at the 50 degree mark if you don’t feel particularly warm or cold toward the group."
+Please enter the rating number in the number box. Ratings between 50 degrees and 100 degrees mean that you feel favorable and warm toward the group. Ratings between 0 degrees and 50 degrees mean that you don’t feel favorable toward the group and that you don’t care too much for that group. You would rate the group at the 50 degree mark if you don’t feel particularly warm or cold toward the group.",Hispanics
 2024,V242516,Post,black_thermometer,Feeling Thermometer,Racial/Ethnic Groups,How would you rate: Blacks,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable","[Using the same thermometer scale which you used earlier in the interview, how would you rate: blacks
 
-Please enter the rating number in the number box. Ratings between 50 degrees and 100 degrees mean that you feel favorable and warm toward the group. Ratings between 0 degrees and 50 degrees mean that you don’t feel favorable toward the group and that you don’t care too much for that group. You would rate the group at the 50 degree mark if you don’t feel particularly warm or cold toward the group."
+Please enter the rating number in the number box. Ratings between 50 degrees and 100 degrees mean that you feel favorable and warm toward the group. Ratings between 0 degrees and 50 degrees mean that you don’t feel favorable toward the group and that you don’t care too much for that group. You would rate the group at the 50 degree mark if you don’t feel particularly warm or cold toward the group.",Blacks
 2024,V242517,Post,illegal_immigrant_thermometer,Feeling Thermometer,Other,How would you rate: Illegal immigrants,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable","[Using the same thermometer scale which you used earlier in the interview, how would you rate: illegal immigrants
 
-Please enter the rating number in the number box. Ratings between 50 degrees and 100 degrees mean that you feel favorable and warm toward the group. Ratings between 0 degrees and 50 degrees mean that you don’t feel favorable toward the group and that you don’t care too much for that group. You would rate the group at the 50 degree mark if you don’t feel particularly warm or cold toward the group."
+Please enter the rating number in the number box. Ratings between 50 degrees and 100 degrees mean that you feel favorable and warm toward the group. Ratings between 0 degrees and 50 degrees mean that you don’t feel favorable toward the group and that you don’t care too much for that group. You would rate the group at the 50 degree mark if you don’t feel particularly warm or cold toward the group.",Illegal immigrants
 2024,V242518,Post,white_thermometer,Feeling Thermometer,Racial/Ethnic Groups,How would you rate: Whites,"-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -1. Inapplicable","[Using the same thermometer scale which you used earlier in the interview, how would you rate: whites
 
-Please enter the rating number in the number box. Ratings between 50 degrees and 100 degrees mean that you feel favorable and warm toward the group. Ratings between 0 degrees and 50 degrees mean that you don’t feel favorable toward the group and that you don’t care too much for that group. You would rate the group at the 50 degree mark if you don’t feel particularly warm or cold toward the group."
+Please enter the rating number in the number box. Ratings between 50 degrees and 100 degrees mean that you feel favorable and warm toward the group. Ratings between 0 degrees and 50 degrees mean that you don’t feel favorable toward the group and that you don’t care too much for that group. You would rate the group at the 50 degree mark if you don’t feel particularly warm or cold toward the group.",Whites
 2024,V241025,Pre,poli_party_reg,Ideology / Party,,"What political party are you registered with, if any?","-9. Refused
 -8. Don’t know
 -1. Inapplicable
 1. Democratic party
 2. Republican party
 4. None or independent
-5. Another party {SPECIFY}",
+5. Another party {SPECIFY}",,
 2024,V241227x,Pre,poli_party_self_7pt,Ideology / Party,,Here is a seven-point scale that describes the way many people think of themselves in terms of the major parties. Where would you place yourself on the following scale?,"-9. Refused
 -4. Error
 -1. Inapplicable
@@ -303,7 +302,7 @@ Please enter the rating number in the number box. Ratings between 50 degrees and
 4. independent
 5. independent leaning toward Republican
 6. Not very strong Republican
-7. Strong Republican",
+7. Strong Republican",,
 2024,v241177,Pre,lib_con_7pt,Ideology / Party,,"Where would you place yourself on this scale, or haven’t you thought much about this?","-9. Refused
 -4. Error
 1. Extremely liberal
@@ -313,12 +312,12 @@ Please enter the rating number in the number box. Ratings between 50 degrees and
 5. Slightly conservative
 6. Conservative
 7. Extremely conservative
-99. Haven’t thought much about this",
+99. Haven’t thought much about this",,
 2024,v241178,Pre,lib_con_2pt,Ideology / Party,,"If you had to choose, would you consider yourself a liberal or a conservative?","-9. Refused
 -8. Don’t know
 -1. Inapplicable
 1. Liberal
-2. Conservative",
+2. Conservative",,
 2024,V242067,Post,pres_vote,Ideology / Party,,Who did you vote for?,"-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
@@ -330,7 +329,7 @@ Please enter the rating number in the number box. Ratings between 50 degrees and
 3. Robert F. Kennedy, Jr
 4. Cornel West
 5. Jill Stein
-6. Another candidate {SPECIFY}","Who did you vote for? [ Kamala Harris (Democrat), Donald Trump (Republican) / Donald Trump (Republican), Kamala Harris (Democrat)], Robert F. Kennedy Jr. (Independent), Cornel West (Independent), Jill Stein (Green), or someone else?"
+6. Another candidate {SPECIFY}","Who did you vote for? [ Kamala Harris (Democrat), Donald Trump (Republican) / Donald Trump (Republican), Kamala Harris (Democrat)], Robert F. Kennedy Jr. (Independent), Cornel West (Independent), Jill Stein (Green), or someone else?",
 2024,V241302,Pre,abortion,Issue Position,Social and Cultural Issues,There has been some discussion about abortion during recent years. Which one of the opinions on this page best agrees with your view?,"-9. Refused
 -8. Don’t know
 -1. Inapplicable
@@ -338,20 +337,20 @@ Please enter the rating number in the number box. Ratings between 50 degrees and
 2. The law should permit abortion only in case of rape, incest, or when the woman’s life is in danger
 3. The law should permit abortion other than for rape/incest/danger to woman but only after need clearly established
 4. By law, a woman should always be able to obtain an abortion as a matter of personal choice
-5. Other {SPECIFY}",There has been some discussion about abortion during recent years. Which one of the opinions on this page best agrees with your view? You can just tell me the number of the opinion you choose.
+5. Other {SPECIFY}",There has been some discussion about abortion during recent years. Which one of the opinions on this page best agrees with your view? You can just tell me the number of the opinion you choose.,
 2024,V241308x,Pre,death_penalty,Issue Position,Guns and Crime,Do you favor or oppose the death penalty for persons convicted of murder?,"-2. DK/RF in V241306 or V241307
 -1. Inapplicable
 1. Favor strongly
 2. Favor not strongly
 3. Oppose not strongly
 4. Oppose strongly","Do you favor or oppose the death penalty for persons convicted of murder? 
-Do you [favor / oppose] the death penalty for persons convicted of murder strongly or not strongly?"
+Do you [favor / oppose] the death penalty for persons convicted of murder strongly or not strongly?",
 2024,V241312x,Pre,us_world_involvement,Issue Position,Military and Foreign Policy,"Do you agree or disagree with this statement: ""This country would be better off if we just stayed home and did not concern ourselves with problems in other parts of the world."" Do you agree or disagree with this statement?","-2. DK/RF in V241309 or V241310
 -1. Applicable
 1. Agree strongly
 2. Agree somewhat
 3. Disagree somewhat
-4. Disagree strongly",Do you agree or disagree with this statement: ‘This country would be better off if we just stayed home and did not concern ourselves with problems in other parts of the world.’ Do you agree strongly or agree somewhat with this statement? / Do you disagree strongly or disagree somewhat with this statement?
+4. Disagree strongly",Do you agree or disagree with this statement: ‘This country would be better off if we just stayed home and did not concern ourselves with problems in other parts of the world.’ Do you agree strongly or agree somewhat with this statement? / Do you disagree strongly or disagree somewhat with this statement?,
 2024,V241313,Pre,international_force,Issue Position,Military and Foreign Policy,How willing should the United States be to use military force to solve international problems?,"-9. Refused
 -8. Don’t know
 -1. Inapplicable
@@ -359,7 +358,7 @@ Do you [favor / oppose] the death penalty for persons convicted of murder strong
 2. Very willing
 3. Moderately willing
 4. A little willing
-5. Not at all willing","How willing should the United States be to use military force to solve international problems? [Extremely willing, very willing, moderately willing, a little willing, or not at all willing / Not at all willing, a little willing, moderately willing, very willing, or extremely willing]?"
+5. Not at all willing","How willing should the United States be to use military force to solve international problems? [Extremely willing, very willing, moderately willing, a little willing, or not at all willing / Not at all willing, a little willing, moderately willing, very willing, or extremely willing]?",
 2024,V241319x,Pre,voting_id,Issue Position,Voting Rights and Democratic Access,"Do you favor, oppose, or neither favor nor oppose requiring all people to show a government issued photo ID when they vote?","-2. DK/RF in V241317 or V241318
 -1. Inapplicable
 1. Favor a great deal
@@ -369,7 +368,7 @@ Do you [favor / oppose] the death penalty for persons convicted of murder strong
 5. Oppose a little
 6. Oppose moderately
 7. Oppose a great deal","Do you favor, oppose, or neither favor nor oppose requiring all people to show a government issued photo ID when they vote?
-Do you [favor / oppose] that [a great deal, moderately, or a little / a little, moderately, or a great deal]?"
+Do you [favor / oppose] that [a great deal, moderately, or a little / a little, moderately, or a great deal]?",
 2024,V241322x,Pre,voting_felons,Issue Position,Voting Rights and Democratic Access,"Do you favor, oppose, or neither favor nor oppose allowing convicted felons to vote once they complete their sentence?","-2. DK/RF in V241319 or V241320
 -1. Inapplicable
 1. Favor a great deal
@@ -379,7 +378,7 @@ Do you [favor / oppose] that [a great deal, moderately, or a little / a little, 
 5. Oppose a little
 6. Oppose moderately
 7. Oppose a great deal","Do you favor, oppose, or neither favor nor oppose allowing convicted felons to vote once they complete their sentence?
-Do you [favor / oppose] that [a great deal, moderately, or a little / a little, moderately, or a great deal]?"
+Do you [favor / oppose] that [a great deal, moderately, or a little / a little, moderately, or a great deal]?",
 2024,V241333x,Pre,journalists,Issue Position,Voting Rights and Democratic Access,"Do you favor, oppose, or neither favor nor oppose elected officials restricting journalists’ access to information about government decision-making?","-2. DK/RF in V241331 or V241332
 -1. Inapplicable
 1. Favor a great deal
@@ -389,7 +388,7 @@ Do you [favor / oppose] that [a great deal, moderately, or a little / a little, 
 5. Oppose a little
 6. Oppose moderately
 7. Oppose a great deal","Do you favor, oppose, or neither favor nor oppose elected officials restricting journalists’ access to information about government decision-making?
-Do you [favor / oppose] that [a great deal, moderately, or a little / a little, moderately, or a great deal]?"
+Do you [favor / oppose] that [a great deal, moderately, or a little / a little, moderately, or a great deal]?",
 2024,V241366x,Pre,climate_inc_temps,Issue Position,Environment,"Do you think the federal government should be doing more about rising temperatures, should be doing less, or is it currently doing the right amount?","-2. DK/RF in V241364 or V241365
 -1. Inapplicable
 1. Should be doing a great deal more
@@ -399,7 +398,7 @@ Do you [favor / oppose] that [a great deal, moderately, or a little / a little, 
 5. Should be doing a little less
 6. Should be doing a moderate amount less
 7. Should be doing a great deal less","Do you think the federal government should be doing more about rising temperatures, should be doing less, or is it currently doing the right amount?
-Should it be doing a great deal [more/less], a moderate amount [more/less], or a little [more/less]? / Should it be doing a little [more/less], a moderate amount [more/less], or a great deal [more/less]?"
+Should it be doing a great deal [more/less], a moderate amount [more/less], or a little [more/less]? / Should it be doing a little [more/less], a moderate amount [more/less], or a great deal [more/less]?",
 2024,V241369x,Pre,paid_leave,Issue Position,Social and Cultural Issues,"Do you favor, oppose, or neither favor nor oppose requiring employers to offer paid leave to parents of new children?","-2. DK/RF in V241367 or V241368
 -1. Inapplicable
 1. Favor a great deal
@@ -409,7 +408,7 @@ Should it be doing a great deal [more/less], a moderate amount [more/less], or a
 5. Oppose a little
 6. Oppose moderately
 7. Oppose a great deal","Do you favor, oppose, or neither favor nor oppose requiring employers to offer paid leave to parents of new children? 
-Do you favor that a great deal, a moderate amount, or a little? / Do you oppose that a great deal, a moderate amount, or a little?"
+Do you favor that a great deal, a moderate amount, or a little? / Do you oppose that a great deal, a moderate amount, or a little?",
 2024,v241372x,Pre,transgender_bathrooms,Issue Position,Social and Cultural Issues,"Do you favor, oppose, or neither favor nor oppose allowing transgender people to use public bathrooms that match the gender they identify with?","-2. DK/RF in V241370 or V241371
 -1. Inapplicable
 1. Favor a great deal
@@ -419,7 +418,7 @@ Do you favor that a great deal, a moderate amount, or a little? / Do you oppose 
 5. Oppose a little
 6. Oppose a moderate amount
 7. Oppose a great deal","Do you favor, oppose, or neither favor nor oppose allowing transgender people to use public bathrooms that match the gender they identify with?
-Do you [favor / oppose] that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?"
+Do you [favor / oppose] that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?",
 2024,v241375x,Pre,transgender_sports,Issue Position,Social and Cultural Issues,"Several states have considered laws that would ban transgender girls from participating in K-12 girls’ sports. Do you favor, oppose, or neither favor nor oppose such a law?","-2. DK/RF in V241373 or V241374
 -1. Inapplicable
 1. Favor a great deal
@@ -429,7 +428,7 @@ Do you [favor / oppose] that [a great deal, a moderate amount, or a little / a l
 5. Oppose a little
 6. Oppose a moderate amount
 7. Oppose a great deal","Several states have considered laws that would ban transgender girls from participating in K-12 girls’ sports. Do you favor, oppose, or neither favor nor oppose such a law?
-Do you [favor / oppose] that [a great deal, a moderate amount, or a little/ a little, a moderate amount, or a great deal]?"
+Do you [favor / oppose] that [a great deal, a moderate amount, or a little/ a little, a moderate amount, or a great deal]?",
 2024,v241389x,Pre,birthright_citizenship,Issue Position,"Immigration, Trade, and Globalization","Some people have proposed that the U.S. Constitution should be changed so that the children of unauthorized immigrants do not automatically get citizenship if they are born in this country. Do you favor, oppose, or neither favor nor oppose this proposal?","-2. DK/RF in V241387 or V241388
 -1. Inapplicable
 1. Favor a great deal
@@ -439,14 +438,14 @@ Do you [favor / oppose] that [a great deal, a moderate amount, or a little/ a li
 5. Oppose a little
 6. Oppose moderately
 7. Oppose a great deal","Some people have proposed that the U.S. Constitution should be changed so that the children of unauthorized immigrants do not automatically get citizenship if they are born in this country. Do you favor, oppose, or neither favor nor oppose this proposal?
-Do you favor that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]? / Do you oppose that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?"
+Do you favor that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]? / Do you oppose that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?",
 2024,v241378x,Pre,lgbt_discrimination,Issue Position,Social and Cultural Issues,Do you favor or oppose laws to protect gays and lesbians against job discrimination?,"-2. DK/RF in V241376 or V241377
 -1. Inapplicable
 1. Favor strongly
 2. Favor not strongly
 3. Oppose not strongly
 4. Oppose strongly","Do you favor or oppose laws to protect gays and lesbians against job discrimination?
-[Do you favor such laws strongly or not strongly? / Do you oppose such laws strongly or not strongly?]"
+[Do you favor such laws strongly or not strongly? / Do you oppose such laws strongly or not strongly?]",
 2024,v241381x,Pre,lgbt_adoption,Issue Position,Social and Cultural Issues,Do you think gay or lesbian couples should be legally permitted to adopt children?,"-2. DK/RF in V241379 or V241380
 -1. Inapplicable
 1. Feels very strongly gay/lesbian couples should be permitted to adopt
@@ -455,7 +454,7 @@ Do you favor that [a great deal, a moderate amount, or a little / a little, a mo
 4. Feels not strongly gay/lesbian couples should not be permitted to adopt
 5. Feels somewhat strongly gay/lesbian couples should not be permitted to adopt
 6. Feels very strongly gay/lesbian couples should not be permitted to adopt","Do you think gay or lesbian couples should be legally permitted to adopt children?
-How strongly do you feel that way? [Very strongly, somewhat strongly, or not strongly / Not strongly, somewhat strongly, or very strongly]?"
+How strongly do you feel that way? [Very strongly, somewhat strongly, or not strongly / Not strongly, somewhat strongly, or very strongly]?",
 2024,v241385x,Pre,gay_marriage,Issue Position,Social and Cultural Issues,"Do you favor or oppose, or neither favor nor oppose the right of gay and lesbian couples to legally marry?","-2. DK/RF in V241383 or V241384
 -1. Inapplicable
 1. Favor a great deal
@@ -465,7 +464,7 @@ How strongly do you feel that way? [Very strongly, somewhat strongly, or not str
 5. Oppose a little
 6. Oppose a moderate amount
 7. Oppose a great deal","Do you favor or oppose, or neither favor nor oppose the right of gay and lesbian couples to legally marry?
-Do you [favor / oppose] that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?"
+Do you [favor / oppose] that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?",
 2024,v241392x,Pre,children_immigrants,Issue Position,"Immigration, Trade, and Globalization","What should happen to immigrants who were brought to the U.S. illegally as children and have lived here for at least 10 years and graduated high school here? Should they be sent back where they came from, or should they be allowed to live and work in the United States?","-2. DK/RF in V241390 or V241391
 -1. Inapplicable
 1. Believes a great deal immigrants should be sent back
@@ -473,7 +472,7 @@ Do you [favor / oppose] that [a great deal, a moderate amount, or a little / a l
 3. Believes a little immigrants should be sent back
 4. Believes a little immigrants should be allowed to live & work in US
 5. Believes a moderate amount immigrants should be allowed to live & work in US
-6. Believes a great deal immigrants should be allowed to live & work in US",
+6. Believes a great deal immigrants should be allowed to live & work in US",,
 2024,v241395x,Pre,mexico_wall,Issue Position,Military and Foreign Policy,"Do you favor, oppose, or neither favor nor oppose building a wall on the U.S. border with Mexico?","-2. DK/RF in V241393 or V241394
 -1. Inapplicable
 1. Favor a great deal
@@ -483,7 +482,7 @@ Do you [favor / oppose] that [a great deal, a moderate amount, or a little / a l
 5. Oppose a little
 6. Oppose moderately
 7. Oppose a great deal","Do you favor, oppose, or neither favor nor oppose building a wall on the U.S. border with Mexico?
-Do you favor that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]? / Do you oppose that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?"
+Do you favor that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]? / Do you oppose that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?",
 2024,v241400x,Pre,ukraine_russia,Issue Position,Military and Foreign Policy,"Do you favor, oppose, or neither favor nor oppose the United States giving weapons to help Ukraine fight Russia? ","-2. DK/RF in V241398 or V241399
 -1. Inapplicable
 1. Favor a great deal
@@ -493,7 +492,7 @@ Do you favor that [a great deal, a moderate amount, or a little / a little, a mo
 5. Oppose a little
 6. Oppose moderately
 7. Oppose a great deal","Do you favor, oppose, or neither favor nor oppose the United States giving weapons to help Ukraine fight Russia? 
-Do you (favor/oppose) that [a great deal, a moderate amount, or a little/ a little, a moderate amount, or a great deal]?"
+Do you (favor/oppose) that [a great deal, a moderate amount, or a little/ a little, a moderate amount, or a great deal]?",
 2024,v241403x,Pre,israel,Issue Position,Military and Foreign Policy,"Do you favor, oppose, or neither favor nor oppose the United States giving military assistance to Israel?","-2. DK/RF in V241401 or V241402
 -1. Inapplicable
 1. Favor a great deal
@@ -503,7 +502,7 @@ Do you (favor/oppose) that [a great deal, a moderate amount, or a little/ a litt
 5. Oppose a little
 6. Oppose moderately
 7. Oppose a great deal","Do you favor, oppose, or neither favor nor oppose the United States giving military assistance to Israel?
-Do you (favor/oppose) that [a great deal, a moderate amount, or a little/ a little, a moderate amount, or a great deal]?"
+Do you (favor/oppose) that [a great deal, a moderate amount, or a little/ a little, a moderate amount, or a great deal]?",
 2024,v241406x,Pre,palestine_aid,Issue Position,Military and Foreign Policy,"Do you favor or oppose, or neither favor nor oppose the United States providing humanitarian assistance to Palestinians in the Gaza Strip?","-2. DK/RF in V241404 or V241405
 -1. Inapplicable
 1. Favor a great deal
@@ -513,8 +512,8 @@ Do you (favor/oppose) that [a great deal, a moderate amount, or a little/ a litt
 5. Oppose a little
 6. Oppose moderately
 7. Oppose a great deal","Do you favor or oppose, or neither favor nor oppose the United States providing humanitarian assistance to Palestinians in the Gaza Strip?
-Do you (favor/oppose) that [a great deal, a moderate amount, or a little/ a little, a moderate amount, or a great deal]?"
-2024,v241409x,Pre,israel_palestine,Issue Position,Military and Foreign Policy,"In the Middle East conflict, do you side more with [the Israelis, the Palestinians/the Palestinians, the Israelis], both equally, or neither? ","-2. DK/RF in V241407 or V241408
+Do you (favor/oppose) that [a great deal, a moderate amount, or a little/ a little, a moderate amount, or a great deal]?",
+2024,v241409x,Pre,israel_palestine,Issue Position,Military and Foreign Policy,"In the Middle East conflict, do you side more with the Israelis, the Palestinians, both equally, or neither? ","-2. DK/RF in V241407 or V241408
 -1. Inapplicable
 1. Side a little with Israelis
 2. Side a moderate amount with Israelis
@@ -524,7 +523,7 @@ Do you (favor/oppose) that [a great deal, a moderate amount, or a little/ a litt
 6. Side a moderate amount with Palestinians
 7. Side a little with Palestinians
 8. Side with neither","In the Middle East conflict, do you side more with [the Israelis, the Palestinians/the Palestinians, the Israelis], both equally, or neither? 
-How much more do you side with the [Israelis / Palestinians]? A little, a moderate amount, or a lot?"
+How much more do you side with the [Israelis / Palestinians]? A little, a moderate amount, or a lot?",
 2024,v241412x,Pre,gaza_protests,Issue Position,Military and Foreign Policy,"Do you approve, disapprove, or neither approve nor disapprove of the protests on college campuses against the war in Gaza?","-2. DK/RF in V241410 or V241411
 -1. Inapplicable
 1. Approve a lot of protests
@@ -534,7 +533,7 @@ How much more do you side with the [Israelis / Palestinians]? A little, a modera
 5. Disapprove a little of protests
 6. Disapprove a moderate amount of protests
 7. Disapprove a lot of protests","Do you approve, disapprove, or neither approve nor disapprove of the protests on college campuses against the war in Gaza?
-How much do you [approve / disapprove] of the protests? A little, a moderate amount, or a lot?"
+How much do you [approve / disapprove] of the protests? A little, a moderate amount, or a lot?",
 2024,V241579,Pre,political_violence,Issue Position,Values,How much do you feel it is justified for people to use violence to pursue their political goals in this country?,"-9. Refused
 -5. Break off, sufficient partial
 -1. Inapplicable
@@ -542,7 +541,7 @@ How much do you [approve / disapprove] of the protests? A little, a moderate amo
 2. A little
 3. A moderate amount
 4. A lot
-5. A great deal",On another topic: How much do you feel it is justified for people to use violence to pursue their political goals in this country?
+5. A great deal",On another topic: How much do you feel it is justified for people to use violence to pursue their political goals in this country?,
 2024,V242226x,Post,import_limits,Issue Position,"Immigration, Trade, and Globalization",Do you favor or oppose placing new limits on imports?,"-7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
@@ -551,7 +550,7 @@ How much do you [approve / disapprove] of the protests? A little, a moderate amo
 1. Favor strongly
 2. Favor not strongly
 3. Oppose not strongly
-4. Oppose strongly",Some people have suggested placing new limits on foreign imports in order to protect American jobs. Others say that such limits would raise consumer prices and hurt American exports. Do you favor or oppose placing new limits on imports?
+4. Oppose strongly",Some people have suggested placing new limits on foreign imports in order to protect American jobs. Others say that such limits would raise consumer prices and hurt American exports. Do you favor or oppose placing new limits on imports?,
 2024,V242227,Post,immigration_levels,Issue Position,"Immigration, Trade, and Globalization","Do you think the number of immigrants from foreign countries who are permitted to come to the United States to live should be increased, decreased, or left the same?","-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
@@ -562,7 +561,7 @@ How much do you [approve / disapprove] of the protests? A little, a moderate amo
 2. Increased a little
 3. Left the same as it is now
 4. Decreased a little
-5. Decreased a lot","Do you think the number of immigrants from foreign countries who are permitted to come to the United States to live should be [increased a lot, increased a little, left the same as it is now, decreased a little, or decreased a lot / decreased a lot, decreased a little, left the same as it is now, increased a little, or increased a lot]?"
+5. Decreased a lot","Do you think the number of immigrants from foreign countries who are permitted to come to the United States to live should be [increased a lot, increased a little, left the same as it is now, decreased a little, or decreased a lot / decreased a lot, decreased a little, left the same as it is now, increased a little, or increased a lot]?",
 2024,V242228,Post,immigration_jobs,Issue Position,"Immigration, Trade, and Globalization",How likely is it that recent immigration levels will take jobs away from people already here?,"-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
@@ -572,21 +571,21 @@ How much do you [approve / disapprove] of the protests? A little, a moderate amo
 1. Extremely likely
 2. Very likely
 3. Somewhat likely
-4. Not at all likely","Now I’d like to ask you about immigration in recent years. How likely is it that recent immigration levels will take jobs away from people already here – [extremely likely, very likely, somewhat likely, or not at all likely / not at all likely, somewhat likely, very likely, or extremely likely]?"
+4. Not at all likely","Now I’d like to ask you about immigration in recent years. How likely is it that recent immigration levels will take jobs away from people already here – [extremely likely, very likely, somewhat likely, or not at all likely / not at all likely, somewhat likely, very likely, or extremely likely]?",
 2024,V242231x,Post,immigration_crime,Issue Position,"Immigration, Trade, and Globalization","Does illegal immigration increase, decrease, or have no effect on the crime rate in the U.S.?
 ","-7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -2. DK/RF in V242229 or V242230
 -1. Inapplicable
-1. Increate a lot
+1. Increase a lot
 2. Increase a moderate amount
 3. Increase a little
 4. Have no effect
 5. Decrease a little
 6. Decrease a moderate amount
 7. Decrease a lot","Does illegal immigration increase, decrease, or have no effect on the crime rate in the U.S.?
-Does it [increase / decrease] the crime rate [a lot, a moderate amount, or a little / a little, a moderate amount, or a lot]?"
+Does it [increase / decrease] the crime rate [a lot, a moderate amount, or a little / a little, a moderate amount, or a lot]?",
 2024,V242232,Post,immigration_citizenship,Issue Position,"Immigration, Trade, and Globalization","Do you favor, oppose, or neither favor nor oppose providing a path to citizenship for unauthorized immigrants who obey the law, pay a fine, and pass security checks?","-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
@@ -595,7 +594,7 @@ Does it [increase / decrease] the crime rate [a lot, a moderate amount, or a lit
 -1. Inapplicable
 1. Favor
 2. Oppose
-3. Neither favor nor oppose",
+3. Neither favor nor oppose",,
 2024,V242235,Post,immigration_economy,Issue Position,"Immigration, Trade, and Globalization",Are immigrants generally good or bad for America’s economy?,"-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
@@ -608,7 +607,7 @@ Does it [increase / decrease] the crime rate [a lot, a moderate amount, or a lit
 4. Neither good nor bad
 5. Slightly bad
 6. Moderately bad
-7. Extremely bad",
+7. Extremely bad",,
 2024,V242236,Post,immigration_customs,Issue Position,"Immigration, Trade, and Globalization",How important is it for immigrants to adapt to the customs and traditions of the United States?,"-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
@@ -619,7 +618,7 @@ Does it [increase / decrease] the crime rate [a lot, a moderate amount, or a lit
 2. A little important
 3. Moderately important
 4. Very important
-5. Extremely important",
+5. Extremely important",,
 2024,V242241x,Post,hiring_black,Issue Position,Race,What about your opinion – are you for or against preferential hiring and promotion of blacks?,"-7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
@@ -629,7 +628,7 @@ Does it [increase / decrease] the crime rate [a lot, a moderate amount, or a lit
 2. Not strongly for preferential hiring and promotion of blacks
 3. Not strongly against preferential hiring and promotion of blacks
 4. Strongly against preferential hiring and promotion of blacks","What about your opinion – are you for or against preferential hiring and promotion of blacks?
-Do you favor preference in hiring and promotion strongly or not strongly?"
+Do you favor preference in hiring and promotion strongly or not strongly?",
 2024,V242245x,Post,affirmative_action,Issue Position,Race,"Do you favor, oppose, or neither favor nor oppose allowing universities to increase the number of black students studying at their schools by considering race along with other factors when choosing students?
 ","-7. Insufficient partial, interview deleted
 -6. No post interview
@@ -643,7 +642,7 @@ Do you favor preference in hiring and promotion strongly or not strongly?"
 5. Oppose a little
 6. Oppose a moderate amount
 7. Oppose a great deal","Do you favor, oppose, or neither favor nor oppose allowing universities to increase the number of black students studying at their schools by considering race along with other factors when choosing students?
-Do you favor that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]? Do you oppose that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?"
+Do you favor that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]? Do you oppose that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?",
 2024,V242248x,Post,gov_involvement,Issue Position,Values,"Which of the following statements comes closer to your view? One, the less government, the better; or Two, there are more things that government should be doing. How strongly do you feel this way?","-7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
@@ -655,7 +654,7 @@ Do you favor that [a great deal, a moderate amount, or a little / a little, a mo
 4. Feels not strongly there is more gov should be doing
 5. Feels somewhat strongly there is more gov should be doing
 6. Feels very stronglt there is more gov should be doing","Which of the following statements comes closer to your view? One, the less government, the better; or Two, there are more things that government should be doing. 
-How strongly do you feel this way? [Very strongly, somewhat strongly, or not strongly / Not strongly, somewhat strongly, or very strongly]?"
+How strongly do you feel this way? [Very strongly, somewhat strongly, or not strongly / Not strongly, somewhat strongly, or very strongly]?",
 2024,V242249,Post,gov_regulation,Issue Position,"Economy, Budget, and Taxes","Would it be good for society to have more, about the same as it is now, or less government regulation?","-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
@@ -668,7 +667,7 @@ How strongly do you feel this way? [Very strongly, somewhat strongly, or not str
 4. About the same amount
 5. A little less
 6. Somewhat less
-7. Much less","Would it be good for society to have [more government regulation, about the same amount of regulation as there is now, or less government regulation / less government regulation, about the same amount of regulation as there is now, or more government regulation]?"
+7. Much less","Would it be good for society to have [more government regulation, about the same amount of regulation as there is now, or less government regulation / less government regulation, about the same amount of regulation as there is now, or more government regulation]?",
 2024,V242253x,Post,income_inequality,Issue Position,"Economy, Budget, and Taxes","Do you favor, oppose, or neither favor nor oppose the government trying to reduce the difference in incomes between the richest and poorest households?
 ","-9. Refused
 -7. Insufficient partial, interview deleted
@@ -683,7 +682,7 @@ How strongly do you feel this way? [Very strongly, somewhat strongly, or not str
 5. Oppose a little
 6. Oppose a moderate amount
 7. Oppose a great deal","Next, do you favor, oppose, or neither favor nor oppose the government trying to reduce the difference in incomes between the richest and poorest households?
-Do you favor that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]? / Do you oppose that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?"
+Do you favor that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]? / Do you oppose that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?",
 2024,V242254,Post,equal_opportunity,Issue Position,Values,"""Our society should do whatever is necessary to make sure that everyone has an equal opportunity to succeed."" Do you agree or disagree with this statement?","-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
@@ -693,7 +692,7 @@ Do you favor that [a great deal, a moderate amount, or a little / a little, a mo
 2. Agree somewhat
 3. Neither agree nor disagree
 4. Disagree somewhat
-5. Disagree strongly","‘Our society should do whatever is necessary to make sure that everyone has an equal opportunity to succeed.’ Do you [agree strongly, agree somewhat, neither agree nor disagree, disagree somewhat, or disagree strongly / disagree strongly, disagree somewhat, neither agree nor disagree, agree somewhat, or agree strongly] with this statement?"
+5. Disagree strongly","‘Our society should do whatever is necessary to make sure that everyone has an equal opportunity to succeed.’ Do you [agree strongly, agree somewhat, neither agree nor disagree, disagree somewhat, or disagree strongly / disagree strongly, disagree somewhat, neither agree nor disagree, agree somewhat, or agree strongly] with this statement?",
 2024,V242279x,Post,gender_roles,Issue Position,Values,"Do you think it is better, worse, or makes no difference for the family as a whole if the man works outside the home and the woman takes care of the home and family?","-7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
@@ -706,7 +705,7 @@ Do you favor that [a great deal, a moderate amount, or a little / a little, a mo
 5. Slightly worse
 6. Somewhat worse
 7. Much worse","Do you think it is better, worse, or makes no difference for the family as a whole if the man works outside the home and the woman takes care of the home and family?
-Is it [much better, somewhat better, or slightly better / slightly better, somewhat better, or much better]? Is it [much worse, somewhat worse, or slightly worse / slightly worse, somewhat worse, or much worse]?"
+Is it [much better, somewhat better, or slightly better / slightly better, somewhat better, or much better]? Is it [much worse, somewhat worse, or slightly worse / slightly worse, somewhat worse, or much worse]?",
 2024,V242315,Post,budget_deficit,Issue Position,"Economy, Budget, and Taxes","When the U.S. federal government spends more money than it collects, the difference is called the federal budget deficit. The federal government currently has a deficit. How important is it to reduce the deficit?","-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
@@ -717,7 +716,7 @@ Is it [much better, somewhat better, or slightly better / slightly better, somew
 2. Very important
 3. Moderately important
 4. A little important
-5. Not at all important","When the U.S. federal government spends more money than it collects, the difference is called the federal budget deficit. The federal government currently has a deficit. How important is it to reduce the deficit? [Extremely important, very important, moderately important, a little important, or not at all important / Not at all important, a little important, moderately important, very important, or extremely important]?"
+5. Not at all important","When the U.S. federal government spends more money than it collects, the difference is called the federal budget deficit. The federal government currently has a deficit. How important is it to reduce the deficit? [Extremely important, very important, moderately important, a little important, or not at all important / Not at all important, a little important, moderately important, very important, or extremely important]?",
 2024,V242316a,Post,tax_millionaires,Issue Position,"Economy, Budget, and Taxes","Do you favor, oppose, or neither favor nor oppose increasing income taxes on people making over one million dollars per year?","-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
@@ -726,7 +725,7 @@ Is it [much better, somewhat better, or slightly better / slightly better, somew
 -1. Inapplicable
 1. Favor
 2. Oppose
-3. Neither favor nor oppose",
+3. Neither favor nor oppose",,
 2024,V242319x,Post,vaccines_schools,Issue Position,"Social Welfare, Healthcare, and Education","Do you favor, oppose, or neither favor nor oppose requiring children to be vaccinated in order to attend public schools?
 ","-7. Insufficient partial, interview deleted
 -6. No post interview
@@ -740,7 +739,7 @@ Is it [much better, somewhat better, or slightly better / slightly better, somew
 5. Oppose a little
 6. Oppose a moderate amount
 7. Oppose a great deal","Do you favor, oppose, or neither favor nor oppose requiring children to be vaccinated in order to attend public schools?
-Do you favor that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]? / Do you oppose that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?"
+Do you favor that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]? / Do you oppose that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?",
 2024,V242320,Post,obamacare,Issue Position,"Social Welfare, Healthcare, and Education","How much do you approve, disapprove, or neither approve nor disapprove of the Affordable Care Act of 2010 (Obamacare)?","-9. Refused
 -7. Insufficient partial, interview deleted
 -6. No post interview
@@ -753,7 +752,7 @@ Do you favor that [a great deal, a moderate amount, or a little / a little, a mo
 4. Neither approve nor disapprove
 5. Disapprove a little
 6. Disapprove a moderate amount
-7. Disapprove a great deal","How much do you approve, disapprove, or neither approve nor disapprove of the Affordable Care Act of 2010, sometimes called Obamacare?"
+7. Disapprove a great deal","How much do you approve, disapprove, or neither approve nor disapprove of the Affordable Care Act of 2010, sometimes called Obamacare?",
 2024,V242321,Post,climate_temps,Issue Position,Environment,"How much, if at all, do you think climate change is currently affecting severe weather events or temperature patterns in the United States?","-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
@@ -765,7 +764,7 @@ Do you favor that [a great deal, a moderate amount, or a little / a little, a mo
 2. A little
 3. A moderate amount
 4. A lot
-5. A great deal","How much, if at all, do you think climate change is currently affecting severe weather events or temperature patterns in the United States? [Not at all, a little, a moderate amount, a lot, or a great deal / A great deal, a lot, a moderate amount, a little, or not at all]?"
+5. A great deal","How much, if at all, do you think climate change is currently affecting severe weather events or temperature patterns in the United States? [Not at all, a little, a moderate amount, a lot, or a great deal / A great deal, a lot, a moderate amount, a little, or not at all]?",
 2024,V242324x,Post,climate_regulate_emissions,Issue Position,Environment,"Do you favor, oppose, or neither favor nor oppose increased government regulation on businesses that produce a great deal of greenhouse emissions linked to climate change?","-7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
@@ -778,7 +777,7 @@ Do you favor that [a great deal, a moderate amount, or a little / a little, a mo
 5. Oppose a little
 6. Oppose a moderate amount
 7. Oppose a great deal","Do you favor, oppose, or neither favor nor oppose increased government regulation on businesses that produce a great deal of greenhouse emissions linked to climate change?
-Do you [favor / oppose] that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?"
+Do you [favor / oppose] that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?",
 2024,V242325,Post,gun_difficulty,Issue Position,Guns and Crime,"Do you think the federal government should make it more difficult, easier, or about the same for people to buy a gun than it is now?","-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
@@ -787,7 +786,7 @@ Do you [favor / oppose] that [a great deal, a moderate amount, or a little / a l
 -1. Inapplicable
 1. More difficult
 2. Easier
-3. Keep these rules about the same","Do you think the federal government should make it more difficult for people to buy a gun than it is now, make it easier for people to buy a gun, or keep these rules about the same as they are now?"
+3. Keep these rules about the same","Do you think the federal government should make it more difficult for people to buy a gun than it is now, make it easier for people to buy a gun, or keep these rules about the same as they are now?",
 2024,V242328x,Post,gun_background_checks,Issue Position,Guns and Crime,"Do you favor, oppose, or neither favor nor oppose requiring background checks for gun purchases at gun shows or other private sales?","-7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
@@ -800,7 +799,7 @@ Do you [favor / oppose] that [a great deal, a moderate amount, or a little / a l
 5. Oppose a little
 6. Oppose a moderate amount
 7. Oppose a great deal","Do you favor, oppose, or neither favor nor oppose requiring background checks for gun purchases at gun shows or other private sales?
-Do you [favor / oppose] that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?"
+Do you [favor / oppose] that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?",
 2024,V242331x,Post,gun_ban_assault_rifles,Issue Position,Guns and Crime,"Do you favor, oppose, or neither favor nor oppose banning the sale of semi-automatic “assault-style” rifles?
 ","-7. Insufficient partial, interview deleted
 -6. No post interview
@@ -814,7 +813,7 @@ Do you [favor / oppose] that [a great deal, a moderate amount, or a little / a l
 5. Oppose a little
 6. Oppose a moderate amount
 7. Oppose a great deal","Do you favor, oppose, or neither favor nor oppose banning the sale of semi-automatic “assault-style” rifles?
-Do you [favor / oppose] that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?"
+Do you [favor / oppose] that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?",
 2024,V242335x,Post,opioid_epidemic,Issue Position,"Social Welfare, Healthcare, and Education","Do you think the federal government should be doing more about the opioid drug addiction issue, should it be doing less, or is it currently doing the right amount?","-7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
@@ -828,9 +827,8 @@ Do you [favor / oppose] that [a great deal, a moderate amount, or a little / a l
 6. Should be doing a moderate amount less
 7. Should be doing a great deal less","Do you think the federal government should be doing more about the opioid drug addiction issue, should it be doing less, or is it currently doing the right amount?
 How much [more / less]? [A great deal, a moderate amount, or a little / A little, a moderate amount, or a great deal]?
-"
-2024,V242336,Post,police_force,Issue Position,Guns and Crime,"How often do you think police officers use more force than is
-necessary?","-9. Refused
+",
+2024,V242336,Post,police_force,Issue Position,Guns and Crime,How often do you think police officers use more force than is necessary?,"-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
 -6. No post interview
@@ -841,7 +839,7 @@ necessary?","-9. Refused
 2. Rarely
 3. About half the time
 4. Most of the time
-5. All the time",
+5. All the time",,
 2024,V242346x,Post,free_trade,Issue Position,"Immigration, Trade, and Globalization","Do you favor, oppose, or neither favor nor oppose the U.S. making free trade agreements with other countries?","-7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
@@ -855,7 +853,7 @@ necessary?","-9. Refused
 6. Oppose a moderate amount
 7. Oppose a great deal","Do you favor, oppose, or neither favor nor oppose the U.S. making free trade agreements with other countries?
 How strongly do you [favor / oppose] it? [A great deal, moderately, or a little / A little, moderately, or a great deal]?
-"
+",
 2024,V242349x,Post,diversity,Issue Position,Social and Cultural Issues,"Does the increasing number of people of many different races and ethnic groups in the United States make this country a better, worse, or no difference place to live?","-7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
@@ -867,7 +865,7 @@ How strongly do you [favor / oppose] it? [A great deal, moderately, or a little 
 4. A little worse
 5. A lot worse","Does the increasing number of people of many different races and ethnic groups in the United States make this country a better place to live, a worse place to live, or does it make no difference?
 Does it make it [a lot better or a little better / a little better or a lot better]? / Does it make it [a lot worse or a little worse / a little worse or a lot worse]?
-"
+",
 2024,V242350,Post,federal_min_wage,Issue Position,"Economy, Budget, and Taxes","Should the federal minimum wage be raised, kept the same, lowered but not eliminated, or eliminated altogether?","-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
@@ -877,7 +875,7 @@ Does it make it [a lot better or a little better / a little better or a lot bett
 1. Raised
 2. Kept the same
 3. Lowered
-4. Eliminated","Should the federal minimum wage be [raised, kept the same, lowered but not eliminated, or eliminated altogether / eliminated altogether, lowered but not eliminated, kept the same, or raised]?"
+4. Eliminated","Should the federal minimum wage be [raised, kept the same, lowered but not eliminated, or eliminated altogether / eliminated altogether, lowered but not eliminated, kept the same, or raised]?",
 2024,V242353x,Post,budget_healthcare,Issue Position,"Social Welfare, Healthcare, and Education","Do you favor an increase, decrease, or no change in government spending to help people pay for health insurance when people can’t pay for it all themselves?","-7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
@@ -891,7 +889,7 @@ Does it make it [a lot better or a little better / a little better or a lot bett
 6. Decrease a moderate amount
 7. Decrease a lot","Do you favor an increase, decrease, or no change in government spending to help people pay for health insurance when people can’t pay for it all themselves?
 Should it increase [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]? / Should it decrease [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?
-"
+",
 2024,V242357x,Post,vaccines,Issue Position,"Social Welfare, Healthcare, and Education","Are the health benefits or risks of vaccinations greater? Do the health benefits of vaccinations generally outweigh the risks, do the risks outweigh the benefits, or is there no difference?
 ","-7. Insufficient partial, interview deleted
 -6. No post interview
@@ -906,7 +904,7 @@ Should it increase [a great deal, a moderate amount, or a little / a little, a m
 6. Risks moderately outweigh benefits
 7. Risks greatly outweigh benefits","Are the health benefits of vaccinations [much greater, moderately greater, or slightly greater / slightly greater, moderately greater, or much greater]? / Are the risks of vaccinations [much greater, moderately greater, or slightly greater / slightly greater, moderately greater, or much greater]?
 Do the health benefits of vaccinations generally outweigh the risks, do the risks outweigh the benefits, or is there no difference?
-"
+",
 2024,V242361x,Post,sexual_harassment,Issue Position,Social and Cultural Issues,What do you think of the attention to sexual harassment?,"-7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
@@ -919,7 +917,7 @@ Do the health benefits of vaccinations generally outweigh the risks, do the risk
 5. Not nearly far enough","Do you think attention to sexual harassment [has gone too far, has not gone far enough, or has been about right / has been about right, has not gone far enough, or has gone too far]?
 Has it gone [much too far or a little too far / a little too far or much too far]?
 Has it [not gone nearly far enough or not gone quite far enough / not gone quite far enough or not gone nearly far enough]?
-"
+",
 2024,V242364x,Post,transgender_military,Issue Position,Social and Cultural Issues,"Do you favor, oppose, or neither favor nor oppose allowing transgender people to serve in the United States Armed Forces?","-7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
@@ -933,7 +931,7 @@ Has it [not gone nearly far enough or not gone quite far enough / not gone quite
 6. Oppose a moderate amount
 7. Oppose a great deal","Do you favor, oppose, or neither favor nor oppose allowing transgender people to serve in the United States Armed Forces?
 Do you favor that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]? / Do you oppose that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?
-"
+",
 2024,V242365,Post,china_threat,Issue Position,Military and Foreign Policy,How much is China a threat to the United States?,"-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
@@ -946,7 +944,7 @@ Do you favor that [a great deal, a moderate amount, or a little / a little, a mo
 4. A lot
 5. A great deal","[Next, we’ll ask you the same question for several countries:
 How much is China a threat to the United States? / How much
-is China a threat to the United States?]"
+is China a threat to the United States?]",
 2024,V242366,Post,russia_threat,Issue Position,Military and Foreign Policy,How much is Russia a threat to the United States?,"-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
@@ -959,7 +957,7 @@ is China a threat to the United States?]"
 4. A lot
 5. A great deal","[Next, we’ll ask you the same question for several countries:
 How much is Russia a threat to the United States? / How
-much is Russia a threat to the United States?]"
+much is Russia a threat to the United States?]",
 2024,V242367,Post,mexico_threat,Issue Position,Military and Foreign Policy,How much is Mexico a threat to the United States?,"-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
@@ -972,7 +970,7 @@ much is Russia a threat to the United States?]"
 4. A lot
 5. A great deal","[Next, we’ll ask you the same question for several countries:
 How much is Mexico a threat to the United States? / How
-much is Mexico a threat to the United States?]"
+much is Mexico a threat to the United States?]",
 2024,V242368,Post,iran_threat,Issue Position,Military and Foreign Policy,How much is Iran a threat to the United States?,"-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
@@ -985,7 +983,7 @@ much is Mexico a threat to the United States?]"
 4. A lot
 5. A great deal","[Next, we’ll ask you the same question for several countries:
 How much is Iran a threat to the United States? / How much
-is Iran a threat to the United States?]"
+is Iran a threat to the United States?]",
 2024,V242369,Post,japan_threat,Issue Position,Military and Foreign Policy,How much is Japan a threat to the United States? ,"-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
@@ -998,7 +996,7 @@ is Iran a threat to the United States?]"
 4. A lot
 5. A great deal","[Next, we’ll ask you the same question for several countries:
 How much is Japan a threat to the United States? / How
-much is Japan a threat to the United States?] "
+much is Japan a threat to the United States?] ",
 2024,V242370,Post,israel_threat,Issue Position,Military and Foreign Policy,How much is Israel a threat to the United States?,"-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
@@ -1011,7 +1009,7 @@ much is Japan a threat to the United States?] "
 4. A lot
 5. A great deal","[Next, we’ll ask you the same question for several countries:
 How much is Israel a threat to the United States? / How much
-is Israel a threat to the United States?]"
+is Israel a threat to the United States?]",
 2024,v241263x,Pre,budget_social_security,Issue Position,"Social Welfare, Healthcare, and Education","Should federal spending on Social Security be increased, decreased, or kept the same?","-2. DK/RF in V241261 or V241262
 -1. Inapplicable
 1. Increased a lot
@@ -1021,7 +1019,7 @@ is Israel a threat to the United States?]"
 5. Decreased a lot","(What about) Social Security 
 (Should federal spending on Social Security be increased, decreased, or kept the same?)
 Should it be [increased / decreased] a lot or a little?
-"
+",
 2024,v241266x,Pre,budget_public_schools,Issue Position,"Social Welfare, Healthcare, and Education","Should federal spending on public schools be increased, decreased, or kept the same?","-2. DK/RF in V241264 or V241265
 -1. Inapplicable
 1. Increased a lot
@@ -1031,7 +1029,7 @@ Should it be [increased / decreased] a lot or a little?
 5. Decreased a lot","(What about) Public schools 
 (Should federal spending on public schools be increased, decreased, or kept the same?)
 Should it be [increased / decreased] a lot or a little?
-"
+",
 2024,v241269x,Pre,budget_border_security,Issue Position,"Immigration, Trade, and Globalization","Should federal spending on tightening border security to prevent illegal immigration be increased, decreased, or kept the same?","-2. DK/RF in V241267 or V241268
 -1. Inapplicable
 1. Increased a lot
@@ -1041,7 +1039,7 @@ Should it be [increased / decreased] a lot or a little?
 5. Decreased a lot","(What about) Tightening border security to prevent illegal immigration 
 (Should federal spending on tightening border security to prevent illegal immigration be increased, decreased, or kept the same?)
 Should it be [increased / decreased] a lot or a little?
-"
+",
 2024,v241272x,Pre,budget_crime,Issue Position,Guns and Crime,"Should federal spending on dealing with crime be increased, decreased, or kept the same?
 ","-2. DK/RF in V241270 or V241271
 -1. Inapplicable
@@ -1052,7 +1050,7 @@ Should it be [increased / decreased] a lot or a little?
 5. Decreased a lot","(What about) Dealing with crime 
 (Should federal spending on dealing with crime be increased, decreased, or kept the same?)
 Should it be [increased / decreased] a lot or a little?
-"
+",
 2024,v241275x,Pre,budget_welfare,Issue Position,"Social Welfare, Healthcare, and Education","Should federal spending on welfare programs be increased, decreased, or kept the same?","-2. DK/RF in V241273 or V241274
 -1. Inapplicable
 1. Increased a lot
@@ -1062,7 +1060,7 @@ Should it be [increased / decreased] a lot or a little?
 5. Decreased a lot","(What about) Welfare programs 
 (Should federal spending on welfare programs be increased, decreased, or kept the same?)
 Should it be [increased / decreased] a lot or a little?
-"
+",
 2024,V241278x,Pre,budget_highways,Issue Position,"Social Welfare, Healthcare, and Education","Should federal spending on building and repairing highways be increased, decreased, or kept the same?","-2. DK/RF in V241276 or V241277
 -1. Inapplicable
 1. Increased a lot
@@ -1072,7 +1070,7 @@ Should it be [increased / decreased] a lot or a little?
 5. Decreased a lot","(What about) Building and repairing highways 
 (Should federal spending on building and repairing highways be increased, decreased, or kept the same?)
 Should it be [increased / decreased] a lot or a little?
-"
+",
 2024,V241281x,Pre,budget_aid_poor,Issue Position,"Social Welfare, Healthcare, and Education","Should federal spending on aid to the poor be increased, decreased, or kept the same?","-2. DK/RF in V241279 or V241280
 -1. Inapplicable
 1. Increased a lot
@@ -1082,7 +1080,7 @@ Should it be [increased / decreased] a lot or a little?
 5. Decreased a lot","(What about) Aid to the poor 
 (Should federal spending on aid to the poor be increased, decreased, or kept the same?)
 Should it be [increased / decreased] a lot or a little?
-"
+",
 2024,v241284x,Pre,budget_environment,Issue Position,Environment,"Should federal spending on protecting the environment be increased, decreased, or kept the same?","-2. DK/RF in V241282 or V241283
 -1. Inapplicable
 1. Increased a lot
@@ -1092,7 +1090,7 @@ Should it be [increased / decreased] a lot or a little?
 5. Decreased a lot","(What about) Protecting the environment 
 (Should federal spending on protecting the environment be increased, decreased, or kept the same?)
 Should it be [increased / decreased] a lot or a little?
-"
+",
 2024,V241287x,Pre,colleges_run,Issue Position,Social and Cultural Issues,"Do you approve, disapprove, or neither approve nor disapprove of how most colleges and universities are run these days?","-2 DK/RF in V241285 or V241285
 -1. Inapplicable
 1. Approve very strongly
@@ -1103,7 +1101,7 @@ Should it be [increased / decreased] a lot or a little?
 6. Disapprove somewhat strongly
 7. Disapprove strongly","Do you approve, disapprove, or neither approve nor disapprove of how most colleges and universities are run these days?
 How strongly do you feel that way?
-"
+",
 2024,v241290x,Pre,dei,Issue Position,Social and Cultural Issues,"Do you favor, oppose, or neither favor nor oppose Diversity, Equity, and Inclusion (DEI) policies on college campuses that influence admission, hiring, and promotion?","-2. DK/RF in V241288 or V241289
 -1. Inapplicable
 1. Favor a great deal
@@ -1114,4 +1112,4 @@ How strongly do you feel that way?
 6. Oppose a moderate amount
 7. Oppose a great deal","Do you favor, oppose, or neither favor nor oppose Diversity, Equity, and Inclusion (DEI) policies on college campuses that influence admission, hiring, and promotion?
 Do you [favor / oppose] that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?
-"
+",
