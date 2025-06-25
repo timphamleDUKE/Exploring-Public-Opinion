@@ -12,16 +12,14 @@ st.set_page_config(
 def load_custom_css():
     st.markdown("""
     <style>
-    /* Import modern font */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    /* Use Streamlit's default font stack */
+    html, body, [class*="css"] {
+        font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
     
     /* Global styles */
     .main {
         padding-top: 2rem;
-    }
-    
-    html, body, [class*="css"] {
-        font-family: 'Inter', sans-serif;
     }
     
     /* Hero section styling */
@@ -39,7 +37,7 @@ def load_custom_css():
     }
     
     .hero-title {
-        font-size: 4.5rem;
+        font-size: 5.5rem;
         font-weight: 700;
         margin-bottom: 0.5rem;
         text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
@@ -261,19 +259,19 @@ def render_stats_section():
     <div class="stats-container">
         <div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
             <div class="stat-item" title="Number of survey responses analyzed in this project">
-                <span class="stat-number">X,XXX</span>
+                <span class="stat-number">5,521</span>
                 <div class="stat-label">Responses Analyzed</div>
             </div>
             <div class="stat-item" title="Political topics and issues examined">
-                <span class="stat-number">XX</span>
-                <div class="stat-label">Topics Examined</div>
+                <span class="stat-number">21</span>
+                <div class="stat-label">Topics Explored</div>
             </div>
             <div class="stat-item" title="Project development timeline">
-                <span class="stat-number">X Months</span>
+                <span class="stat-number">3 Months</span>
                 <div class="stat-label">Project Duration</div>
             </div>
             <div class="stat-item" title="Team members who contributed to this analysis">
-                <span class="stat-number">X</span>
+                <span class="stat-number">4</span>
                 <div class="stat-label">Team Members</div>
             </div>
         </div>
@@ -289,7 +287,7 @@ FEATURE_CARDS = [
         Americans feel about people on the other side? Track emotional responses by 
         political identity over time and discover patterns in inter-party sentiment.
         """,
-        "button_text": "Explore Emotional Patterns →",
+        "button_text": "Explore Emotional Patterns",
         "page": "pages/1_Affective_Polarization.py",
         "key": "ap_button"
     },
@@ -300,7 +298,7 @@ FEATURE_CARDS = [
         healthcare, and the economy. Uncover the nuanced positions that often get lost 
         in polarized debates and find surprising areas of consensus.
         """,
-        "button_text": "Analyze Issue Positions →",
+        "button_text": "Analyze Issue Positions",
         "page": "pages/2_Issue_Position.py",
         "key": "ip_button"
     }
@@ -408,14 +406,19 @@ def render_key_findings():
 
 # Main application flow
 def main():
-    # Set up page logo and title (now only handles logo display)
-    set_logo()
-    
     # Render hero section
     render_hero_section()
 
-    # Add some spacing
-    st.markdown("<br>", unsafe_allow_html=True)
+    # Add description text full width with minimal spacing
+    st.markdown("""
+    <div style="text-align: center; width: 100%; margin: 1rem auto;">
+        <p style="font-size: 1.2rem; color: #5a6c7d; line-height: 1.6; margin: 0.5rem 0;">
+            This project analyzes the 2024 American National Election Study data to explore political polarization 
+            and public opinion patterns. Through interactive visualizations, we examine both affective polarization 
+            (how people feel about opposing parties) and issue positions (where Americans stand on key political topics).
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     
     # Render stats
     render_stats_section()
@@ -423,7 +426,7 @@ def main():
     # Section header for features
     st.markdown("""
     <div style="text-align: center;">
-        <h2>Explore the Data</h2>
+        <h2>Explore Our Site</h2>
     </div>
     """, unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
