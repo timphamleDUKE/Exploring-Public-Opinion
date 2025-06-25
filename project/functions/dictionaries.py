@@ -118,46 +118,24 @@ description_to_renamed = dict(zip(codebook["Description"], codebook["Renamed"]))
 dropdown_to_renamed = dict(zip(codebook["Dropdown Text"], codebook["Renamed"]))
 
 # Sankey Color Mapping
-lib_con_2pt = {
-    1: "rgba(0,0,255,0.3)",
-    2: "rgba(255,0,0,0.3)"
+
+sankey_colors = {
+    1: "rgba(0,0,255,0.3)", # Blue
+    2: "rgba(255,0,0,0.3)", # Red
+    3: "rgba(160,160,160,0.3)" # Grey
 }
 
-lib_con_7pt = {
-    1: "rgba(0,0,255,0.3)",
-    2: "rgba(64,96,255,0.3)",
-    3: "rgba(128,160,255,0.3)",
-    4: "rgba(160,160,160,0.3)",
-    5: "rgba(255,160,128,0.3)",
-    6: "rgba(255,96,64,0.3)",
-    7: "rgba(255,0,0,0.3)",
-}
-
-lib_con_map_2pt = {
+lib_con_map_3pt = {
     1: "Liberal",
-    2: "Conservative"
+    2: "Conservative",
+    3: "Moderate"
 }
 
-lib_con_map_7pt = {
-    1: "Extremely liberal",
-    2: "Liberal",
-    3: "Slightly Liberal",
-    4: "Moderate",
-    5: "Slightly Conservative",
-    6: "Conservative",
-    7: "Extremely Conservative"
+political_map_3pt = {
+    1: "Democrat",
+    2: "Republican",
+    3: "Independent"
 }
-
-political_map = {
-    1: "Democratic Party",
-    2: "Republican Party"
-}
-
-political_colors_numbered = {
-    1: "rgba(0, 0, 255, 0.3)", # Blue
-    2: "rgba(255, 0, 0, 0.3)" # Red
-}
-
 
 def find_weight_col(question):
     if codebook[codebook["Renamed"] == question]["Pre/Post"].iloc[0] == "Pre":

@@ -1,30 +1,27 @@
 import holoviews as hv
 from holoviews import opts, dim
 import pandas as pd
-from functions.dictionaries import *
+from functions.dictionaries import lib_con_map_3pt, sankey_colors, find_weight_col, find_answer_choices, political_map_3pt
+from functions.sidebar_sankey import lib_con_map_7pt_reverse, political_map_reverse
 from functions.weights import SurveyDesign
 import streamlit as st
 
 # Enable bokeh backend for HoloViews
 hv.extension('bokeh')
 
-def sankeyGraph(df, question, group):
+def sankeyGraph(df, question, list_of_groups, group):
     """
     Create a Sankey diagram with optional survey-weighted flows using HoloViews.
     """
 
-    if group == "Lib/Con 2-Point Scale":
-        source_col = "lib_con_2pt"
-        lib_con_map = lib_con_map_2pt
-        ideology_colors = lib_con_2pt
-    elif group == "Lib/Con 7-Point Scale":
+    if group == "Ideological Groups":
         source_col = "lib_con_7pt"
-        lib_con_map = lib_con_map_7pt
-        ideology_colors = lib_con_7pt
+        label_map = lib_con_map_3pt
+        ideology_colors = sankey_colors
     else:
-        source_col = "poli_party_reg"
-        lib_con_map = political_map
-        ideology_colors = political_colors_numbered
+        source_col = "poli_party_self_7pt"
+        label_map = political_map_3pt
+        ideology_colors = sankey_colors
 
     target_col = question
 
@@ -35,16 +32,30 @@ def sankeyGraph(df, question, group):
     df = design.df
 
     # Filter valid values
-    if group == "Political Party":
-        df = df[
-            (df[source_col].between(1, 2)) &
-            (df[target_col].between(0, 7))
-        ]
+    valid_values = []
+    if group == "Political Groups":
+        for group in list_of_groups:
+            for value in political_map_reverse[group]:
+                valid_values.append(value)
     else:
-        df = df[
-            (df[source_col].between(1, 7)) &
-            (df[target_col].between(0, 7))
-        ]
+        for group in list_of_groups:
+            for value in lib_con_map_7pt_reverse[group]:
+                valid_values.append(value)
+    
+    df = df[
+        df[source_col].isin(valid_values) &
+        df[target_col].between(0, 7)
+    ]
+
+    df[source_col] = df[source_col].apply(
+        lambda x: 1 if 1 <= x <= 3 else x
+    )
+    df[source_col] = df[source_col].apply(
+        lambda x: 2 if 5 <= x <= 7 else x
+    )
+    df[source_col] = df[source_col].apply(
+        lambda x: 3 if x == 4 else x
+    )
 
     # Weighted flow counts
     flow_df = (
@@ -64,7 +75,7 @@ def sankeyGraph(df, question, group):
     total = flow_df["count"].sum()
     
     for _, row in flow_df.iterrows():
-        source_label = lib_con_map[int(row[source_col])]
+        source_label = label_map[int(row[source_col])]
         target_label = answer_choice_map[int(row[target_col])]
         value = row["count"]
         percent = (value / total) * 100
@@ -86,7 +97,7 @@ def sankeyGraph(df, question, group):
     # Apply styling options
     sankey = sankey.opts(
         opts.Sankey(
-            width=600,
+            width=500,
             height=200,
             edge_color='Color',
             edge_alpha=1,
@@ -121,12 +132,12 @@ def sankeyGraph(df, question, group):
     return sankey
 
 # Alternative function that returns the plot in a format suitable for Streamlit
-def sankeyGraph_streamlit(df, question, group):
+def sankeyGraph_streamlit(df, question, list_of_groups, group):
     """
     Create a Sankey diagram for Streamlit display.
     Returns the bokeh plot object.
     """
-    sankey = sankeyGraph(df, question, group)
+    sankey = sankeyGraph(df, question, list_of_groups, group)
     
     # Convert to bokeh plot for Streamlit
     bokeh_plot = hv.render(sankey)
@@ -134,14 +145,26 @@ def sankeyGraph_streamlit(df, question, group):
     return bokeh_plot
 
 # Function to display using streamlit-bokeh (correct import)
-def display_sankey_streamlit_bokeh(df, question, group):
+def display_sankey_streamlit_bokeh(df, question, list_of_groups, group):
     """
     Create and display a Sankey diagram using streamlit-bokeh.
     """
     try:
         from streamlit_bokeh import streamlit_bokeh
         
-        bokeh_plot = sankeyGraph_streamlit(df, question, group)
+        # Add CSS to override font
+        st.markdown("""
+        <style>
+        div[data-testid="stVerticalBlock"] .bk-root text {
+            font-family: 'Open Sans', Arial, sans-serif !important;
+        }
+        .bk-root .bk-text {
+            font-family: 'Open Sans', Arial, sans-serif !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        bokeh_plot = sankeyGraph_streamlit(df, question, list_of_groups, group)
         streamlit_bokeh(bokeh_plot, use_container_width=True)
         
     except ImportError:
@@ -149,11 +172,11 @@ def display_sankey_streamlit_bokeh(df, question, group):
         return None
 
 # Alternative function for HTML export to Streamlit
-def sankeyGraph_html(df, question, group):
+def sankeyGraph_html(df, question, list_of_groups, group):
     """
     Create a Sankey diagram and return as HTML for Streamlit display.
     """
-    sankey = sankeyGraph(df, question, group)
+    sankey = sankeyGraph(df, question, list_of_groups, group)
     
     # Export as HTML
     from bokeh.embed import file_html
@@ -164,9 +187,9 @@ def sankeyGraph_html(df, question, group):
     return html
 
 # Function to display using HTML components
-def display_sankey_html(df, question, group):
+def display_sankey_html(df, question, list_of_groups, group):
     """
     Create and display a Sankey diagram using HTML components.
     """
-    html_plot = sankeyGraph_html(df, question, group)
+    html_plot = sankeyGraph_html(df, question, list_of_groups, group)
     st.components.v1.html(html_plot, height=500, scrolling=True)
