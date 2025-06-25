@@ -1,7 +1,6 @@
 import streamlit as st
-import base64
-import os
-from functions.dictionaries import set_logo, df
+import pandas as pd
+from functions.dictionaries import set_logo
 
 set_logo()
 
@@ -12,23 +11,22 @@ with col1:
     st.title("About the Data")
 
 with col2:
-    st.image("images/Anes Logo.png", use_container_width=True)
+    st.image("images/Anes Logo.png")
 
 st.divider()
 
-# Show the dataframe
-st.write(df)
-
-# Add metadata description
+# Description
 st.markdown("""
 **American National Election Survey (ANES) 2024**  
 5,521 observations and 124 variables  
 High quality public opinion data
 """)
 
-# ---------- Footer ----------
-st.divider()
 st.markdown(
     "This project: "
     "[**American National Election Studies**](https://electionstudies.org/)."
 )
+
+# Show the dataframe
+df = pd.read_csv("../data/anes_2024_clean.csv")
+st.write(df)
