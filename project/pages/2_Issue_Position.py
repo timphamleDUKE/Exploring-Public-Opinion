@@ -43,7 +43,7 @@ bokeh_plot = hv.render(sankey_graph)
 streamlit_bokeh(bokeh_plot, use_container_width=True)
 
 # Expander
-expander(df, issue_question, list_of_groups, group)
+expander(df, issue_question)
 
 # Caption
 st.caption("This graph uses survey weights to represent population-level transitions between party self-placement and responses. However, it does not calculate standard errors using Taylor series linearization as recommended by ANES for formal inference.")
