@@ -85,9 +85,6 @@ def sankeyGraph(df, question, list_of_groups, group):
         color = ideology_colors[int(row[source_col])]
         
         sankey_data.append((source_label, target_label, value, percent, color))
-    
-    st.write(flow_df)
-    st.write(sankey_data)
 
     # Convert to DataFrame for HoloViews
     sankey_df = pd.DataFrame(sankey_data, columns=['Source', 'Target', 'Value', 'Percent', 'Color'])
@@ -122,7 +119,6 @@ def sankeyGraph(df, question, list_of_groups, group):
         )
     )
 
-    
     # Add custom hover tool information
     sankey = sankey.opts(
         opts.Sankey(
