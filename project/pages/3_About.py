@@ -8,7 +8,7 @@ set_logo()
 st.title("About")
 
 # Tabs
-tab1, tab2 = st.tabs(["The Data", "Us"])
+tab1, tab2 = st.tabs(["The Data", "The Team"])
 
 # Tab 1: The Data
 df = pd.read_csv("../data/anes_2024_clean.csv")
@@ -29,7 +29,7 @@ with tab1:
         """)
         
     with col2:
-        st.image("images/Anes Logo.png", use_container_width=True)
+        st.image("images/logos/anes-logo.png", use_container_width=True)
     
     # Add space between text and dataframe
     st.markdown("<br>", unsafe_allow_html=True)
@@ -73,7 +73,7 @@ with tab2:
     
     authors = [
         {
-            "image_path": "images/AF_cropped.png",
+            "image_path": "images/pfp/AF_cropped.png",
             "name": "Alexa Fahrer",
             "class_year": "Class of 2026",
             "major": "Statistical Science & Public Policy",
@@ -81,7 +81,7 @@ with tab2:
             "linkedin_url": "https://www.linkedin.com/in/alexa-fahrer-138456133/"
         },
         {
-            "image_path": "images/TL_cropped.png",
+            "image_path": "images/pfp/TL_cropped.png",
             "name": "Tim Le",
             "class_year": "Class of 2028",
             "major": "Computer Science & Statistical Science",
@@ -89,7 +89,7 @@ with tab2:
             "linkedin_url": "https://www.linkedin.com/in/tim-le-836296283/"
         },
         {
-            "image_path": "images/JJ_cropped.png",
+            "image_path": "images/pfp/JJ_cropped.png",
             "name": "Joie Jacobs",
             "class_year": "Class of 2028",
             "major": "Accounting & Math",
@@ -97,7 +97,7 @@ with tab2:
             "linkedin_url": "https://www.linkedin.com/in/joie-jacobs-09801b332/"
         },
         {
-            "image_path": "images/DM_Lol.png",
+            "image_path": "images/pfp/DM_Lol.png",
             "name": "Dario Moscatello",
             "class_year": "Class of 2026",
             "major": "Business Administration",
