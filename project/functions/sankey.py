@@ -67,6 +67,7 @@ def sankeyGraph(df, question, list_of_groups, group):
 
     # Label mapping
     answer_choice_map = find_answer_choices(question)
+    target_order = [answer_choice_map[i] for i in sorted(answer_choice_map.keys())]
 
     # Create the data structure for HoloViews Sankey
     # HoloViews expects (source, target, value) tuples
@@ -84,6 +85,9 @@ def sankeyGraph(df, question, list_of_groups, group):
         color = ideology_colors[int(row[source_col])]
         
         sankey_data.append((source_label, target_label, value, percent, color))
+    
+    st.write(flow_df)
+    st.write(sankey_data)
 
     # Convert to DataFrame for HoloViews
     sankey_df = pd.DataFrame(sankey_data, columns=['Source', 'Target', 'Value', 'Percent', 'Color'])
@@ -113,7 +117,8 @@ def sankeyGraph(df, question, list_of_groups, group):
             tools=['hover'],           # Only keep hover tool
             active_tools=[],           # Disable default active tools like box zoom
             bgcolor='white',
-            show_values=False
+            show_values = False,
+            node_sort = False
         )
     )
 
@@ -129,37 +134,4 @@ def sankeyGraph(df, question, list_of_groups, group):
         )
     )
 
-    
-
     return sankey
-
-# Alternative function that returns the plot in a format suitable for Streamlit
-def sankeyGraph_streamlit(df, question, list_of_groups, group):
-    from bokeh.models import Text
-    
-# CSS to force Arial font on all Bokeh text elements
-
-    # 2. HoloViews options
-    sankey = sankeyGraph(df, question, list_of_groups, group)
-
-    # 3. Bokeh direct manipulation
-    bokeh_plot = hv.render(sankey)
-    
-    return bokeh_plot
-
-# Function to display using streamlit-bokeh (correct import)
-def display_sankey_streamlit_bokeh(df, question, list_of_groups, group):
-    """
-    Create and display a Sankey diagram using streamlit-bokeh.
-    """
-    try:
-        from streamlit_bokeh import streamlit_bokeh
-        
-        
-        bokeh_plot = sankeyGraph_streamlit(df, question, list_of_groups, group)
-
-        streamlit_bokeh(bokeh_plot, use_container_width=True)
-        
-    except ImportError:
-        st.error("streamlit-bokeh not installed. Please run: pip install streamlit-bokeh")
-        return None

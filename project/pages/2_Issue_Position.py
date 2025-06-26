@@ -2,9 +2,10 @@ import streamlit as st
 import pandas as pd
 import holoviews as hv
 from functions.dictionaries import *
-from functions.sankey import sankeyGraph, display_sankey_streamlit_bokeh
+from functions.sankey import sankeyGraph
 from functions.sidebar_sankey import political_check, ideological_check, list_of_groups_check
 from functions.expander import expander
+from streamlit_bokeh import streamlit_bokeh
 
 set_logo()
 st.title("Issue Position")
@@ -37,19 +38,12 @@ list_of_groups = list_of_groups_check(group, checks)
 # Filter data to only include valid responses (>= 1)
 df_filtered = df[df[issue_question] >= 1].copy()
 
-sankey_graph = (sankeyGraph(df, issue_question, list_of_groups, group))
-
 # Display plots
 st.markdown(f"### {description_map.get(issue_question)}")
 
-try:
-    st.pyplot(sankey_graph, use_container_width=True)
-except:
-    try:
-        st.plotly_chart(sankey_graph, use_container_width=True)
-    except:
-        bokeh_plot = hv.render(sankey_graph)
-        display_sankey_streamlit_bokeh(df, issue_question, list_of_groups, group)
+sankey_graph = (sankeyGraph(df, issue_question, list_of_groups, group))
+bokeh_plot = hv.render(sankey_graph)
+streamlit_bokeh(bokeh_plot, use_container_width=True)
 
 # Expander
 
