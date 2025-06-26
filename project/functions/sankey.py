@@ -106,7 +106,8 @@ def sankeyGraph(df, question, list_of_groups, group):
             node_line_color='black',
             node_line_width=0.25,
             edge_line_width=1,
-            label_text_font_size='12pt',
+            label_text_font_size='10pt',
+            label_position = "right",
             node_padding=50,
             tools=['hover'],           # Only keep hover tool
             active_tools=[],           # Disable default active tools like box zoom
