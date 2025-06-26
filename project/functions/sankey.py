@@ -10,9 +10,6 @@ import streamlit as st
 hv.extension('bokeh')
 
 def sankeyGraph(df, question, list_of_groups, group):
-    """
-    Create a Sankey diagram with optional survey-weighted flows using HoloViews.
-    """
 
     if group == "Ideological Groups":
         source_col = "lib_con_7pt"

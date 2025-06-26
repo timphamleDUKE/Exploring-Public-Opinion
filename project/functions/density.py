@@ -4,22 +4,6 @@ from functions.dictionaries import *
 from functions.weights import get_anes_weighted_density_data
 
 def densityGraph(df, question, groups, group, title=None, yaxis_range=None):
-    """
-    Create a weighted density graph using ANES survey weights.
-
-    Parameters:
-    -----------
-    df : pandas.DataFrame
-        ANES dataframe
-    question : str
-        Question/variable name for thermometer ratings
-    groups : list or tuple
-        List of groups to include
-    group : str
-        Either "Political Groups" or "Ideological Groups"
-    title : str or None
-        Optional plot title
-    """
 
     # Map group values
     if group == "Ideological Groups":

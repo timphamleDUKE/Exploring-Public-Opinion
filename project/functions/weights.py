@@ -4,9 +4,6 @@ from scipy.stats import gaussian_kde
 from functions.dictionaries import find_weight_col
 
 class SurveyDesign:
-    """
-    Emulates Stata"s svyset design object: handles weights, strata, and PSUs
-    """
     def __init__(self, df, weight, strata=None, psu=None, seed=None):
         self.df = df.copy()
         self.weight_col = weight
