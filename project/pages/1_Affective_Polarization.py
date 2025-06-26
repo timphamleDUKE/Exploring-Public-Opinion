@@ -44,7 +44,8 @@ with tab1:
             "democrat_thermometer_pre",
             ("Republican Party", "Democratic Party"),
             group="Political Groups",
-            title=description_map.get("democrat_thermometer_pre")
+            title=description_map.get("democrat_thermometer_pre"), 
+            yaxis_range=[0, 0.032]
         )
 
         st.plotly_chart(democratic_graph, use_container_width=True, key="dem_chart")
@@ -54,7 +55,8 @@ with tab1:
             "republican_thermometer_pre",
             ("Republican Party", "Democratic Party"),
             group="Political Groups",
-            title=description_map.get("republican_thermometer_pre")
+            title=description_map.get("republican_thermometer_pre"),
+            yaxis_range=[0, 0.032]
         )
 
         st.plotly_chart(republican_graph, use_container_width=True, key="rep_chart")
@@ -69,7 +71,8 @@ with tab2:
             "liberals_thermometer",
             ("Liberal", "Conservative"),
             group="Ideological Groups",
-            title=description_map.get("liberals_thermometer")
+            title=description_map.get("liberals_thermometer"),
+            yaxis_range=[0, 0.023]
         )
 
         st.plotly_chart(liberal_graph, use_container_width=True, key="lib_chart")
@@ -79,7 +82,8 @@ with tab2:
             "conservatives_thermometer",
             ("Liberal", "Conservative"),
             group="Ideological Groups",
-            title=description_map.get("conservatives_thermometer")
+            title=description_map.get("conservatives_thermometer"),
+            yaxis_range=[0, 0.023]
         )
 
         st.plotly_chart(conservative_graph, use_container_width=True, key="cons_chart")
@@ -93,7 +97,8 @@ with tab3:
             "harris_thermometer_pre",
             ("Republican Party", "Democratic Party"),
             group="Political Groups",
-            title=description_map.get("harris_thermometer_pre")
+            title=description_map.get("harris_thermometer_pre"),
+            yaxis_range=[0, 0.047]
         )
 
         harris_graph_post = densityGraph(
@@ -101,7 +106,8 @@ with tab3:
             "harris_thermometer_post",
             ("Republican Party", "Democratic Party"),
             group="Political Groups",
-            title=description_map.get("harris_thermometer_post")
+            title=description_map.get("harris_thermometer_post"),
+            yaxis_range=[0, 0.047]
         )
 
         st.plotly_chart(harris_graph_pre, use_container_width=True, key="harris_chart_pre")
@@ -114,7 +120,8 @@ with tab3:
             "trump_thermometer_pre",
             ("Republican Party", "Democratic Party"),
             group="Political Groups",
-            title=description_map.get("trump_thermometer_pre")
+            title=description_map.get("trump_thermometer_pre"),
+            yaxis_range=[0, 0.047]
         )
 
         trump_graph_post = densityGraph(
@@ -122,7 +129,8 @@ with tab3:
             "trump_thermometer_post",
             ("Republican Party", "Democratic Party"),
             group="Political Groups",
-            title=description_map.get("trump_thermometer_post")
+            title=description_map.get("trump_thermometer_post"),
+            yaxis_range=[0, 0.047]
         )
 
         st.plotly_chart(trump_graph_pre, use_container_width=True, key="trump_chart_pre")

@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 from functions.dictionaries import *
 from functions.weights import get_anes_weighted_density_data
 
-def densityGraph(df, question, groups, group, title=None):
+def densityGraph(df, question, groups, group, title=None, yaxis_range=None):
     """
     Create a weighted density graph using ANES survey weights.
 
@@ -83,7 +83,10 @@ def densityGraph(df, question, groups, group, title=None):
         xaxis_title=dict(text="Thermometer Rating (0–100)", font=dict(size=24)),
         yaxis_title=dict(text="Density", font=dict(size=24)),
         xaxis=dict(tickmode="linear", tick0=0, dtick=20, tickfont=dict(size=20)),
-        yaxis=dict(tickfont=dict(size=20)),
+        yaxis=dict(
+            tickfont=dict(size=20), 
+            range=yaxis_range
+            ),
         legend=dict(font=dict(size=20)),
         hovermode="x unified",
         template="simple_white",
