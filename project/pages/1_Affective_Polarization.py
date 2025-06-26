@@ -1,12 +1,20 @@
 import streamlit as st
 import pandas as pd
 from functions.sidebar_density import ideological_check, political_check, list_of_groups_check
-from functions.dictionaries import (set_logo, list_of_thermometer_topics, topic_to_list_of_thermometer_map, df, description_map, full_description_map, dropdown_to_renamed)
+from functions.dictionaries import (set_logo, list_of_thermometer_topics, topic_to_list_of_thermometer_map, df, description_map, dropdown_to_renamed)
 from functions.density import densityGraph
 from functions.expander import expander
+from functions.css import load_custom_css
 
 set_logo()
-st.title("Affective Polarization")
+
+load_custom_css()
+
+st.markdown("""
+<div class="hero-container">
+    <h1 class="hero-title">Affective Polarization</h1>
+</div>
+""", unsafe_allow_html=True)
 
 # Sidebar
 with st.sidebar:
