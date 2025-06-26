@@ -13,7 +13,7 @@ def expander(df, issue_question, list_of_groups, group):
         expander.write(full_question)
 
     # Add vote count table
-    expander.subheader("Response Counts by Party:")
+    expander.subheader(f"Response Counts by {group}:")
 
     if group == "Ideological Groups":
         group_col = "lib_con_7pt"

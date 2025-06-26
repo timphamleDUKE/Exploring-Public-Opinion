@@ -76,7 +76,10 @@ def densityGraph(df, question, groups, group, title=None):
 
     # Layout settings
     fig.update_layout(
-        title=title if title else "",  # Optional title
+        title=dict(
+            text = title if title else "",
+            font = dict(size = 24)
+        ),
         xaxis_title=dict(text="Thermometer Rating (0–100)", font=dict(size=24)),
         yaxis_title=dict(text="Density", font=dict(size=24)),
         xaxis=dict(tickmode="linear", tick0=0, dtick=20, tickfont=dict(size=20)),
@@ -88,3 +91,4 @@ def densityGraph(df, question, groups, group, title=None):
     )
 
     return fig
+

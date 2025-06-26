@@ -4,7 +4,7 @@ import holoviews as hv
 from functions.dictionaries import *
 from functions.sankey import sankeyGraph, display_sankey_streamlit_bokeh
 from functions.sidebar_sankey import political_check, ideological_check, list_of_groups_check
-from functions.details import expander
+from functions.expander import expander
 
 set_logo()
 st.title("Issue Position")
