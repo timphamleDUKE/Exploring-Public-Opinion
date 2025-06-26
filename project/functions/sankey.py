@@ -97,7 +97,7 @@ def sankeyGraph(df, question, list_of_groups, group):
     # Apply styling options
     sankey = sankey.opts(
         opts.Sankey(
-            width=500,
+            width=600,
             height=200,
             edge_color='Color',
             edge_alpha=1,
@@ -135,35 +135,15 @@ def sankeyGraph(df, question, list_of_groups, group):
 
 # Alternative function that returns the plot in a format suitable for Streamlit
 def sankeyGraph_streamlit(df, question, list_of_groups, group):
-    """
-    Create a Sankey diagram for Streamlit display.
-    Returns the bokeh plot object.
-    """
-    sankey = sankeyGraph(df, question, list_of_groups, group)
+    from bokeh.models import Text
     
-    # Convert to bokeh plot for Streamlit
+# CSS to force Arial font on all Bokeh text elements
+
+    # 2. HoloViews options
+    sankey = sankeyGraph(df, question, list_of_groups, group)
+
+    # 3. Bokeh direct manipulation
     bokeh_plot = hv.render(sankey)
-
-    font_name = 'Source Sans Pro, Arial, sans-serif'
-
-    # Handle renderers - specifically for Sankey/Graph renderers
-    for renderer in bokeh_plot.renderers:
-        # Check if it's a GraphRenderer (used by Sankey)
-        if hasattr(renderer, 'edge_renderer'):
-            # Handle edge renderer
-            edge_renderer = renderer.edge_renderer
-            if hasattr(edge_renderer, 'glyph') and hasattr(edge_renderer.glyph, 'text_font'):
-                edge_renderer.glyph.text_font = font_name
-            
-        if hasattr(renderer, 'node_renderer'):
-            # Handle node renderer
-            node_renderer = renderer.node_renderer
-            if hasattr(node_renderer, 'glyph') and hasattr(node_renderer.glyph, 'text_font'):
-                node_renderer.glyph.text_font = font_name
-        
-        # Handle regular renderers (non-graph)
-        if hasattr(renderer, 'glyph') and hasattr(renderer.glyph, 'text_font'):
-            renderer.glyph.text_font = font_name
     
     return bokeh_plot
 
@@ -177,31 +157,9 @@ def display_sankey_streamlit_bokeh(df, question, list_of_groups, group):
         
         
         bokeh_plot = sankeyGraph_streamlit(df, question, list_of_groups, group)
+
         streamlit_bokeh(bokeh_plot, use_container_width=True)
         
     except ImportError:
         st.error("streamlit-bokeh not installed. Please run: pip install streamlit-bokeh")
         return None
-
-# Alternative function for HTML export to Streamlit
-def sankeyGraph_html(df, question, list_of_groups, group):
-    """
-    Create a Sankey diagram and return as HTML for Streamlit display.
-    """
-    sankey = sankeyGraph(df, question, list_of_groups, group)
-    
-    # Export as HTML
-    from bokeh.embed import file_html
-    from bokeh.resources import CDN
-    
-    bokeh_plot = hv.render(sankey)
-    html = file_html(bokeh_plot, CDN, "Sankey Diagram")
-    return html
-
-# Function to display using HTML components
-def display_sankey_html(df, question, list_of_groups, group):
-    """
-    Create and display a Sankey diagram using HTML components.
-    """
-    html_plot = sankeyGraph_html(df, question, list_of_groups, group)
-    st.components.v1.html(html_plot, height=500, scrolling=True)
