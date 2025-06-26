@@ -25,42 +25,32 @@ df = pd.read_csv("../data/anes_2024_clean.csv")
 
 with tab1:
     st.markdown("""
-    <div class="content-container">
-        <div class="data-description">
-            The data used in this project come from the <strong>American National Election Survey (ANES) 2024</strong>, 
-            one of the most respected sources of public opinion data in the United States, a collaborative project between Stanford 
-            University and the University of Michigan.
-            <br><br>
-            The dataset includes detailed information on political attitudes, voting behavior, 
-            demographic characteristics, ideological self-placement, partisanship, and much more.
-        </div>
-        
-        <div class="data-stats">
-            <div class="stat-item">
-                <span class="stat-number">5,521</span>
-                <div class="stat-label">Respondents</div>
+        <div class="content-container">
+            <div class="data-description">
+                The data used in this project come from the <strong>American National Election Survey (ANES) 2024</strong>, 
+                one of the most respected sources of public opinion data in the United States, a collaborative project between Stanford 
+                University and the University of Michigan.
+                <br><br>
+                The dataset includes detailed information on political attitudes, voting behavior, 
+                demographic characteristics, ideological self-placement, partisanship, and much more.
             </div>
-            <div class="stat-item">
-                <span class="stat-number">124</span>
-                <div class="stat-label">Variables</div>
+            <div class="data-stats">
+                <div class="stat-item">
+                    <span class="stat-number">5,521</span>
+                    <div class="stat-label">Respondents</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">124</span>
+                    <div class="stat-label">Variables</div>
+                </div>
             </div>
         </div>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    col1, col2 = st.columns([3, 1])
-    
-    with col1:
-        # Display dataframe with enhanced styling
-        st.dataframe(df, use_container_width=True)
-        
-    with col2:
-        st.markdown("""
-        <div class="logo-container">
-            <img src="images/logos/anes-logo.png" style="max-width: 100%; height: auto;">
-        </div>
-        """, unsafe_allow_html=True)
-    
+     """, unsafe_allow_html=True)
+
+
+    # Display dataframe with enhanced styling
+    st.dataframe(df, use_container_width=True)
+
     st.markdown("""
     <div class="footer-text">
         This project was created as part of a research collaboration with the 
