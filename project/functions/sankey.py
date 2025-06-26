@@ -129,6 +129,8 @@ def sankeyGraph(df, question, list_of_groups, group):
         )
     )
 
+    
+
     return sankey
 
 # Alternative function that returns the plot in a format suitable for Streamlit
@@ -141,6 +143,27 @@ def sankeyGraph_streamlit(df, question, list_of_groups, group):
     
     # Convert to bokeh plot for Streamlit
     bokeh_plot = hv.render(sankey)
+
+    font_name = 'Source Sans Pro, Arial, sans-serif'
+
+    # Handle renderers - specifically for Sankey/Graph renderers
+    for renderer in bokeh_plot.renderers:
+        # Check if it's a GraphRenderer (used by Sankey)
+        if hasattr(renderer, 'edge_renderer'):
+            # Handle edge renderer
+            edge_renderer = renderer.edge_renderer
+            if hasattr(edge_renderer, 'glyph') and hasattr(edge_renderer.glyph, 'text_font'):
+                edge_renderer.glyph.text_font = font_name
+            
+        if hasattr(renderer, 'node_renderer'):
+            # Handle node renderer
+            node_renderer = renderer.node_renderer
+            if hasattr(node_renderer, 'glyph') and hasattr(node_renderer.glyph, 'text_font'):
+                node_renderer.glyph.text_font = font_name
+        
+        # Handle regular renderers (non-graph)
+        if hasattr(renderer, 'glyph') and hasattr(renderer.glyph, 'text_font'):
+            renderer.glyph.text_font = font_name
     
     return bokeh_plot
 
@@ -152,17 +175,6 @@ def display_sankey_streamlit_bokeh(df, question, list_of_groups, group):
     try:
         from streamlit_bokeh import streamlit_bokeh
         
-        # Add CSS to override font
-        st.markdown("""
-        <style>
-        div[data-testid="stVerticalBlock"] .bk-root text {
-            font-family: 'Open Sans', Arial, sans-serif !important;
-        }
-        .bk-root .bk-text {
-            font-family: 'Open Sans', Arial, sans-serif !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
         
         bokeh_plot = sankeyGraph_streamlit(df, question, list_of_groups, group)
         streamlit_bokeh(bokeh_plot, use_container_width=True)
