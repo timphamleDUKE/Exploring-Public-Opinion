@@ -35,7 +35,7 @@ with tab1:
     st.markdown("<br>", unsafe_allow_html=True)
     
     # Display dataframe at full width
-    st.write(df)
+    st.dataframe(df)
     
     st.markdown(
         "This project was created as part of a research collaboration with the "

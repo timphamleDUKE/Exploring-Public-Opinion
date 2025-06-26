@@ -13,22 +13,31 @@ def expander(df, issue_question):
         exp.write(full_question)
 
     # Filter valid responses
-    #df = df[df[issue_question] >= 1].copy()
+    missing_df = df[df[issue_question] < 1]
+    valid_df = df[df[issue_question] >= 1]
+
     answer_choices = find_answer_choices(issue_question)
 
     # Count and percent
-    counts = df[issue_question].value_counts().sort_index()
-    counts.index.name = None
-    total = counts.sum()
-    percentages = counts / total * 100
+    full_counts = df[issue_question].value_counts().sort_index()
+    missing_total = full_counts[full_counts.index < 1].sum()
+    clean_counts = full_counts[full_counts.index >= 1].copy()
+    clean_counts.loc["Missing"] = missing_total
+
+    clean_counts.index.name = None
+    total = clean_counts.sum()
+    percentages = clean_counts / total * 100
 
     result_df = pd.DataFrame({
-        "Answer Choice": counts.index.map(lambda x: f"{x}. {answer_choices.get(x, x)}"),
-        "Count": counts.values,
+        "Answer Choice": clean_counts.index.map(
+            lambda x: "Missing" if x == "Missing" else f"{x}. {answer_choices.get(x, x)}"
+        ),
+        "Count": clean_counts.values,
         "Percent": percentages.round(1).astype(str) + "%"
     })
 
-    result_df.loc[len(result_df.index)] = ["Total", total, "100%"]
+
+    result_df.loc[len(result_df.index) + 1] = ["Total", total, "100%"]
     result_df.set_index("Answer Choice", inplace=True)
 
     # Display table
@@ -37,4 +46,11 @@ def expander(df, issue_question):
 
     # Bar chart
     exp.subheader("Visual Breakdown:")
-    exp.bar_chart(counts)
+
+    labeled_counts = clean_counts.rename(
+        index={k: v for k, v in answer_choices.items() if k in clean_counts.index and k != "Missing"}
+    )
+    
+    exp.bar_chart(labeled_counts, color = "#7c41d2", horizontal = True, height = 500)
+
+    exp.caption("Missing Values include those that answered: Don't Know, Inapplicable, Refused, Insufficient Partials, Sufficient Breakoffs, etc.")
