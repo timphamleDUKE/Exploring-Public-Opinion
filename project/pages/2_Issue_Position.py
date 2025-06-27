@@ -7,14 +7,11 @@ from functions.expander import expander
 from streamlit_bokeh import streamlit_bokeh
 from functions.css import load_custom_css
 
-load_custom_css()
 set_logo()
 
-st.markdown("""
-<div class="hero-container">
-    <h1 class="hero-title">Issue Polarization</h1>
-</div>
-""", unsafe_allow_html=True)
+st.title("Issue Polarization")
+
+st.divider()
 
 #Columns
 col1, col2, col3 = st.columns([3, 1, 1])

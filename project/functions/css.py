@@ -281,3 +281,42 @@ def load_custom_css():
     
     </style>
     """, unsafe_allow_html=True)
+
+def load_custom_css_plot_page():
+    st.markdown("""
+    <style>
+    
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 24px;
+        background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,250,252,0.9));
+        border-radius: 15px;
+        padding: 1rem;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+        box-shadow: 0 8px 32px rgba(102, 126, 234, 0.1);
+        margin-bottom: 2rem;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        background: white;
+        color: black;
+        border-radius: 12px;
+        border: none;
+        padding: 1rem 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .stTabs [data-baseweb="tab"]:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        background: #f7f8fe;
+    }
+    
+    .stTabs [data-baseweb="tab"][aria-selected="true"] {
+        background: #f7f8fe;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+    
+    </style>
+    """, unsafe_allow_html=True)
