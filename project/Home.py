@@ -124,6 +124,19 @@ def load_custom_css():
         transform: translateY(-2px);
         color: hsl(0, 0%, 85%);
     }
+                
+    .stButton > button:active {
+        color: hsl(0, 0%, 85%);
+    }
+
+    .stButton > button:focus {
+        color: hsl(0, 0%, 85%);
+        outline: none !important;
+    }
+
+    .stButton > button:focus:not(:focus-visible) {
+        color: hsl(0, 0%, 85%);
+    }
     
     /* Enhanced stats section with modern glassmorphism */
     .stats-container {
@@ -198,11 +211,11 @@ def load_custom_css():
     </style>
     """, unsafe_allow_html=True)
 
-# Load custom styling
-load_custom_css()
-
 # Set up page logo and title (without page config)
 set_logo()
+
+# Load custom styling
+load_custom_css()
 
 # Enhanced hero section
 def render_hero_section():
