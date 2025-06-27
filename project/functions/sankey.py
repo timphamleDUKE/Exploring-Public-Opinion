@@ -10,9 +10,6 @@ import streamlit as st
 hv.extension('bokeh')
 
 def sankeyGraph(df, question, list_of_groups, group):
-    """
-    Create a Sankey diagram with optional survey-weighted flows using HoloViews.
-    """
 
     if group == "Ideological Groups":
         source_col = "lib_con_7pt"
@@ -67,6 +64,7 @@ def sankeyGraph(df, question, list_of_groups, group):
 
     # Label mapping
     answer_choice_map = find_answer_choices(question)
+    target_order = [answer_choice_map[i] for i in sorted(answer_choice_map.keys())]
 
     # Create the data structure for HoloViews Sankey
     # HoloViews expects (source, target, value) tuples
@@ -97,7 +95,7 @@ def sankeyGraph(df, question, list_of_groups, group):
     # Apply styling options
     sankey = sankey.opts(
         opts.Sankey(
-            width=500,
+            width=600,
             height=200,
             edge_color='Color',
             edge_alpha=1,
@@ -108,16 +106,17 @@ def sankeyGraph(df, question, list_of_groups, group):
             node_line_color='black',
             node_line_width=0.25,
             edge_line_width=1,
-            label_text_font_size='12pt',
+            label_text_font_size='10pt',
+            label_position = "right",
             node_padding=50,
             tools=['hover'],           # Only keep hover tool
             active_tools=[],           # Disable default active tools like box zoom
             bgcolor='white',
-            show_values=False
+            show_values = False,
+            node_sort = False
         )
     )
 
-    
     # Add custom hover tool information
     sankey = sankey.opts(
         opts.Sankey(
@@ -130,66 +129,3 @@ def sankeyGraph(df, question, list_of_groups, group):
     )
 
     return sankey
-
-# Alternative function that returns the plot in a format suitable for Streamlit
-def sankeyGraph_streamlit(df, question, list_of_groups, group):
-    """
-    Create a Sankey diagram for Streamlit display.
-    Returns the bokeh plot object.
-    """
-    sankey = sankeyGraph(df, question, list_of_groups, group)
-    
-    # Convert to bokeh plot for Streamlit
-    bokeh_plot = hv.render(sankey)
-    
-    return bokeh_plot
-
-# Function to display using streamlit-bokeh (correct import)
-def display_sankey_streamlit_bokeh(df, question, list_of_groups, group):
-    """
-    Create and display a Sankey diagram using streamlit-bokeh.
-    """
-    try:
-        from streamlit_bokeh import streamlit_bokeh
-        
-        # Add CSS to override font
-        st.markdown("""
-        <style>
-        div[data-testid="stVerticalBlock"] .bk-root text {
-            font-family: 'Open Sans', Arial, sans-serif !important;
-        }
-        .bk-root .bk-text {
-            font-family: 'Open Sans', Arial, sans-serif !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
-        
-        bokeh_plot = sankeyGraph_streamlit(df, question, list_of_groups, group)
-        streamlit_bokeh(bokeh_plot, use_container_width=True)
-        
-    except ImportError:
-        st.error("streamlit-bokeh not installed. Please run: pip install streamlit-bokeh")
-        return None
-
-# Alternative function for HTML export to Streamlit
-def sankeyGraph_html(df, question, list_of_groups, group):
-    """
-    Create a Sankey diagram and return as HTML for Streamlit display.
-    """
-    sankey = sankeyGraph(df, question, list_of_groups, group)
-    
-    # Export as HTML
-    from bokeh.embed import file_html
-    from bokeh.resources import CDN
-    
-    bokeh_plot = hv.render(sankey)
-    html = file_html(bokeh_plot, CDN, "Sankey Diagram")
-    return html
-
-# Function to display using HTML components
-def display_sankey_html(df, question, list_of_groups, group):
-    """
-    Create and display a Sankey diagram using HTML components.
-    """
-    html_plot = sankeyGraph_html(df, question, list_of_groups, group)
-    st.components.v1.html(html_plot, height=500, scrolling=True)

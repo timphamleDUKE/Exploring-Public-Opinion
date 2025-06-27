@@ -1,11 +1,20 @@
 import streamlit as st
 import pandas as pd
 from functions.sidebar_density import ideological_check, political_check, list_of_groups_check
-from functions.dictionaries import (set_logo, list_of_thermometer_topics, topic_to_list_of_thermometer_map, df, description_map, full_description_map, dropdown_to_renamed)
+from functions.dictionaries import (set_logo, list_of_thermometer_topics, topic_to_list_of_thermometer_map, df, description_map, dropdown_to_renamed)
 from functions.density import densityGraph
+from functions.expander import expander
+from functions.css import load_custom_css
 
 set_logo()
-st.title("Affective Polarization")
+
+load_custom_css()
+
+st.markdown("""
+<div class="hero-container">
+    <h1 class="hero-title">Affective Polarization</h1>
+</div>
+""", unsafe_allow_html=True)
 
 # Sidebar
 with st.sidebar:
@@ -31,6 +40,115 @@ with st.sidebar:
 
 list_of_groups = list_of_groups_check(group, checks)
 
+# Tabs
+tab1, tab2, tab3 = st.tabs(["Parties", "Ideologies", "Candidates"])
+
+with tab1:
+    st.subheader("Thermometer Ratings: Democratic & Republican Parties")
+    col1, col2 = st.columns(2)
+    with col1:
+        democratic_graph = densityGraph(
+            df,
+            "democrat_thermometer_pre",
+            ("Republican Party", "Democratic Party"),
+            group="Political Groups",
+            title=description_map.get("democrat_thermometer_pre"), 
+            yaxis_range=[0, 0.032]
+        )
+
+        st.plotly_chart(democratic_graph, use_container_width=True, key="dem_chart")
+    with col2:
+        republican_graph = densityGraph(
+            df,
+            "republican_thermometer_pre",
+            ("Republican Party", "Democratic Party"),
+            group="Political Groups",
+            title=description_map.get("republican_thermometer_pre"),
+            yaxis_range=[0, 0.032]
+        )
+
+        st.plotly_chart(republican_graph, use_container_width=True, key="rep_chart")
+
+
+with tab2:
+    st.subheader("Thermometer Ratings: Liberals & Conservatives")
+    col1, col2 = st.columns(2)
+    with col1:
+        liberal_graph = densityGraph(
+            df,
+            "liberals_thermometer",
+            ("Liberal", "Conservative"),
+            group="Ideological Groups",
+            title=description_map.get("liberals_thermometer"),
+            yaxis_range=[0, 0.023]
+        )
+
+        st.plotly_chart(liberal_graph, use_container_width=True, key="lib_chart")
+    with col2:
+        conservative_graph = densityGraph(
+            df,
+            "conservatives_thermometer",
+            ("Liberal", "Conservative"),
+            group="Ideological Groups",
+            title=description_map.get("conservatives_thermometer"),
+            yaxis_range=[0, 0.023]
+        )
+
+        st.plotly_chart(conservative_graph, use_container_width=True, key="cons_chart")
+
+with tab3:
+    st.subheader("Thermometer Ratings: Presidential Candidates")
+    col1, col2 = st.columns(2)
+    with col1:
+        harris_graph_pre = densityGraph(
+            df,
+            "harris_thermometer_pre",
+            ("Republican Party", "Democratic Party"),
+            group="Political Groups",
+            title=description_map.get("harris_thermometer_pre"),
+            yaxis_range=[0, 0.047]
+        )
+
+        harris_graph_post = densityGraph(
+            df,
+            "harris_thermometer_post",
+            ("Republican Party", "Democratic Party"),
+            group="Political Groups",
+            title=description_map.get("harris_thermometer_post"),
+            yaxis_range=[0, 0.047]
+        )
+
+        st.plotly_chart(harris_graph_pre, use_container_width=True, key="harris_chart_pre")
+
+        st.plotly_chart(harris_graph_post, use_container_width=True, key="harris_chart_post")
+
+    with col2:
+        trump_graph_pre = densityGraph(
+            df,
+            "trump_thermometer_pre",
+            ("Republican Party", "Democratic Party"),
+            group="Political Groups",
+            title=description_map.get("trump_thermometer_pre"),
+            yaxis_range=[0, 0.047]
+        )
+
+        trump_graph_post = densityGraph(
+            df,
+            "trump_thermometer_post",
+            ("Republican Party", "Democratic Party"),
+            group="Political Groups",
+            title=description_map.get("trump_thermometer_post"),
+            yaxis_range=[0, 0.047]
+        )
+
+        st.plotly_chart(trump_graph_pre, use_container_width=True, key="trump_chart_pre")
+
+        st.plotly_chart(trump_graph_post, use_container_width=True, key="trump_chart_post")
+
+# Display Plot
+st.divider()
+st.header("Thermometer Questions")
+
 density_graph = densityGraph(
     df,
     thermometer_question,
@@ -39,111 +157,10 @@ density_graph = densityGraph(
     title=description_map.get(thermometer_question)
 )
 
-democratic_graph = densityGraph(
-    df,
-    "democrat_thermometer_pre",
-    ("Republican Party", "Democratic Party"),
-    group="Political Groups",
-    title=description_map.get("democrat_thermometer_pre")
-)
-
-republican_graph = densityGraph(
-    df,
-    "republican_thermometer_pre",
-    ("Republican Party", "Democratic Party"),
-    group="Political Groups",
-    title=description_map.get("republican_thermometer_pre")
-)
-
-liberal_graph = densityGraph(
-    df,
-    "liberals_thermometer",
-    ("Liberal", "Conservative"),
-    group="Ideological Groups",
-    title=description_map.get("liberals_thermometer")
-)
-
-conservative_graph = densityGraph(
-    df,
-    "conservatives_thermometer",
-    ("Liberal", "Conservative"),
-    group="Ideological Groups",
-    title=description_map.get("conservatives_thermometer")
-)
-
-harris_graph_pre = densityGraph(
-    df,
-    "harris_thermometer_pre",
-    ("Republican Party", "Democratic Party"),
-    group="Political Groups",
-    title=description_map.get("harris_thermometer_pre")
-)
-
-harris_graph_post = densityGraph(
-    df,
-    "harris_thermometer_post",
-    ("Republican Party", "Democratic Party"),
-    group="Political Groups",
-    title=description_map.get("harris_thermometer_post")
-)
-
-trump_graph_pre = densityGraph(
-    df,
-    "trump_thermometer_pre",
-    ("Republican Party", "Democratic Party"),
-    group="Political Groups",
-    title=description_map.get("trump_thermometer_pre")
-)
-
-trump_graph_post = densityGraph(
-    df,
-    "trump_thermometer_post",
-    ("Republican Party", "Democratic Party"),
-    group="Political Groups",
-    title=description_map.get("trump_thermometer_post")
-)
-
-# Tabs
-tab1, tab2, tab3 = st.tabs(["Parties", "Ideologies", "Candidates"])
-
-with tab1:
-    st.subheader("Thermometer Ratings: Democratic & Republican Parties")
-    col1, col2 = st.columns(2)
-    with col1:
-        st.plotly_chart(democratic_graph, use_container_width=True, key="dem_chart")
-    with col2:
-        st.plotly_chart(republican_graph, use_container_width=True, key="rep_chart")
-
-with tab2:
-    st.subheader("Thermometer Ratings: Liberals & Conservatives")
-    col1, col2 = st.columns(2)
-    with col1:
-        st.plotly_chart(liberal_graph, use_container_width=True, key="lib_chart")
-    with col2:
-        st.plotly_chart(conservative_graph, use_container_width=True, key="cons_chart")
-
-with tab3:
-    st.subheader("Thermometer Ratings: Presidential Candidates")
-    col1, col2 = st.columns(2)
-    with col1:
-        st.plotly_chart(harris_graph_pre, use_container_width=True, key="harris_chart_pre")
-        st.plotly_chart(harris_graph_post, use_container_width=True, key="harris_chart_post")
-    with col2:
-        st.plotly_chart(trump_graph_pre, use_container_width=True, key="trump_chart_pre")
-        st.plotly_chart(trump_graph_post, use_container_width=True, key="trump_chart_post")
-
-# Display Plot
-st.divider()
-st.header("Thermometer Questions")
 st.plotly_chart(density_graph, use_container_width=True)
 
 # Expander
-full_question = full_description_map.get(thermometer_question)
-
-if pd.notna(full_question):
-    with st.expander("Details"):
-        st.subheader("Full Question from ANES:")
-        st.write(full_question)
+expander(df, thermometer_question)
 
 # Caption
 st.caption(

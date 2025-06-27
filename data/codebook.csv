@@ -619,7 +619,7 @@ Does it [increase / decrease] the crime rate [a lot, a moderate amount, or a lit
 3. Moderately important
 4. Very important
 5. Extremely important",,
-2024,V242241x,Post,hiring_black,Issue Position,Race,What about your opinion – are you for or against preferential hiring and promotion of blacks?,"-7. Insufficient partial, interview deleted
+2024,V242241x,Post,hiring_black,Issue Position,Race,Are you for or against preferential hiring and promotion of blacks?,"-7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
 -4. Error
@@ -673,7 +673,7 @@ How strongly do you feel this way? [Very strongly, somewhat strongly, or not str
 -7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
--2 DK/RF in V242250 or V242251
+-2. DK/RF in V242250 or V242251
 -1. Inapplicable
 1. Favor a great deal
 2. Favor a moderate amount
@@ -696,7 +696,7 @@ Do you favor that [a great deal, a moderate amount, or a little / a little, a mo
 2024,V242279x,Post,gender_roles,Issue Position,Values,"Do you think it is better, worse, or makes no difference for the family as a whole if the man works outside the home and the woman takes care of the home and family?","-7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
--2 DK/RF in V242276, V242277, V242278
+-2. DK/RF in V242276, V242277, V242278
 -1. Inapplicable
 1. Much better
 2. Somewhat better
@@ -857,7 +857,7 @@ How strongly do you [favor / oppose] it? [A great deal, moderately, or a little 
 2024,V242349x,Post,diversity,Issue Position,Social and Cultural Issues,"Does the increasing number of people of many different races and ethnic groups in the United States make this country a better, worse, or no difference place to live?","-7. Insufficient partial, interview deleted
 -6. No post interview
 -5. Sufficient partial, breakoff
--2 DK/RF in V242347 or V242348
+-2. DK/RF in V242347 or V242348
 -1. Inapplicable
 1. A lot better
 2. A little better
@@ -1091,7 +1091,7 @@ Should it be [increased / decreased] a lot or a little?
 (Should federal spending on protecting the environment be increased, decreased, or kept the same?)
 Should it be [increased / decreased] a lot or a little?
 ",
-2024,V241287x,Pre,colleges_run,Issue Position,Social and Cultural Issues,"Do you approve, disapprove, or neither approve nor disapprove of how most colleges and universities are run these days?","-2 DK/RF in V241285 or V241285
+2024,V241287x,Pre,colleges_run,Issue Position,Social and Cultural Issues,"Do you approve, disapprove, or neither approve nor disapprove of how most colleges and universities are run these days?","-2. DK/RF in V241285 or V241285
 -1. Inapplicable
 1. Approve very strongly
 2. Approve somewhat strongly

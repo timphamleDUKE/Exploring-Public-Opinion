@@ -3,7 +3,7 @@ import streamlit as st
 
 # Setting logo
 def set_logo():
-    logo = "images/logo-black.PNG"
+    logo = "images/logos/polarization-logo.PNG"
 
     st.logo(
         image=logo,
@@ -159,3 +159,4 @@ def find_answer_choices(question):
             except ValueError:
                 continue  # Skip if the key isn't an int
     return answer_map
+

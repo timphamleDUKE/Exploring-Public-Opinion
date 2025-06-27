@@ -1,91 +1,56 @@
 import streamlit as st
-import pandas as pd
 import holoviews as hv
 from functions.dictionaries import *
-from functions.sankey import sankeyGraph, display_sankey_streamlit_bokeh
+from functions.sankey import sankeyGraph
 from functions.sidebar_sankey import political_check, ideological_check, list_of_groups_check
+from functions.expander import expander
+from streamlit_bokeh import streamlit_bokeh
+from functions.css import load_custom_css
 
+load_custom_css()
 set_logo()
-st.title("Issue Position")
 
-col1, col2 = st.columns([1, 2])
+st.markdown("""
+<div class="hero-container">
+    <h1 class="hero-title">Issue Polarization</h1>
+</div>
+""", unsafe_allow_html=True)
+
+#Columns
+col1, col2, col3 = st.columns([3, 1, 1])
 
 with col1:
     topic = st.selectbox("Topic", list_of_issue_topics, index=0)
-
-list_of_issues = topic_to_list_of_issue_map.get(topic)
+    list_of_issues = topic_to_list_of_issue_map.get(topic)
 
 with col2:
-    dropdown_issue_question = st.selectbox("Issue Question", list_of_issues, index=0)
+    group = st.radio("Groups", ["Ideological Groups", "Political Groups"], index=0)
 
+with col3:
+    st.markdown('<div style="font-size: 0.875rem; font-weight: 400; margin-bottom: 0.5rem;">Options</div>', unsafe_allow_html=True)
+    if group == "Ideological Groups":
+        checks = ideological_check()
+    else:
+        checks = political_check()
+
+dropdown_issue_question = st.selectbox("Issue Question", list_of_issues, index=0)
 issue_question = description_to_renamed.get(dropdown_issue_question)
-group = st.radio("Groups", ["Ideological Groups", "Political Groups"])
-
-st.markdown(
-    '<div style="font-size: 0.875rem; font-weight: 400; margin-bottom: 0.5rem;">Options</div>',
-    unsafe_allow_html=True
-)
-
-if group == "Ideological Groups":
-    checks = ideological_check()
-else:
-    checks = political_check()
-
-list_of_groups = list_of_groups_check(group, checks)
-
-#with st.sidebar:
-#    st.title("Customize:")
-#    
-#    topic = st.selectbox("Topic", list_of_issue_topics, index=0)
-#    list_of_issues = topic_to_list_of_issue_map.get(topic)
-#    issue_question = st.selectbox("Issue Question", list_of_issues, index=0)
-#    issue_question = description_to_renamed.get(issue_question)    
-#    lib_con_pt = st.radio("Groups", ("Lib/Con 2-Point Scale", "Lib/Con 7-Point Scale", "Political Party"))
 
 # Filter data to only include valid responses (>= 1)
 df_filtered = df[df[issue_question] >= 1].copy()
 
-sankey_graph = (sankeyGraph(df, issue_question, list_of_groups, group))
+list_of_groups = list_of_groups_check(group, checks)
 
 # Display plots
+st.write("")
 st.markdown(f"### {description_map.get(issue_question)}")
 
-try:
-    st.pyplot(sankey_graph, use_container_width=True)
-except:
-    try:
-        st.plotly_chart(sankey_graph, use_container_width=True)
-    except:
-        bokeh_plot = hv.render(sankey_graph)
-        display_sankey_streamlit_bokeh(df, issue_question, list_of_groups, group)
+sankey_graph = (sankeyGraph(df, issue_question, list_of_groups, group))
+bokeh_plot = hv.render(sankey_graph)
+streamlit_bokeh(bokeh_plot, use_container_width=True)
 
 # Expander
-expander = st.expander("Details")
-full_question = full_description_map.get(issue_question)
-if pd.notna(full_question):
-    expander.subheader("Full Question from ANES:")
-    expander.write(full_question)
-
-# Add vote count table
-expander.header("Response Counts by Party:")
-
-answer_choices = find_answer_choices(issue_question)
-
-# if lib_con_pt == "Political Party":
-#     party_data = df_filtered[df_filtered['party_id'].isin(['Republican', 'Democrat'])].copy()
-#     vote_counts = pd.crosstab(party_data['party_id'], party_data[issue_question], margins=True).T
-#     if answer_choices:
-#         vote_counts.index = vote_counts.index.map(lambda x: f"{x}. {answer_choices.get(x, x)}" if x != 'All' and x in answer_choices else x)
- 
-#     expander.dataframe(vote_counts, use_container_width=True)
-# else:
-#     ideology_col = 'lib_con_2pt' if lib_con_pt == "Lib/Con 2-Point Scale" else 'lib_con_7pt'
-#     filtered_data = df_filtered.dropna(subset=[ideology_col, issue_question]).copy()
-#     vote_counts = pd.crosstab(filtered_data[ideology_col], filtered_data[issue_question], margins=True).T
-#     if answer_choices:
-#         vote_counts.index = vote_counts.index.map(lambda x: f"{x}. {answer_choices.get(x, x)}" if x != 'All' and x in answer_choices else x)
-    
-#     expander.dataframe(vote_counts, use_container_width=True)
+expander(df, issue_question)
 
 # Caption
 st.caption("This graph uses survey weights to represent population-level transitions between party self-placement and responses. However, it does not calculate standard errors using Taylor series linearization as recommended by ANES for formal inference.")
