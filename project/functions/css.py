@@ -49,7 +49,7 @@ def load_custom_css():
     
     .stTabs [data-baseweb="tab"] {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+        color: black;
         border-radius: 12px;
         border: none;
         padding: 1rem 2rem;

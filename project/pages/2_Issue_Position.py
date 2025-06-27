@@ -9,7 +9,7 @@ from functions.css import load_custom_css
 
 set_logo()
 
-st.title("Issue Polarization")
+st.title("Issue Position")
 
 st.divider()
 

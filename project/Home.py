@@ -4,7 +4,6 @@ from functions.dictionaries import set_logo
 # Configure page settings for better appearance (MUST BE FIRST)
 st.set_page_config(
     page_title="Survey Navigator - Home",
-    page_icon="📊",  # Keep this for browser tab - it's functional, not decorative
     layout="wide"
 )
 
@@ -12,10 +11,6 @@ st.set_page_config(
 def load_custom_css():
     st.markdown("""
     <style>
-    /* Use Streamlit's default font stack */
-    html, body, [class*="css"] {
-        font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
     
     /* Global styles */
     .main {
@@ -24,14 +19,11 @@ def load_custom_css():
     
     /* Hero section styling */
     .hero-container {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 4rem 3rem;
+        background: white;
         border-radius: 20px;
-        margin-bottom: 3rem;
-        color: white;
+        margin-bottom: 0.1rem;
+        color: #31333F;
         text-align: center;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        max-width: 1200px;
         margin-left: auto;
         margin-right: auto;
     }
@@ -40,7 +32,6 @@ def load_custom_css():
         font-size: 5.5rem;
         font-weight: 700;
         margin-bottom: 0.5rem;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         line-height: 1.1;
     }
     
@@ -71,7 +62,7 @@ def load_custom_css():
         border-radius: 20px;
         padding: 2.5rem;
         margin-bottom: 1.5rem;
-        box-shadow: 0 8px 32px rgba(102, 126, 234, 0.1);
+        # box-shadow: 0 8px 32px rgba(102, 126, 234, 0.1);
         border: 1px solid rgba(102, 126, 234, 0.1);
         transition: all 0.4s ease;
         position: relative;
@@ -81,11 +72,11 @@ def load_custom_css():
         backdrop-filter: blur(10px);
     }
     
-    .feature-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 20px 50px rgba(102, 126, 234, 0.15);
-        border-color: rgba(102, 126, 234, 0.2);
-    }
+    # .feature-card:hover {
+    #     transform: translateY(-8px);
+    #     box-shadow: 0 20px 50px rgba(102, 126, 234, 0.15);
+    #     border-color: rgba(102, 126, 234, 0.2);
+    # }
     
     .feature-card::before {
         content: '';
@@ -94,7 +85,7 @@ def load_custom_css():
         left: 0;
         right: 0;
         height: 5px;
-        background: linear-gradient(90deg, #667eea, #764ba2);
+        background: #7C41D2;
         border-radius: 20px 20px 0 0;
     }
     
@@ -104,10 +95,8 @@ def load_custom_css():
         color: #2c3e50;
         margin-bottom: 1.5rem;
         letter-spacing: -0.5px;
-        background: linear-gradient(135deg, #2c3e50, #667eea);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
         background-clip: text;
+        text-align: center;
     }
     
     .card-description {
@@ -119,7 +108,7 @@ def load_custom_css():
     
     /* Button styling */
     .stButton > button {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: #7C41D2;
         color: white;
         border: none;
         border-radius: 12px;
@@ -133,8 +122,7 @@ def load_custom_css():
     
     .stButton > button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-        background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+        color: hsl(0, 0%, 85%);
     }
     
     /* Enhanced stats section with modern glassmorphism */
@@ -161,37 +149,20 @@ def load_custom_css():
     .stat-number {
         font-size: 3.5rem;
         font-weight: 700;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: #7C41D2;
         display: block;
         text-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
     }
     
     .stat-label {
         font-size: 1.1rem;
-        color: #64748b;
+        color: #31333F;
         text-transform: uppercase;
         letter-spacing: 1px;
         margin-top: 0.5rem;
         font-weight: 500;
     }
     
-    /* Smooth transitions and animations */
-    .stApp {
-        transition: all 0.3s ease;
-    }
-    
-    /* Loading animation */
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .hero-container, .feature-card, .stats-container {
-        animation: fadeIn 0.8s ease-out;
-    }
     
     /* Hover effects for better interactivity */
     .stTabs [data-baseweb="tab"] {
@@ -223,10 +194,6 @@ def load_custom_css():
         }
     }
     
-    /* Remove Streamlit branding */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
     
     </style>
     """, unsafe_allow_html=True)
@@ -283,30 +250,35 @@ FEATURE_CARDS = [
     {
         "title": "Affective Polarization",
         "icon": """<svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 9V7c0-1.1-.9-2-2-2H6c-1.1 0-2 .9-2 2v2" stroke="#667eea" stroke-width="2"/>
-                    <path d="M4 15v2c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-2" stroke="#667eea" stroke-width="2"/>
-                    <circle cx="8" cy="12" r="3" fill="#764ba2"/>
-                    <circle cx="16" cy="12" r="3" fill="#667eea"/>
-                   </svg>""",
+                <path d="M2 18 Q6 4 10 8 Q14 12 18 18" stroke="#764ba2" stroke-width="2" fill="none"/>
+                <path d="M2 18 Q6 4 10 8 Q14 12 18 18 L18 20 L2 20 Z" fill="#764ba2" opacity="0.25"/>
+                <path d="M6 18 Q10 14 14 10 Q18 6 22 18" stroke="#667eea" stroke-width="2" fill="none"/>
+                <path d="M6 18 Q10 14 14 10 Q18 6 22 18 L22 20 L6 20 Z" fill="#667eea" opacity="0.25"/>
+                <line x1="2" y1="20" x2="22" y2="20" stroke="#999" stroke-width="1"/>
+               </svg>""",
         "description": """
         Explore the emotional landscape of American politics. How warmly or coldly do 
         Americans feel about people on the other side? Track emotional responses by 
         political identity over time and discover patterns in inter-party sentiment.
         """,
-        "button_text": "Explore Emotional Patterns",
+        "button_text": "Explore Affective Polarization",
         "page": "pages/1_Affective_Polarization.py",
         "key": "ap_button"
     },
     {
-        "title": "Issue Positions",
+        "title": "Issue Positions", 
         "icon": """<svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3 17l6-6 4 4 8-8" stroke="#667eea" stroke-width="2" fill="none"/>
-                    <path d="M21 7v2l-8 8-4-4-6 6v-2" fill="#764ba2" opacity="0.3"/>
-                    <circle cx="3" cy="17" r="2" fill="#764ba2"/>
-                    <circle cx="9" cy="11" r="2" fill="#667eea"/>
-                    <circle cx="13" cy="15" r="2" fill="#764ba2"/>
-                    <circle cx="21" cy="7" r="2" fill="#667eea"/>
-                   </svg>""",
+                <rect x="1" y="4" width="2" height="4" rx="1" fill="#764ba2"/>
+                <rect x="1" y="10" width="2" height="6" rx="1" fill="#764ba2"/>
+                <rect x="1" y="18" width="2" height="2" rx="1" fill="#764ba2"/>
+                <rect x="21" y="6" width="2" height="3" rx="1" fill="#667eea"/>
+                <rect x="21" y="11" width="2" height="8" rx="1" fill="#667eea"/>
+                <rect x="21" y="20" width="2" height="2" rx="1" fill="#667eea"/>
+                <path d="M3 6 C8 6 16 7 21 7.5 L21 9 C16 8.5 8 7.5 3 8 Z" fill="#764ba2" opacity="0.4"/>
+                <path d="M3 8 C8 9 16 12 21 15 L21 17 C16 14 8 10 3 8.5 Z" fill="#764ba2" opacity="0.5"/>
+                <path d="M3 13 C8 14 16 16 21 17 L21 19 C16 18 8 15 3 15 Z" fill="#764ba2" opacity="0.6"/>
+                <path d="M3 19 C8 19.5 16 20.5 21 21 L21 22 C16 21.5 8 20 3 19.5 Z" fill="#764ba2" opacity="0.3"/>
+               </svg>""",
         "description": """
         Dive deep into where Americans actually stand on critical issues like immigration, 
         healthcare, and the economy. Uncover the nuanced positions that often get lost 
@@ -347,14 +319,6 @@ def main():
     # Add description text full width with minimal spacing
     st.markdown("""
     <div style="text-align: center; width: 100%; margin: 1rem auto;">
-        <div style="margin-bottom: 1rem;">
-            <svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="10" y="15" width="20" height="20" rx="3" fill="#667eea" opacity="0.7"/>
-                <rect x="35" y="10" width="20" height="25" rx="3" fill="#764ba2" opacity="0.7"/>
-                <rect x="60" y="12" width="20" height="23" rx="3" fill="#667eea" opacity="0.7"/>
-                <circle cx="95" cy="20" r="8" fill="#764ba2" opacity="0.7"/>
-            </svg>
-        </div>
         <p style="font-size: 1.2rem; color: #5a6c7d; line-height: 1.6; margin: 0.5rem 0;">
             This project analyzes the 2024 American National Election Study data to explore political polarization 
             and public opinion patterns. Through interactive visualizations, we examine both affective polarization 
@@ -364,15 +328,15 @@ def main():
     """, unsafe_allow_html=True)
     
     # Render stats
-    render_stats_section()
+    # render_stats_section()
 
     # Section header for features
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("""
-    <div style="text-align: center;">
-        <h2 style="color: #3b4cb8; margin-bottom: 2rem;">Explore Our Site</h2>
-    </div>
-    """, unsafe_allow_html=True)
+    # st.markdown("""
+    # <div style="text-align: center;">
+    #     <h2 style="color: #31333F; margin-bottom: 2rem;">Explore Our Site</h2>
+    # </div>
+    # """, unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
     
     # Render feature cards
