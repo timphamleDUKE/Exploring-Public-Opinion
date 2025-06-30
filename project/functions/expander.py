@@ -13,7 +13,7 @@ def expander(df, issue_question, page):
         full_question = full_description_map.get(issue_question)
         exp.write(full_question)
 
-    # Get response labels
+    # Table
     answer_choices = find_answer_choices(issue_question)
     raw_counts = df[issue_question].value_counts().sort_index()
     raw_counts.index.name = None
@@ -48,33 +48,26 @@ def expander(df, issue_question, page):
     labeled_counts = raw_counts.rename(
         index={k: v for k, v in answer_choices.items() if k in raw_counts.index}
     )
-    
-    # Create plotly bar chart with preserved order
-    fig = px.bar(
-        x = labeled_counts.values, 
-        y = labeled_counts.index,
-        orientation = 'h',
-        color_discrete_sequence = ["#7c41d2"],
-        height = 500,
-        labels={
-        'x': 'Count',  # Custom x-axis title
-        'y': 'Answers'   # Custom y-axis title
-        }
-    )
+    labeled_counts.index = labeled_counts.index.astype(str)
+    labeled_counts_sorted = labeled_counts.sort_values(ascending=False)
 
-    if page == "issue":
-        fig.update_traces(
-        width=0.5,  # Increase bar width (0.0 to 1.0, where 1.0 is maximum width)
-        marker_line_width=0.1  # Remove bar borders for cleaner look (optional)
-    ) 
-    else:
-        fig.update_traces(
-        width=3,  # Increase bar width (0.0 to 1.0, where 1.0 is maximum width)
-    )
+
+    fig = go.Figure(go.Bar(
+        x=labeled_counts_sorted.values,
+        y=labeled_counts_sorted.index.tolist(),
+        orientation='h',
+        marker=dict(color="#7c41d2"),
+        customdata=labeled_counts_sorted.values.reshape(-1, 1),
+        hovertemplate="<b>%{y}</b><br>Count: %{customdata[0]}<extra></extra>"
+    ))
 
     fig.update_layout(
-        font=dict(size=15),  # Increase font size
-        margin=dict(l=100, r=50, t=50, b=50)  # Adjust margins if needed
+        height=500,
+        margin=dict(l=100, r=20, t=20, b=40),
+        xaxis_title="Number of Responses",
+        yaxis_title="Answer Choice",
+        yaxis=dict(autorange="reversed"),  # Puts highest count at top
+        font=dict(size=14)
     )
 
     exp.plotly_chart(fig, use_container_width=True)
