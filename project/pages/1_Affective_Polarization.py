@@ -4,7 +4,6 @@ from functions.sidebar_density import ideological_check, political_check, list_o
 from functions.dictionaries import (set_logo, list_of_thermometer_topics, topic_to_list_of_thermometer_map, df, description_map, dropdown_to_renamed)
 from functions.density import densityGraph
 from functions.expander import expander
-from functions.css import load_custom_css, load_custom_css_plot_page
 
 set_logo()
 
@@ -155,7 +154,7 @@ density_graph = densityGraph(
 st.plotly_chart(density_graph, use_container_width=True)
 
 # Expander
-expander(df, thermometer_question)
+expander(df, thermometer_question, "affective")
 
 # Caption
 st.caption(
