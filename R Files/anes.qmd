@@ -18,6 +18,7 @@ library(dplyr)
 library(ggforce)
 library(ggridges)
 library(ggalluvial)
+library(broom)
 ```
 
 ```{r}
@@ -765,3 +766,152 @@ for people to buy a gun, or keep these rules about the same?"
   ) +
   theme_minimal()
 ```
+
+# Missing Data Analysis
+
+```{r}
+#| label: missing-data
+
+missing_analysis <- anes_2024_clean |>
+  mutate(
+    harris_dk = harris_thermometer_pre %in% c(-9, -8),
+    harris_50 = harris_thermometer_pre == 50,
+    harris_low = harris_thermometer_pre >= 0 & harris_thermometer_pre < 50,
+    harris_high = harris_thermometer_pre > 50 & harris_thermometer_pre <= 100,
+    harris_valid = harris_thermometer_pre >= 0 & harris_thermometer_pre <= 100,
+    poli_party_self_7pt_grouped = case_when(
+      poli_party_self_7pt %in% c(-9, -8, -4) ~ NA_character_, 
+      poli_party_self_7pt %in% c(1, 2) ~ "Democrat", 
+      poli_party_self_7pt %in% c(3, 4, 5) ~ "Independent",
+      poli_party_self_7pt %in% c(6, 7) ~ "Republican"
+      ), 
+    educ = case_when(
+      educ %in% c(-9, -8, -4, -2) ~ NA_character_,
+      educ == 1 ~ "Less than high school",
+      educ == 2 ~ "High school credential",
+      educ == 3 ~ "Some college, no BA",
+      educ == 4 ~ "Bachelor’s degree",
+      educ == 5 ~ "Graduate degree"
+    ), 
+    marriage = case_when(
+      marriage == -2 ~ NA_character_,
+      marriage == 1 ~ "Married",
+      marriage == 2 ~ "Widowed",
+      marriage == 3 ~ "Divorced",
+      marriage == 4 ~ "Separated",
+      marriage == 5 ~ "Never married"
+    ),
+    income = case_when(
+      income %in% c(-9, -5, -4) ~ NA_character_,
+      income == 1 ~ "Under $9,999",
+      income == 2 ~ "$10,000 to $29,999",
+      income == 3 ~ "$30,000 to $59,999",
+      income == 4 ~ "$60,000 to $99,999",
+      income == 5 ~ "$100,000 to $249,999",
+      income == 6 ~ "$250,000 or more"
+    ),
+    religion = case_when(
+      religion %in% c(-9, -8, -1) ~ NA_character_,
+      religion %in% 1:8 ~ "Religious",
+      religion %in% 9:12 ~ "Not religious"
+    ),
+    gender = case_when(
+      gender %in% c(-9, -1) ~ NA_character_,
+      gender == 1 ~ "Man",
+      gender == 2 ~ "Woman",
+      gender %in% c(3, 4) ~ "Non-cisgender"
+    ),
+    race_ethnicity = case_when(
+      race_ethnicity %in% c(-9, -8, -4) ~ NA_character_,
+      race_ethnicity == 1 ~ "White, non-Hispanic",
+      race_ethnicity == 2 ~ "Black, non-Hispanic",
+      race_ethnicity == 3 ~ "Hispanic",
+      race_ethnicity == 4 ~ "Asian/NHPI, non-Hispanic",
+      race_ethnicity == 5 ~ "Native American/Other, non-Hispanic",
+      race_ethnicity == 6 ~ "Multiracial, non-Hispanic"
+    )
+  )
+
+missing_analysis |>
+  group_by(poli_party_self_7pt_grouped) |>
+  summarise(
+    pct_dk = mean(harris_dk, na.rm = TRUE),
+    pct_50 = mean(harris_50, na.rm = TRUE),
+    pct_low = mean(harris_low, na.rm = TRUE),
+    pct_high = mean(harris_high, na.rm = TRUE)
+  )
+
+missing_analysis |>
+  group_by(poli_party_self_7pt_grouped) |>
+  summarise(
+    DK = mean(harris_dk, na.rm = TRUE),
+    `50` = mean(harris_50, na.rm = TRUE),
+    Low = mean(harris_low, na.rm = TRUE),
+    High = mean(harris_high, na.rm = TRUE)
+  ) |>
+  pivot_longer(cols = c(DK, `50`, Low, High), names_to = "Response", values_to = "Percent") |>
+  ggplot(aes(x = Percent, y = fct_rev(poli_party_self_7pt_grouped), fill = Response)) +
+  geom_col(position = "stack") +
+  scale_x_continuous(labels = percent_format()) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Thermometer Ratings for Kamala Harris by Party ID",
+    x = "Percentage of Respondents",
+    y = "Party ID",
+    fill = "Response Type"
+  ) +
+  theme_minimal()
+
+model_data <- missing_analysis |>
+  select(harris_thermometer_pre, poli_party_self_7pt_grouped, age_election_day, educ, marriage, income, religion, gender, race_ethnicity) |>
+  drop_na()
+
+model <- lm(harris_thermometer_pre ~ poli_party_self_7pt_grouped + age_election_day + 
+                           educ + marriage + income + religion + gender + race_ethnicity, 
+            data = model_data)
+summary(model)
+```
+
+## Bayesian
+
+```{r}
+#| label: bayes
+#| eval: FALSE
+
+library(brms)
+library(tidybayes)
+
+bayes_data <- missing_analysis |>
+  filter(!is.na(harris_50)) |>
+  filter(!is.na(poli_party_self_7pt_grouped), !is.na(educ), !is.na(gender), !is.na(race_ethnicity)) |>
+  mutate(
+    poli_party_self_7pt_grouped = factor(poli_party_self_7pt_grouped),
+    educ = factor(educ),
+    gender = factor(gender),
+    race_ethnicity = factor(race_ethnicity)
+  )
+
+harris_50_model <- brm(
+  formula = harris_50 ~ poli_party_self_7pt_grouped + educ + gender + race_ethnicity,
+  data = bayes_data,
+  family = bernoulli(),  # Logistic regression
+  prior = c(
+    prior(normal(0, 1), class = "b"),       # Coefficients
+    prior(student_t(3, 0, 2.5), class = "Intercept")  # Intercept
+  ),
+  chains = 4, iter = 2000, warmup = 500, cores = 4,
+  seed = 2025
+)
+
+summary(harris_50_model)
+
+# Get predicted probabilities for each party
+bayes_data |> 
+  data_grid(poli_party_self_7pt_grouped = unique(bayes_data$poli_party_self_7pt_grouped)) |>
+  add_epred_draws(harris_50_model) |>
+  ggplot(aes(x = .epred, y = fct_rev(poli_party_self_7pt_grouped))) +
+  stat_halfeye(.width = 0.89, fill = "steelblue", alpha = 0.7) +
+  labs(title = "Posterior Distribution: Probability of Selecting 50 on Harris Thermometer",
+       x = "Estimated Probability", y = "Party ID")
+```
+
