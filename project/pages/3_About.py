@@ -3,8 +3,10 @@ import pandas as pd
 import base64
 import os
 from functions.dictionaries import set_logo
+from functions.css import load_custom_css
 
 set_logo()
+load_custom_css()
 st.title("About")
 
 # Tabs
@@ -56,18 +58,18 @@ with tab2:
             return
         encoded_image = base64_image(image_path)
         html = f"""
-        <div style="text-align: center; margin-bottom: 2rem;">
+        <div class="author-container" style="text-align: center; margin-bottom: 2rem;">
             <a href="{linkedin_url}" target="_blank" style="text-decoration: none; color: inherit;">
                 <img src="data:image/png;base64,{encoded_image}"
                      style="width: 240px; height: 240px; object-fit: cover;
                             border: 2px solid #31333F; border-radius: 0;">
+            </a>
                 <div style="margin-top: 1rem;">
                     <strong style="font-size: 18px;">{name}</strong><br>
                     <span style="font-size: 16px;">{class_year}</span><br>
                     <span style="font-size: 16px;">{major}</span><br>
                     <span style="font-size: 16px;">{school}</span>
                 </div>
-            </a>
         </div>
         """
         st.markdown(html, unsafe_allow_html=True)

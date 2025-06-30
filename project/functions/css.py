@@ -199,6 +199,29 @@ def load_custom_css():
         }
     }
     
+    # Hyperlink Styling
+            
+    .main a:link, .main a:visited {
+        color: #7c41d2 !important;
+        text-decoration: none !important;
+    }
+    .main a:hover, .main a:active {
+        color: #9b59e8 !important;
+        text-decoration: none !important;
+    }
+    /* Also target the markdown container specifically */
+    .stMarkdown a:link, .stMarkdown a:visited {
+        color: #7c41d2 !important;
+        text-decoration: none !important;
+    }
+    .stMarkdown a:hover, .stMarkdown a:active {
+        color: #9b59e8 !important;
+        text-decoration: none !important;
+    }
+                
+    .author-container {
+        padding-top: 2rem;
+    }
     
     </style>
     """, unsafe_allow_html=True)
