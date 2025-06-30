@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import plotly.graph_objects as go
 from functions.dictionaries import full_description_map, codebook, find_answer_choices
 import plotly.express as px
 
@@ -9,11 +10,12 @@ def expander(df, issue_question, page):
     # Show full question
     matched_row = codebook[codebook["Renamed"] ==  issue_question]
     if not matched_row.empty and matched_row["Original Question"].notna().any():
-        exp.subheader("Full Question from ANES:")
+        exp.subheader("Full Question from ANES")
         full_question = full_description_map.get(issue_question)
         exp.write(full_question)
 
-    # Filter valid responses
+    # Get response labels
+    answer_choices = find_answer_choices(issue_question) or {}
 
     answer_choices = find_answer_choices(issue_question)
 
@@ -42,14 +44,10 @@ def expander(df, issue_question, page):
             "Percent": percentages.round(1).astype(str) + "%"
         })
 
-    st.write(result_df)
-
-
     result_df.loc[len(result_df.index) + 1] = ["Total", total, "100%"]
     result_df.set_index("Answer Choice", inplace = True)
 
-    # Display table
-    exp.subheader("Raw Response Counts:")
+    exp.subheader("Raw Response Counts")
     exp.table(result_df)
 
     # Bar chart
@@ -58,8 +56,6 @@ def expander(df, issue_question, page):
     labeled_counts = clean_counts.rename(
         index = {k: v for k, v in answer_choices.items() if k in clean_counts.index and k !=  "Missing"}
     )
-
-    st.write(labeled_counts)
     
     labeled_counts.index = labeled_counts.index.astype(str)
 
