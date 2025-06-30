@@ -13,6 +13,17 @@ def expander(df, issue_question, page):
         full_question = full_description_map.get(issue_question)
         exp.write(full_question)
 
+    exp.subheader("Raw Response Counts")
+
+    # Missing and valid N
+    series = df[issue_question]
+    valid_responses = series[series >= 0].count()
+    missing_responses = series[series < 0].count()
+
+    col1, col2 = exp.columns(2)
+    col1.metric("Valid responses", valid_responses)
+    col2.metric("Missing responses", missing_responses)
+
     # Table
     answer_choices = find_answer_choices(issue_question)
     raw_counts = df[issue_question].value_counts().sort_index()
@@ -46,7 +57,6 @@ def expander(df, issue_question, page):
     header_height = 40
     table_height = header_height + row_height * len(result_df)
 
-    exp.subheader("Raw Response Counts")
     exp.dataframe(result_df, hide_index=True, height=table_height)
 
     # Bar chart
@@ -88,8 +98,7 @@ def expander(df, issue_question, page):
         margin=dict(l=100, r=20, t=20, b=40),
         xaxis_title="Number of Responses",
         yaxis_title="Answer Choice",
-        yaxis=dict(autorange="reversed"),
-        font=dict(size=14)
+        yaxis=dict(autorange="reversed")
     )
 
     exp.plotly_chart(fig, use_container_width=True)
