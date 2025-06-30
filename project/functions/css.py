@@ -222,6 +222,36 @@ def load_custom_css():
     .author-container {
         padding-top: 2rem;
     }
+                
+    .star {
+        display: flex;
+        justify-content: flex-end;  /* Right align */
+        align-items: center;        /* Vertical center */
+        height: 100%;
+        padding-right: 1rem;
+    }
+                
+    .star-button{
+        display: flex;
+        justify-content: center;
+    }
+                
+    .stHorizontalBlock {
+        align-items: center;
+        height: 100%;
+    }
+                
+    section[data-testid="stHorizontalBlock"] > div:last-child {
+        display: flex;
+        justify-content: flex-end !important;
+    }
     
     </style>
+    """, unsafe_allow_html=True)
+
+def load_star_css():
+    st.markdown("""
+
+    
+
     """, unsafe_allow_html=True)
