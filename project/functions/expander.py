@@ -13,15 +13,13 @@ def expander(df, issue_question):
         exp.write(full_question)
 
     # Filter valid responses
-    missing_df = df[df[issue_question] < 1]
-    valid_df = df[df[issue_question] >= 1]
 
     answer_choices = find_answer_choices(issue_question)
 
     # Count and percent
     full_counts = df[issue_question].value_counts().sort_index()
-    missing_total = full_counts[full_counts.index < 1].sum()
-    clean_counts = full_counts[full_counts.index >= 1].copy()
+    missing_total = full_counts[(full_counts.index) < 1 | (full_counts.index > 100)].sum()
+    clean_counts = full_counts[(full_counts.index >= 1) & (full_counts.index <= 100)].copy()
     clean_counts.loc["Missing"] = missing_total
 
     clean_counts.index.name = None
@@ -51,6 +49,8 @@ def expander(df, issue_question):
         index={k: v for k, v in answer_choices.items() if k in clean_counts.index and k != "Missing"}
     )
     
-    exp.bar_chart(labeled_counts, color = "#7c41d2", horizontal = True, height = 500)
+    labeled_counts_sorted = labeled_counts.sort_values(ascending=False)
+
+    exp.bar_chart(labeled_counts_sorted, color = "#7c41d2", horizontal = True, height = 500)
 
     exp.caption("Missing Values include those that answered: Don't Know, Inapplicable, Refused, Insufficient Partials, Sufficient Breakoffs, etc.")
