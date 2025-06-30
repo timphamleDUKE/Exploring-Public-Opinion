@@ -19,13 +19,14 @@ with tab1:
         # Add metadata description
         st.markdown("""  
         The data used in this project come from the **American National Election Survey (ANES) 2024**, 
-        one of the most respected sources of public opinion data in the United States, a collaborative project between Stanford 
-        University and the University of Michigan.
+        one of the most respected sources of public opinion data in the United States. ANES is a 
+        collaboration of Duke University, University of Michigan, The University of Texas at Austin, 
+        and Stanford University, with funding by the National Science Foundation.
         
         **Observations:** 5,521 respondents    &    **Variables:** 124
         
         The dataset includes detailed information on political attitudes, voting behavior, 
-        demographic characteristics, ideological self-placement, partisanship, and much more.
+        demographic characteristics, ideological self-placement, partisanship, and more.
         """)
         
     with col2:
