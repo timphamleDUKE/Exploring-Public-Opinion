@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 from functions.dictionaries import full_description_map, codebook, find_answer_choices
-import plotly.express as px
 
 def expander(df, issue_question, page):
     exp = st.expander("Details")
@@ -16,43 +15,38 @@ def expander(df, issue_question, page):
 
     # Get response labels
     answer_choices = find_answer_choices(issue_question)
-
-    # Count and percent
-    full_counts = df[issue_question].value_counts().sort_index()
-    missing_total = full_counts[(full_counts.index) < 1 | (full_counts.index > 100)].sum()
-    clean_counts = full_counts[(full_counts.index >=  1) & (full_counts.index <=  100)].copy()
-    clean_counts.loc["Missing"] = missing_total
-
-    clean_counts.index.name = None
-    total = clean_counts.sum()
-    percentages = clean_counts / total * 100
+    raw_counts = df[issue_question].value_counts().sort_index()
+    raw_counts.index.name = None
+    total = raw_counts.sum()
+    percentages = raw_counts / total * 100
 
     if page == "issue":
-        result_df = pd.DataFrame({
-            "Answer Choice": clean_counts.index.map(
-                lambda x: "Missing" if x ==  "Missing" else f"{x}. {answer_choices.get(x, x)}"
-            ),
-            "Count": clean_counts.values,
-            "Percent": percentages.round(1).astype(str) + "%"
-        })
+        answer_labels = raw_counts.index.map(lambda x: f"{x}. {answer_choices.get(x, x)}")
     else:
-        result_df = pd.DataFrame({
-            "Answer Choice": clean_counts.index,
-            "Count": clean_counts.values,
-            "Percent": percentages.round(1).astype(str) + "%"
-        })
+        answer_labels = raw_counts.index
 
-    result_df.loc[len(result_df.index) + 1] = ["Total", total, "100%"]
-    result_df.set_index("Answer Choice", inplace = True)
+    # Create result table and append Total row
+    result_df = pd.concat([
+        pd.DataFrame({
+            "Answer Choice": answer_labels,
+            "Count": raw_counts.values,
+            "Percent": percentages.round(1).astype(str) + "%"
+        }),
+        pd.DataFrame([["Total", total, "100%"]], columns=["Answer Choice", "Count", "Percent"])
+    ], ignore_index=True)
+
+    row_height = 35
+    header_height = 40
+    table_height = header_height + row_height * len(result_df)
 
     exp.subheader("Raw Response Counts")
-    exp.table(result_df)
+    exp.dataframe(result_df, hide_index=True, height=table_height)
 
     # Bar chart
-    exp.subheader("Visual Breakdown:")
+    exp.subheader("Visual Breakdown")
 
-    labeled_counts = clean_counts.rename(
-        index = {k: v for k, v in answer_choices.items() if k in clean_counts.index and k !=  "Missing"}
+    labeled_counts = raw_counts.rename(
+        index={k: v for k, v in answer_choices.items() if k in raw_counts.index}
     )
     
     # Create plotly bar chart with preserved order
@@ -83,7 +77,4 @@ def expander(df, issue_question, page):
         margin=dict(l=100, r=50, t=50, b=50)  # Adjust margins if needed
     )
 
-    # Preserve the original order by setting category order
-    exp.plotly_chart(fig, use_container_width = True)
-
-    exp.caption("Missing Values include those that answered: Don't Know, Inapplicable, Refused, Insufficient Partials, Sufficient Breakoffs, etc.")
+    exp.plotly_chart(fig, use_container_width=True)
