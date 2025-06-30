@@ -7,7 +7,7 @@ def expander(df, issue_question, page):
     exp = st.expander("Details")
 
     # Show full question
-    matched_row = codebook[codebook["Renamed"] ==  issue_question]
+    matched_row = codebook[codebook["Renamed"] == issue_question]
     if not matched_row.empty and matched_row["Original Question"].notna().any():
         exp.subheader("Full Question from ANES")
         full_question = full_description_map.get(issue_question)
@@ -20,12 +20,19 @@ def expander(df, issue_question, page):
     total = raw_counts.sum()
     percentages = raw_counts / total * 100
 
-    if page == "issue":
-        answer_labels = raw_counts.index.map(lambda x: f"{x}. {answer_choices.get(x, x)}")
-    else:
-        answer_labels = raw_counts.index
+    # Table label formatting
+    def format_table_label(x):
+        if page == "issue":
+            return f"{x}. {answer_choices.get(x, x)}"
+        elif page == "affective":
+            if isinstance(x, (int, float)) and (x < 0 or x > 100):
+                return f"{x}. {answer_choices.get(x, x)}"
+            return str(x)
+        else:
+            return str(x)
 
-    # Create result table and append Total row
+    answer_labels = raw_counts.index.map(format_table_label)
+
     result_df = pd.concat([
         pd.DataFrame({
             "Answer Choice": answer_labels,
@@ -45,19 +52,34 @@ def expander(df, issue_question, page):
     # Bar chart
     exp.subheader("Visual Breakdown")
 
-    labeled_counts = raw_counts.rename(
-        index={k: v for k, v in answer_choices.items() if k in raw_counts.index}
-    )
-    labeled_counts.index = labeled_counts.index.astype(str)
-    labeled_counts_sorted = labeled_counts.sort_values(ascending=False)
+    chart_df = pd.DataFrame({
+        "value": raw_counts.index.astype(str),
+        "count": raw_counts.values
+    })
 
+    def format_chart_label(x):
+        try:
+            num_x = int(x)
+        except:
+            return str(x)
+        if page == "issue":
+            return answer_choices.get(num_x, str(num_x))
+        elif page == "affective":
+            if num_x < 0 or num_x > 100:
+                return answer_choices.get(num_x, str(num_x))
+            return str(num_x)
+        else:
+            return str(num_x)
+
+    chart_df["label"] = chart_df["value"].map(format_chart_label)
+    chart_df_sorted = chart_df.sort_values(by="count", ascending=False)
 
     fig = go.Figure(go.Bar(
-        x=labeled_counts_sorted.values,
-        y=labeled_counts_sorted.index.tolist(),
+        x=chart_df_sorted["count"],
+        y=chart_df_sorted["label"],
         orientation='h',
         marker=dict(color="#7c41d2"),
-        customdata=labeled_counts_sorted.values.reshape(-1, 1),
+        customdata=chart_df_sorted["count"].values.reshape(-1, 1),
         hovertemplate="<b>%{y}</b><br>Count: %{customdata[0]}<extra></extra>"
     ))
 
@@ -66,7 +88,7 @@ def expander(df, issue_question, page):
         margin=dict(l=100, r=20, t=20, b=40),
         xaxis_title="Number of Responses",
         yaxis_title="Answer Choice",
-        yaxis=dict(autorange="reversed"),  # Puts highest count at top
+        yaxis=dict(autorange="reversed"),
         font=dict(size=14)
     )
 
