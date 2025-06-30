@@ -2,88 +2,103 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 from functions.dictionaries import full_description_map, codebook, find_answer_choices
-import plotly.express as px
 
 def expander(df, issue_question, page):
     exp = st.expander("Details")
 
     # Show full question
-    matched_row = codebook[codebook["Renamed"] ==  issue_question]
+    matched_row = codebook[codebook["Renamed"] == issue_question]
     if not matched_row.empty and matched_row["Original Question"].notna().any():
         exp.subheader("Full Question from ANES")
         full_question = full_description_map.get(issue_question)
         exp.write(full_question)
 
-    # Get response labels
-    answer_choices = find_answer_choices(issue_question)
-
-    # Count and percent
-    full_counts = df[issue_question].value_counts().sort_index()
-    missing_total = full_counts[(full_counts.index) < 1 | (full_counts.index > 100)].sum()
-    clean_counts = full_counts[(full_counts.index >=  1) & (full_counts.index <=  100)].copy()
-    clean_counts.loc["Missing"] = missing_total
-
-    clean_counts.index.name = None
-    total = clean_counts.sum()
-    percentages = clean_counts / total * 100
-
-    if page == "issue":
-        result_df = pd.DataFrame({
-            "Answer Choice": clean_counts.index.map(
-                lambda x: "Missing" if x ==  "Missing" else f"{x}. {answer_choices.get(x, x)}"
-            ),
-            "Count": clean_counts.values,
-            "Percent": percentages.round(1).astype(str) + "%"
-        })
-    else:
-        result_df = pd.DataFrame({
-            "Answer Choice": clean_counts.index,
-            "Count": clean_counts.values,
-            "Percent": percentages.round(1).astype(str) + "%"
-        })
-
-    result_df.loc[len(result_df.index) + 1] = ["Total", total, "100%"]
-    result_df.set_index("Answer Choice", inplace = True)
-
     exp.subheader("Raw Response Counts")
-    exp.table(result_df)
+
+    # Missing and valid N
+    series = df[issue_question]
+    valid_responses = series[series >= 0].count()
+    missing_responses = series[series < 0].count()
+
+    col1, col2 = exp.columns(2)
+    col1.metric("Valid responses", valid_responses)
+    col2.metric("Missing responses", missing_responses)
+
+    # Table
+    answer_choices = find_answer_choices(issue_question)
+    raw_counts = df[issue_question].value_counts().sort_index()
+    raw_counts.index.name = None
+    total = raw_counts.sum()
+    percentages = raw_counts / total * 100
+
+    # Table label formatting
+    def format_table_label(x):
+        if page == "issue":
+            return f"{x}. {answer_choices.get(x, x)}"
+        elif page == "affective":
+            if isinstance(x, (int, float)) and (x < 0 or x > 100):
+                return f"{x}. {answer_choices.get(x, x)}"
+            return str(x)
+        else:
+            return str(x)
+
+    answer_labels = raw_counts.index.map(format_table_label)
+
+    result_df = pd.concat([
+        pd.DataFrame({
+            "Answer Choice": answer_labels,
+            "Count": raw_counts.values,
+            "Percent": percentages.round(1).astype(str) + "%"
+        }),
+        pd.DataFrame([["Total", total, "100%"]], columns=["Answer Choice", "Count", "Percent"])
+    ], ignore_index=True)
+
+    row_height = 35
+    header_height = 40
+    table_height = header_height + row_height * len(result_df)
+
+    exp.dataframe(result_df, hide_index=True, height=table_height)
 
     # Bar chart
-    exp.subheader("Visual Breakdown:")
+    exp.subheader("Visual Breakdown")
 
-    labeled_counts = clean_counts.rename(
-        index = {k: v for k, v in answer_choices.items() if k in clean_counts.index and k !=  "Missing"}
-    )
-    
-    # Create plotly bar chart with preserved order
-    fig = px.bar(
-        x = labeled_counts.values, 
-        y = labeled_counts.index,
-        orientation = 'h',
-        color_discrete_sequence = ["#7c41d2"],
-        height = 500,
-        labels={
-        'x': 'Count',  # Custom x-axis title
-        'y': 'Answers'   # Custom y-axis title
-        }
-    )
+    chart_df = pd.DataFrame({
+        "value": raw_counts.index.astype(str),
+        "count": raw_counts.values
+    })
 
-    if page == "issue":
-        fig.update_traces(
-        width=0.5,  # Increase bar width (0.0 to 1.0, where 1.0 is maximum width)
-        marker_line_width=0.1  # Remove bar borders for cleaner look (optional)
-    ) 
-    else:
-        fig.update_traces(
-        width=3,  # Increase bar width (0.0 to 1.0, where 1.0 is maximum width)
-    )
+    def format_chart_label(x):
+        try:
+            num_x = int(x)
+        except:
+            return str(x)
+        if page == "issue":
+            return answer_choices.get(num_x, str(num_x))
+        elif page == "affective":
+            if num_x < 0 or num_x > 100:
+                return answer_choices.get(num_x, str(num_x))
+            return str(num_x)
+        else:
+            return str(num_x)
+
+    chart_df["label"] = chart_df["value"].map(format_chart_label)
+    chart_df_sorted = chart_df.sort_values(by="count", ascending=False)
+
+    fig = go.Figure(go.Bar(
+        x=chart_df_sorted["count"],
+        y=chart_df_sorted["label"],
+        orientation='h',
+        marker=dict(color="#7c41d2"),
+        customdata=chart_df_sorted["count"].values.reshape(-1, 1),
+        hovertemplate="<b>%{y}</b><br>Count: %{customdata[0]}<extra></extra>"
+    ))
 
     fig.update_layout(
-        font=dict(size=15),  # Increase font size
-        margin=dict(l=100, r=50, t=50, b=50)  # Adjust margins if needed
+        height=500,
+        margin=dict(l=100, r=20, t=20, b=40),
+        xaxis_title="Number of Responses",
+        yaxis_title="Answer Choice",
+        yaxis=dict(autorange="reversed")
     )
 
-    # Preserve the original order by setting category order
-    exp.plotly_chart(fig, use_container_width = True)
-
-    exp.caption("Missing Values include those that answered: Don't Know, Inapplicable, Refused, Insufficient Partials, Sufficient Breakoffs, etc.")
+    exp.plotly_chart(fig, use_container_width=True)
