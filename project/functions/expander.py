@@ -15,8 +15,6 @@ def expander(df, issue_question, page):
         exp.write(full_question)
 
     # Get response labels
-    answer_choices = find_answer_choices(issue_question) or {}
-
     answer_choices = find_answer_choices(issue_question)
 
     # Count and percent
@@ -57,8 +55,6 @@ def expander(df, issue_question, page):
         index = {k: v for k, v in answer_choices.items() if k in clean_counts.index and k !=  "Missing"}
     )
     
-    labeled_counts.index = labeled_counts.index.astype(str)
-
     # Create plotly bar chart with preserved order
     fig = px.bar(
         x = labeled_counts.values, 
@@ -76,17 +72,14 @@ def expander(df, issue_question, page):
         fig.update_traces(
         width=0.5,  # Increase bar width (0.0 to 1.0, where 1.0 is maximum width)
         marker_line_width=0.1  # Remove bar borders for cleaner look (optional)
-    )
-        
+    ) 
     else:
         fig.update_traces(
         width=3,  # Increase bar width (0.0 to 1.0, where 1.0 is maximum width)
-        marker_line_width=0.1  # Remove bar borders for cleaner look (optional)
     )
 
     fig.update_layout(
-        bargap=0.999,  # Reduce gap between bars (0.0 to 1.0)
-        font=dict(size=12),  # Increase font size
+        font=dict(size=15),  # Increase font size
         margin=dict(l=100, r=50, t=50, b=50)  # Adjust margins if needed
     )
 
