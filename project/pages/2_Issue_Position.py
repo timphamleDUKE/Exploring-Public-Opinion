@@ -5,7 +5,6 @@ from functions.sankey import sankeyGraph
 from functions.sidebar_sankey import political_check, ideological_check, list_of_groups_check
 from functions.expander import expander
 from streamlit_bokeh import streamlit_bokeh
-from functions.css import load_custom_css
 
 set_logo()
 
