@@ -154,7 +154,7 @@ density_graph = densityGraph(
 st.plotly_chart(density_graph, use_container_width=True)
 
 # Expander
-expander(df, thermometer_question)
+expander(df, thermometer_question, "affective")
 
 # Caption
 st.caption(
