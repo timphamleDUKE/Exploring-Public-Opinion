@@ -11,8 +11,6 @@ def star_toggle(page, df, thermometer_question, list_of_groups, group):
     if "compare_list" not in session_state:
         session_state["compare_list"] = []
 
-    st.write(session_state)
-
     on_svg = """
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <path d="M12 2l3.09 6.26L22 9.27l-5.18 5.05L18.18 22 12 18.27 5.82 22l1.36-7.68L2 9.27l6.91-1.01L12 2Z" fill="#7c41d2" stroke="#7c41d2" stroke-width="2"/>
@@ -40,20 +38,22 @@ def star_toggle(page, df, thermometer_question, list_of_groups, group):
     else:
         load_star_css(on_base64)
     
-    if st.button("", key="star_toggle_btn", help="Add to compare list"):
+    if st.button("", type="primary", key="star_toggle_btn", help="Save visualization"):
         # Toggle state only when button is clicked
         if session_state["star_state"] == "off":
             session_state["star_state"] = "on"
             # Add object to compare_list
             if check_compare_list(thermometer_question, list_of_groups) == False:
                 add_compare_list(page, df, thermometer_question, list_of_groups, group)
+                st.toast("Saved Visualization!")
         else:
             session_state["star_state"] = "off"
             if check_compare_list(thermometer_question, list_of_groups) == True:
                 remove_compare_list(thermometer_question, list_of_groups)
+                st.toast("Removed Visualization!")
         # Rerun to update the display
         st.rerun()
-
+    
 def check_compare_list(thermometer_question, list_of_groups):
     for item in session_state["compare_list"]:
         if item["id"] == get_compare_list_object(thermometer_question, list_of_groups):
@@ -91,7 +91,7 @@ def load_star_css(b64):
 
     st.markdown(f"""
         <style>
-        .stButton {{
+        .stButton:has(button[kind="primary"]) {{
             display: flex;
             justify-content: flex-end !important;
             align-items: center !important;
@@ -99,9 +99,9 @@ def load_star_css(b64):
         }}
         
         /* Target button regardless of wrapper structure */
-        .stButton button,
-        .stButton > div button,
-        .stButton > div > div button {{
+        .stButton button[kind="primary"],
+        .stButton > div button[kind="primary"],
+        .stButton > div > div button[kind="primary"] {{
             background-image: url("data:image/svg+xml;base64,{b64}") !important;
             background-position: center !important;
             background-repeat: no-repeat !important;
@@ -115,32 +115,35 @@ def load_star_css(b64):
         }}
 
         /* Hover state */
-        .stButton button:hover,
-        .stButton > div button:hover,
-        .stButton > div > div button:hover {{
+        .stButton button[kind="primary"]:hover,
+        .stButton > div button[kind="primary"]:hover,
+        .stButton > div > div button[kind="primary"]:hover {{
             background-image: url("data:image/svg+xml;base64,{hover_base64}") !important;
             border: 1px solid #31333F !important;
         }}
 
         /* Active state */
-        .stButton button:active,
-        .stButton > div button:active,
-        .stButton > div > div button:active {{
+        .stButton button[kind="primary"]:active,
+        .stButton > div button[kind="primary"]:active,
+        .stButton > div > div button[kind="primary"]:active {{
             background-image: url("data:image/svg+xml;base64,{b64}") !important;
             border: 1px solid #31333F !important;
         }}
         </style>
     """, unsafe_allow_html=True)
 
-def compare_box(page):
-    exp = st.expander("Compare")
-    counter = 0
-
-    if "compare_list" not in session_state or len(session_state["compare_list"]) == 0:
-        exp.write("Please add a visualization to compare")
-    else:
-        for item in session_state["compare_list"]:
-            if item["page"] == page:
-                graph_object = item["graph_object"]
-                exp.plotly_chart(graph_object, use_container_width=True, key = counter)
-                counter += 1
+def show_saved(page):
+    @st.dialog("Saved List")
+    def show_saved_list(page):
+        counter = 0
+        if "compare_list" not in session_state or len(session_state["compare_list"]) == 0:
+            st.write("Please add a visualization to compare")
+        else:
+            for item in session_state["compare_list"]:
+                if item["page"] == page:
+                    graph_object = item["graph_object"]
+                    st.plotly_chart(graph_object, use_container_width=True, key = counter)
+                    counter += 1
+    
+    if st.button("Saved List"):
+        show_saved_list(page)

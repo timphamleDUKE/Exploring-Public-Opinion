@@ -248,3 +248,17 @@ def load_custom_css():
     
     </style>
     """, unsafe_allow_html=True)
+
+def load_sidebar_css():
+    st.markdown("""
+    <style>
+    .stDialog {
+        max-width: 100% !important;
+        width: 100% !important;
+                
+    div[role="dialog"][aria-label="dialog"] {
+        width: 1000px !important;
+        max-width: 1000px !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)

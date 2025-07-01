@@ -4,10 +4,12 @@ from functions.sidebar_density import ideological_check, political_check, list_o
 from functions.dictionaries import (set_logo, list_of_thermometer_topics, topic_to_list_of_thermometer_map, df, description_map, dropdown_to_renamed)
 from functions.density import densityGraph
 from functions.expander import expander
-from functions.star_toggle import star_toggle, compare_box
+from functions.saved import star_toggle, show_saved
+from functions.css import load_sidebar_css
 
 
 set_logo()
+load_sidebar_css()
 
 st.title("Affective Polarization")
 
@@ -33,6 +35,8 @@ with st.sidebar:
         checks = ideological_check()
     else:
         checks = political_check()
+    
+    show_saved = show_saved("density")
 
 list_of_groups = list_of_groups_check(group, checks)
 
@@ -160,8 +164,6 @@ st.plotly_chart(density_graph, use_container_width=True)
 
 # Expander
 expander(df, thermometer_question, "affective")
-
-compare_box("density")
 
 # Caption
 st.caption(
