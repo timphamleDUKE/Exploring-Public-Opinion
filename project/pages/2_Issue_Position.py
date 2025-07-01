@@ -53,116 +53,160 @@ df_filtered = df[df[issue_question] >= 1].copy()
 # --------------------------
 def create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, group_type):
     from holoviews import opts
+    import pandas as pd
 
-    group_var = 'lib_con_2pt' if group_type == "Ideological Groups" else 'poli_party_self_7pt'
-    df_valid = df[(df[issue_question] >= 1) & (df[group_var] >= 1)].copy()
+    # Use the same mapping logic as traditional Sankey
+    if group_type == "Ideological Groups":
+        df_valid = df[(df[issue_question] >= 1) & (df['lib_con_7pt'] >= 1)].copy()
+        
+        def map_to_3pt_ideological(value):
+            if value in [1, 2, 3]:
+                return 'Liberal'
+            elif value in [5, 6, 7]:
+                return 'Conservative'  
+            elif value == 4:
+                return 'Moderate'
+            else:
+                return None
+                
+        df_valid['group_label'] = df_valid['lib_con_7pt'].apply(map_to_3pt_ideological)
+        
+    else:  # Political Groups
+        df_valid = df[(df[issue_question] >= 1) & (df['poli_party_self_7pt'] >= 1)].copy()
+        
+        def map_to_3pt_political(value):
+            if value in [1, 2, 3]:
+                return 'Democratic Party'
+            elif value in [5, 6, 7]:
+                return 'Republican Party'
+            elif value == 4:
+                return 'Independent'
+            else:
+                return None
+                
+        df_valid['group_label'] = df_valid['poli_party_self_7pt'].apply(map_to_3pt_political)
+
     if df_valid.empty:
         return None
 
-    max_val = int(df_valid[issue_question].max())
+    # Get actual ANES response labels from your dictionaries
+    try:
+        response_labels = find_answer_choices(issue_question)
+    except:
+        # Fallback if find_answer_choices fails
+        max_val = int(df_valid[issue_question].max())
+        response_labels = {i: f"Response {i}" for i in range(1, max_val + 1)}
 
-    def get_response_labels(max_value):
-        if max_value == 7:
-            return {
-                1: "Favor a great deal", 2: "Favor moderately", 3: "Favor a little",
-                4: "Neither favor nor oppose", 5: "Oppose a little",
-                6: "Oppose moderately", 7: "Oppose a great deal"
-            }
-        elif max_value == 5:
-            return {
-                1: "Strongly agree", 2: "Somewhat agree", 3: "Neither agree nor disagree",
-                4: "Somewhat disagree", 5: "Strongly disagree"
-            }
-        elif max_value == 4:
-            return {
-                1: "Strongly favor", 2: "Somewhat favor",
-                3: "Somewhat oppose", 4: "Strongly oppose"
-            }
+    def categorize_response(value, response_labels):
+        # Get the actual text for this response
+        response_text = response_labels.get(value, f"Response {value}")
+        
+        # Categorize based on the text content
+        lower_text = response_text.lower()
+        
+        if any(word in lower_text for word in ['favor', 'support', 'agree', 'yes']):
+            return "Favor"
+        elif any(word in lower_text for word in ['oppose', 'against', 'disagree', 'no']):
+            return "Oppose"
+        elif any(word in lower_text for word in ['neither', 'neutral', 'middle', 'same']):
+            return "Neither"
         else:
-            return {i: f"Response {i}" for i in range(1, max_value + 1)}
-
-    def categorize_response(value, max_value):
-        if max_value == 7:
-            if value <= 3:
+            # Fallback to numeric position
+            max_val = max(response_labels.keys())
+            if value <= max_val // 3:
                 return "Favor"
-            elif value == 4:
-                return "Neither"
-            else:
-                return "Oppose"
-        elif max_value == 5:
-            if value <= 2:
-                return "Agree"
-            elif value == 3:
-                return "Neither"
-            else:
-                return "Disagree"
-        elif max_value == 4:
-            if value <= 2:
-                return "Favor"
-            else:
-                return "Oppose"
-        else:
-            if value <= max_value // 3:
-                return "Favor"
-            elif value > (max_value * 2) // 3:
+            elif value > (max_val * 2) // 3:
                 return "Oppose"
             else:
                 return "Neither"
 
-    response_labels = get_response_labels(max_val)
-    df_valid['general_position'] = df_valid[issue_question].apply(lambda x: categorize_response(x, max_val))
+    df_valid['general_position'] = df_valid[issue_question].apply(lambda x: categorize_response(x, response_labels))
     df_valid['specific_response'] = df_valid[issue_question].map(response_labels)
 
-    if group_type == "Ideological Groups":
-        group_labels = {1: 'Liberal', 2: 'Conservative'}
-        df_valid['group_label'] = df_valid['lib_con_2pt'].map(group_labels)
-    else:
-        party_labels = {
-            1: 'Strong Democrat', 2: 'Weak Democrat', 3: 'Independent Democrat',
-            4: 'Independent', 5: 'Independent Republican', 6: 'Weak Republican',
-            7: 'Strong Republican'
-        }
-        df_valid['group_label'] = df_valid['poli_party_self_7pt'].map(party_labels)
-
+    # Filter to selected groups
     df_valid = df_valid[df_valid['group_label'].isin(list_of_groups)]
     df_valid = df_valid.dropna(subset=['group_label', 'general_position', 'specific_response'])
     if df_valid.empty:
         return None
 
+    # Create flows WITHOUT prefixes - maintain colors throughout
     flows = []
+    
+    # Layer 1 -> Layer 2: Groups to General Position (colored by source)
     group_to_general = df_valid.groupby(['group_label', 'general_position']).size().reset_index(name='count')
     for _, row in group_to_general.iterrows():
-        flows.append((row['group_label'], row['general_position'], row['count']))
+        # Get color based on source group like traditional sankey
+        if group_type == "Ideological Groups":
+            if row['group_label'] == 'Liberal':
+                color = ideological_fill_colors['Liberal']
+            elif row['group_label'] == 'Conservative':
+                color = ideological_fill_colors['Conservative']
+            elif row['group_label'] == 'Moderate':
+                color = ideological_fill_colors['Moderate']
+            else:
+                color = '#ececec'
+        else:  # Political Groups
+            if row['group_label'] == 'Democratic Party':
+                color = political_fill_colors['Democratic Party']
+            elif row['group_label'] == 'Republican Party':
+                color = political_fill_colors['Republican Party']
+            elif row['group_label'] == 'Independent':
+                color = 'rgba(128, 128, 128, 0.3)'
+            else:
+                color = '#ececec'
+        
+        flows.append((row['group_label'], row['general_position'], row['count'], color))
 
-    general_to_specific = df_valid.groupby(['general_position', 'specific_response']).size().reset_index(name='count')
+    # Layer 2 -> Layer 3: General Position to Specific Response 
+    # Create separate flows for each original source to maintain colors
+    general_to_specific = df_valid.groupby(['group_label', 'general_position', 'specific_response']).size().reset_index(name='count')
     for _, row in general_to_specific.iterrows():
-        flows.append((row['general_position'], row['specific_response'], row['count']))
+        # Get original source color
+        if group_type == "Ideological Groups":
+            if row['group_label'] == 'Liberal':
+                color = ideological_fill_colors['Liberal']
+            elif row['group_label'] == 'Conservative':
+                color = ideological_fill_colors['Conservative']
+            elif row['group_label'] == 'Moderate':
+                color = ideological_fill_colors['Moderate']
+            else:
+                color = '#ececec'
+        else:  # Political Groups
+            if row['group_label'] == 'Democratic Party':
+                color = political_fill_colors['Democratic Party']
+            elif row['group_label'] == 'Republican Party':
+                color = political_fill_colors['Republican Party']
+            elif row['group_label'] == 'Independent':
+                color = 'rgba(128, 128, 128, 0.3)'
+            else:
+                color = '#ececec'
+        
+        flows.append((row['general_position'], row['specific_response'], row['count'], color))
 
-    edge_color_map = {
-        'Liberal': '#547DD3',        # Blue
-        'Conservative': '#D75D5D'    # Red
-    }
+    # Convert to DataFrame like traditional sankey
+    flows_df = pd.DataFrame(flows, columns=['Source', 'Target', 'Value', 'Color'])
+    
+    # Get all unique nodes
+    all_nodes = list(flows_df['Source'].unique()) + list(flows_df['Target'].unique())
+    unique_nodes = list(set(all_nodes))
 
-    all_nodes = set()
-    for src, tgt, _ in flows:
-        all_nodes.update([src, tgt])
-
-    node_colors = {label: '#f0f0f0' for label in all_nodes}  # Light grey nodes
-
-    sankey = hv.Sankey(flows).opts(
+    # Create HoloViews Sankey using the same approach as traditional
+    sankey = hv.Sankey(flows_df, kdims=['Source', 'Target'], vdims=['Value', 'Color']).opts(
         opts.Sankey(
             width=900,
             height=600,
-            edge_color=hv.dim('source').categorize(edge_color_map, default='lightgray'),
-            edge_line_color='black',
-            edge_line_alpha=0.4,
-            edge_line_width=0.5,
-            node_color=hv.dim('label').categorize(node_colors, default='#f0f0f0'),
-            node_line_color='white',
-            node_line_width=0.5,
+            edge_color='Color',  # Use the Color column like traditional sankey
+            edge_alpha=1,
+            node_color=hv.dim('Source').categorize({node: '#ececec' for node in unique_nodes}),
+            node_fill_color=hv.dim('Source').categorize({node: '#ececec' for node in unique_nodes}),
+            node_alpha=1.0,
+            node_fill_alpha=1.0,
+            node_line_color='black',
+            node_line_width=0.25,
+            edge_line_width=1,
             label_text_font_size='11pt',
-            show_values=False,
-            tools=['hover']
+            tools=['hover'],
+            show_values=False
         )
     )
 
