@@ -40,7 +40,7 @@ def star_toggle(page, df, thermometer_question, list_of_groups, group):
     else:
         load_star_css(on_base64)
     
-    if st.button("", key="star_toggle_btn"):
+    if st.button("", key="star_toggle_btn", help="Add to compare list"):
         # Toggle state only when button is clicked
         if session_state["star_state"] == "off":
             session_state["star_state"] = "on"
@@ -68,6 +68,7 @@ def add_compare_list(page, df, thermometer_question, list_of_groups, group):
 
     session_state["compare_list"].append({
         "id": get_compare_list_object(thermometer_question, list_of_groups),
+        "page": page,
         "graph_object": graph_object
     })
 
@@ -96,28 +97,50 @@ def load_star_css(b64):
             align-items: center !important;
             padding-top: 1rem;
         }}
-                
-        .stButton > button:hover {{
-            background-image: url("data:image/svg+xml;base64,{hover_base64}");
-            border: 1px solid #31333F;
+        
+        /* Target button regardless of wrapper structure */
+        .stButton button,
+        .stButton > div button,
+        .stButton > div > div button {{
+            background-image: url("data:image/svg+xml;base64,{b64}") !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+            background-size: 70% 70% !important;
+            border: 1px solid #31333F !important;
+            padding: 0 !important;
+            width: 3.3rem !important;
+            height: 2rem !important;
+            margin: 0 !important;
+            background-color: transparent !important;
         }}
 
-        .stButton > button:active {{
-            background-image: url("data:image/svg+xml;base64,{b64}");
-            border: 1px solid #31333F;
+        /* Hover state */
+        .stButton button:hover,
+        .stButton > div button:hover,
+        .stButton > div > div button:hover {{
+            background-image: url("data:image/svg+xml;base64,{hover_base64}") !important;
+            border: 1px solid #31333F !important;
         }}
 
-        .stButton > button {{
-            background-image: url("data:image/svg+xml;base64,{b64}");
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: 70% 70%;  /* Adjust this to control size */
-            border: 1px solid #31333F;
-            padding: 0;
-            width: 3.3rem;
-            height: 2rem;
-            margin: 0;
+        /* Active state */
+        .stButton button:active,
+        .stButton > div button:active,
+        .stButton > div > div button:active {{
+            background-image: url("data:image/svg+xml;base64,{b64}") !important;
+            border: 1px solid #31333F !important;
         }}
-
         </style>
     """, unsafe_allow_html=True)
+
+def compare_box(page):
+    exp = st.expander("Compare")
+    counter = 0
+
+    if "compare_list" not in session_state or len(session_state["compare_list"]) == 0:
+        exp.write("Please add a visualization to compare")
+    else:
+        for item in session_state["compare_list"]:
+            if item["page"] == page:
+                graph_object = item["graph_object"]
+                exp.plotly_chart(graph_object, use_container_width=True, key = counter)
+                counter += 1
