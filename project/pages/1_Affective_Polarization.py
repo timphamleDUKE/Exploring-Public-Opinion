@@ -4,12 +4,10 @@ from functions.sidebar_density import ideological_check, political_check, list_o
 from functions.dictionaries import (set_logo, list_of_thermometer_topics, topic_to_list_of_thermometer_map, df, description_map, dropdown_to_renamed)
 from functions.density import densityGraph
 from functions.expander import expander
-from functions.css import load_star_css
-import base64
+from functions.star_toggle import star_toggle
 
 
 set_logo()
-load_star_css()
 
 st.title("Affective Polarization")
 
@@ -145,7 +143,10 @@ with tab3:
 
 # Display Plot
 st.divider()
-st.header("Thermometer Questions")
+col1, col2 = st.columns(2)
+col1.header("Thermometer Questions")
+with col2:
+    star_toggle("density", df, thermometer_question, list_of_groups, group)
 
 density_graph = densityGraph(
     df,
@@ -156,30 +157,6 @@ density_graph = densityGraph(
 )
 
 st.plotly_chart(density_graph, use_container_width=True)
-
-svg = """
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <path d="M12 2l3.09 6.26L22 9.27…Z" fill="none" stroke="#7c41d2" stroke-width="2"/>
-</svg>
-"""
-b64 = base64.b64encode(svg.encode("utf-8")).decode("utf-8")
-
-# 2. Inject CSS to style the button
-st.markdown(f"""
-<style>
-  .stButton > button{{
-    background: url("data:image/svg+xml;base64,{b64}") center/contain no-repeat;
-    background-size: contain;
-    border: none;
-    padding: 0;
-    width: 5rem;
-    height: 5rem;
-}}
-  
-</style>
-""", unsafe_allow_html=True)
-
-st.button("")
 
 # Expander
 expander(df, thermometer_question, "affective")

@@ -2,12 +2,6 @@ import streamlit as st
 from functions.dictionaries import set_logo
 from functions.css import load_custom_css
 
-# Configure page settings for better appearance (MUST BE FIRST)
-st.set_page_config(
-    page_title="Survey Navigator - Home",
-    layout="wide"
-)
-
 # Set up page logo and title (without page config)
 set_logo()
 

@@ -5,6 +5,9 @@ import streamlit as st
 def set_logo():
     logo = "images/logos/polarization-logo.PNG"
 
+    st.set_page_config(layout="wide")
+
+
     st.logo(
         image=logo,
         icon_image=logo,

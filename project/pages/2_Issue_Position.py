@@ -7,8 +7,9 @@ from functions.sankey import sankeyGraph
 from functions.sidebar_sankey import political_check, ideological_check, list_of_groups_check
 from functions.expander import expander
 from functions.css import load_custom_css
-
 hv.extension('bokeh')
+
+set_logo()
 
 # Custom CSS
 st.markdown("""
@@ -18,9 +19,6 @@ st.markdown("""
 .stRadio > div { gap: 0.25rem !important; }
 </style>
 """, unsafe_allow_html=True)
-
-# Set logo
-set_logo()
 
 # Title
 st.title("Issue Position")

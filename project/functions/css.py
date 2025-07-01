@@ -248,10 +248,3 @@ def load_custom_css():
     
     </style>
     """, unsafe_allow_html=True)
-
-def load_star_css():
-    st.markdown("""
-
-    
-
-    """, unsafe_allow_html=True)
