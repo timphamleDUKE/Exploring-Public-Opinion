@@ -49,7 +49,8 @@ with col5:
 
 dropdown_issue_question = st.selectbox("Issue Question", list_of_issues, index=0)
 issue_question = description_to_renamed.get(dropdown_issue_question)
-df_filtered = df[df[issue_question] >= 1].copy()
+#df_filtered = df[df[issue_question] >= 1].copy()
+df_filtered = df[df[issue_question].notna()].copy()
 
 # --------------------------
 # AGREE/DISAGREE SANKEY
@@ -242,6 +243,6 @@ else:
 # --------------------------
 # EXPANDER + CAPTION
 # --------------------------
-expander(df_filtered, issue_question, page="Issue Position")
+expander(df_filtered, issue_question, page="issue")
 
 st.caption("This graph uses survey weights to represent population-level transitions between party self-placement and responses. However, it does not calculate standard errors using Taylor series linearization as recommended by ANES for formal inference.")
