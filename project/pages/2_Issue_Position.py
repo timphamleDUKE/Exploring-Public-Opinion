@@ -2,6 +2,12 @@ import streamlit as st
 import pandas as pd
 import holoviews as hv
 from streamlit_bokeh import streamlit_bokeh
+
+# Import and call set_logo FIRST before any other streamlit commands
+from functions.dictionaries import set_logo
+set_logo()
+
+# Now import everything else after page config is set
 from functions.dictionaries import *
 from functions.sankey import sankeyGraph
 from functions.sidebar_sankey import political_check, ideological_check, list_of_groups_check
@@ -18,9 +24,6 @@ st.markdown("""
 .stRadio > div { gap: 0.25rem !important; }
 </style>
 """, unsafe_allow_html=True)
-
-# Set logo
-set_logo()
 
 # Title
 st.title("Issue Position")
