@@ -4,7 +4,7 @@ from functions.sidebar_density import ideological_check, political_check, list_o
 from functions.dictionaries import (set_logo, list_of_thermometer_topics, topic_to_list_of_thermometer_map, df, description_map, dropdown_to_renamed)
 from functions.density import densityGraph
 from functions.expander import expander
-from functions.saved import star_toggle, show_saved
+from functions.saved import star_button, show_saved_button
 from functions.css import load_sidebar_css
 
 set_logo()
@@ -34,9 +34,10 @@ with st.sidebar:
     else:
         checks = political_check()
     
-    show_saved = show_saved("density")
+    list_of_groups = list_of_groups_check(group, checks)
 
-list_of_groups = list_of_groups_check(group, checks)
+    # Saved List Button
+    show_saved = show_saved_button("density", thermometer_question, list_of_groups)
 
 # Tabs
 tab1, tab2, tab3 = st.tabs(["Parties", "Ideologies", "Candidates"])
@@ -148,7 +149,7 @@ col1, col2 = st.columns(2)
 col1.header("Thermometer Questions")
 
 with col2:
-    star_toggle("density", df, thermometer_question, list_of_groups, group)
+    star_button("density", df, thermometer_question, list_of_groups, group)
 
 density_graph = densityGraph(
     df,
@@ -169,3 +170,5 @@ st.caption(
     "and responses. However, it does not calculate standard errors using Taylor series linearization as "
     "recommended by ANES for formal inference."
 )
+
+st.write(st.session_state)

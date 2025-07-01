@@ -5,29 +5,32 @@ import base64
 
 session_state = st.session_state
 
-
-def star_toggle(page, df, thermometer_question, list_of_groups, group):
-
-    if "compare_list" not in session_state:
-        session_state["compare_list"] = []
-
-    on_svg = """
+on_svg = """
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <path d="M12 2l3.09 6.26L22 9.27l-5.18 5.05L18.18 22 12 18.27 5.82 22l1.36-7.68L2 9.27l6.91-1.01L12 2Z" fill="#7c41d2" stroke="#7c41d2" stroke-width="2"/>
     </svg>
     """
 
-    off_svg = """
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5.18 5.05L18.18 22 12 18.27 5.82 22l1.36-7.68L2 9.27l6.91-1.01L12 2Z" fill="none" stroke="#7c41d2" stroke-width="2"/>
-    </svg>
-    """
+off_svg = """
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M12 2l3.09 6.26L22 9.27l-5.18 5.05L18.18 22 12 18.27 5.82 22l1.36-7.68L2 9.27l6.91-1.01L12 2Z" fill="none" stroke="#7c41d2" stroke-width="2"/>
+</svg>
+"""
 
-    on_base64 = base64.b64encode(on_svg.encode("utf-8")).decode("utf-8")
-    off_base64 = base64.b64encode(off_svg.encode("utf-8")).decode("utf-8")
+on_base64 = base64.b64encode(on_svg.encode("utf-8")).decode("utf-8")
+off_base64 = base64.b64encode(off_svg.encode("utf-8")).decode("utf-8")
 
-    # If compare_list contains the object change session_state accordingly
-    if check_compare_list(thermometer_question, list_of_groups) == True:
+
+def star_button(page, df, thermometer_question, list_of_groups, group):
+
+    if "saved_list" not in session_state:
+        session_state["saved_list"] = []
+    
+    if "graph_ids" not in session_state:
+        session_state["graph_ids"] = []
+
+    # If saved_list contains the object change session_state accordingly
+    if check_saved_list(thermometer_question, list_of_groups) == True:
         session_state["star_state"] = "on"
     else:
         session_state["star_state"] = "off"
@@ -38,46 +41,58 @@ def star_toggle(page, df, thermometer_question, list_of_groups, group):
     else:
         load_star_css(on_base64)
     
-    if st.button("", type="primary", key="star_toggle_btn", help="Save visualization"):
+    if st.button("", type="primary", key="star-btn", help="Save visualization"):
         # Toggle state only when button is clicked
         if session_state["star_state"] == "off":
             session_state["star_state"] = "on"
-            # Add object to compare_list
-            if check_compare_list(thermometer_question, list_of_groups) == False:
-                add_compare_list(page, df, thermometer_question, list_of_groups, group)
-                st.toast("Saved Visualization!")
+            # Add object to saved_list
+            if check_saved_list(thermometer_question, list_of_groups) == False:
+                add_saved_list(page, df, thermometer_question, list_of_groups, group)
         else:
             session_state["star_state"] = "off"
-            if check_compare_list(thermometer_question, list_of_groups) == True:
-                remove_compare_list(thermometer_question, list_of_groups)
-                st.toast("Removed Visualization!")
+            if check_saved_list(thermometer_question, list_of_groups) == True:
+                remove_saved_list(thermometer_question, list_of_groups, True)
         # Rerun to update the display
         st.rerun()
     
-def check_compare_list(thermometer_question, list_of_groups):
-    for item in session_state["compare_list"]:
-        if item["id"] == get_compare_list_object(thermometer_question, list_of_groups):
+def check_saved_list(thermometer_question, list_of_groups):
+    for item in session_state["saved_list"]:
+        if item["id"] == get_saved_list_object(thermometer_question, list_of_groups):
             return True
     return False
 
-def add_compare_list(page, df, thermometer_question, list_of_groups, group):
+def add_saved_list(page, df, thermometer_question, list_of_groups, group):
     if page == "density":
         graph_object = densityGraph(
             df, thermometer_question, list_of_groups, group, title=description_map.get(thermometer_question)
         )
 
-    session_state["compare_list"].append({
-        "id": get_compare_list_object(thermometer_question, list_of_groups),
+    session_state["saved_list"].append({
+        "id": get_saved_list_object(thermometer_question, list_of_groups),
         "page": page,
         "graph_object": graph_object
     })
+    session_state["graph_ids"].append(get_saved_list_object(thermometer_question, list_of_groups))
 
-def remove_compare_list(thermometer_question, list_of_groups):
-    for item in session_state["compare_list"]:
-        if item["id"] == get_compare_list_object(thermometer_question, list_of_groups):
-            session_state["compare_list"].remove(item)
+    st.toast("Saved Visualization!")
 
-def get_compare_list_object(thermometer_question, list_of_groups):
+
+def remove_saved_list(thermometer_question, list_of_groups, main = False, id = None):
+    if main:
+        for item in session_state["saved_list"]:
+            if item["id"] == get_saved_list_object(thermometer_question, list_of_groups):
+                session_state["graph_ids"].remove(item["id"])
+                session_state["saved_list"].remove(item)
+        st.toast("Removed Visualization!")
+    else:
+        for item in session_state["saved_list"]:
+            if item["id"] == id:
+                session_state["graph_ids"].remove(item["id"])
+                session_state["saved_list"].remove(item)
+        st.toast("Removed Visualization!")
+
+
+def get_saved_list_object(thermometer_question, list_of_groups):
     return f"{thermometer_question}, {list_of_groups}"
     
 def load_star_css(b64):
@@ -132,18 +147,22 @@ def load_star_css(b64):
         </style>
     """, unsafe_allow_html=True)
 
-def show_saved(page):
+def show_saved_button(page, thermometer_question, list_of_groups):
     @st.dialog("Saved List")
-    def show_saved_list(page):
-        counter = 0
-        if "compare_list" not in session_state or len(session_state["compare_list"]) == 0:
-            st.write("Please add a visualization to compare")
+    def show_saved_list(page, thermometer_question, list_of_groups):
+        key = 0
+        if "saved_list" not in session_state or len(session_state["saved_list"]) == 0:
+            st.write("Save a visualization to display")
         else:
-            for item in session_state["compare_list"]:
+            for item in session_state["saved_list"]:
                 if item["page"] == page:
                     graph_object = item["graph_object"]
-                    st.plotly_chart(graph_object, use_container_width=True, key = counter)
-                    counter += 1
+                    st.plotly_chart(graph_object, use_container_width=True, key = f"chart-{key}")
+                    if st.button("Remove", key=item["id"]):
+                        remove_saved_list(thermometer_question, list_of_groups, main = False, id = item["id"])
+                        st.rerun()
+                    key += 1
     
     if st.button("Saved List"):
-        show_saved_list(page)
+        show_saved_list(page, thermometer_question, list_of_groups)
+    
