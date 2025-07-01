@@ -10,12 +10,6 @@ from functions.ad_sankey import create_agree_disagree_sankey_holoviews
 
 hv.extension('bokeh')
 
-set_logo()
-load_custom_css()
-
-st.title("Issue Position")
-st.divider()
-
 # Custom CSS
 st.markdown("""
     <style>
@@ -25,22 +19,28 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# Sidebar
-col1, _, col3, col4, col5 = st.columns([3,0.3,1,0.8,1])
-with col1:
-    topic = st.selectbox("Topic", list_of_issue_topics)
-    list_of_issues = topic_to_list_of_issue_map[topic]
-with col3:
-    group = st.radio("Groups", ["Ideological Groups","Political Groups"])
-with col4:
-    st.markdown("<div style='…'>Options</div>", unsafe_allow_html=True)
-    checks = (ideological_check() if group=="Ideological Groups" else political_check())
-with col5:
-    st.markdown("<div style='…'>Visualization Type</div>", unsafe_allow_html=True)
-    viz_type = st.radio("", ["Traditional Sankey","Agree/Disagree Flow"], label_visibility="collapsed")
+st.title("Issue Position")
+st.divider()
 
-dropdown = st.selectbox("Issue Question", list_of_issues)
-issue_question = description_to_renamed[dropdown]
+col1, col2, col3, col4, col5 = st.columns([3, 0.3, 1, 0.8, 1])
+
+with col1:
+    topic = st.selectbox("Topic", list_of_issue_topics, index=0)
+    list_of_issues = topic_to_list_of_issue_map.get(topic)
+
+with col3:
+    group = st.radio("Groups", ["Ideological Groups", "Political Groups"], index=0)
+
+with col4:
+    st.markdown('<div style="font-size: 0.875rem; font-weight: 400; margin-bottom: 0.5rem;">Options</div>', unsafe_allow_html=True)
+    checks = ideological_check() if group == "Ideological Groups" else political_check()
+
+with col5:
+    st.markdown('<div style="font-size: 0.875rem; font-weight: 400; margin-bottom: 0.5rem;">Visualization Type</div>', unsafe_allow_html=True)
+    viz_type = st.radio("", ["Traditional Sankey", "Agree/Disagree Flow"], label_visibility="collapsed")
+
+dropdown_issue_question = st.selectbox("Issue Question", list_of_issues, index=0)
+issue_question = description_to_renamed.get(dropdown_issue_question)
 
 list_of_groups = list_of_groups_check(group, checks)
 st.markdown(f"### {description_map.get(issue_question)}")
