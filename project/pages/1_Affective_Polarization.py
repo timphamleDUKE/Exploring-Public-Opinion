@@ -7,12 +7,10 @@ from functions.expander import expander
 from functions.saved import star_toggle, show_saved
 from functions.css import load_sidebar_css
 
-
 set_logo()
 load_sidebar_css()
 
 st.title("Affective Polarization")
-
 
 # Sidebar
 with st.sidebar:
@@ -68,7 +66,6 @@ with tab1:
         )
 
         st.plotly_chart(republican_graph, use_container_width=True, key="rep_chart")
-
 
 with tab2:
     st.subheader("Thermometer Ratings: Liberals & Conservatives")
@@ -149,6 +146,7 @@ with tab3:
 st.divider()
 col1, col2 = st.columns(2)
 col1.header("Thermometer Questions")
+
 with col2:
     star_toggle("density", df, thermometer_question, list_of_groups, group)
 
