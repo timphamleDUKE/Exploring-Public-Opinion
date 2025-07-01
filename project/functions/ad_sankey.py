@@ -1,10 +1,6 @@
 import pandas as pd
 import holoviews as hv
-from functions.dictionaries import (
-    find_answer_choices,
-    ideological_fill_colors,
-    political_fill_colors
-)
+from functions.dictionaries import find_answer_choices, ideological_fill_colors, political_fill_colors
 
 def create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, group_type):
     """

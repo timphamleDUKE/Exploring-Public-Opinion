@@ -1,7 +1,7 @@
 import streamlit as st
 import holoviews as hv
 from streamlit_bokeh import streamlit_bokeh
-from functions.dictionaries import *
+from functions.dictionaries import set_logo, description_map, list_of_issue_topics, topic_to_list_of_issue_map, description_to_renamed, df
 from functions.sankey import sankeyGraph
 from functions.sidebar_sankey import political_check, ideological_check, list_of_groups_check
 from functions.expander import expander
