@@ -49,8 +49,6 @@ with col5:
 
 dropdown_issue_question = st.selectbox("Issue Question", list_of_issues, index=0)
 issue_question = description_to_renamed.get(dropdown_issue_question)
-#df_filtered = df[df[issue_question] >= 1].copy()
-df_filtered = df[df[issue_question].notna()].copy()
 
 # --------------------------
 # AGREE/DISAGREE SANKEY
@@ -224,7 +222,7 @@ if viz_type == "Agree/Disagree Flow":
     st.markdown(f"### {description_map.get(issue_question)}")
 
     try:
-        sankey_graph = create_agree_disagree_sankey_holoviews(df_filtered, issue_question, list_of_groups, group)
+        sankey_graph = create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, group)
         if sankey_graph:
             bokeh_plot = hv.render(sankey_graph)
             streamlit_bokeh(bokeh_plot, use_container_width=True)
@@ -236,13 +234,13 @@ if viz_type == "Agree/Disagree Flow":
 else:
     list_of_groups = list_of_groups_check(group, checks)
     st.markdown(f"### {description_map.get(issue_question)}")
-    sankey_graph = sankeyGraph(df_filtered, issue_question, list_of_groups, group)
+    sankey_graph = sankeyGraph(df, issue_question, list_of_groups, group)
     bokeh_plot = hv.render(sankey_graph)
     streamlit_bokeh(bokeh_plot, use_container_width=True)
 
 # --------------------------
 # EXPANDER + CAPTION
 # --------------------------
-expander(df_filtered, issue_question, page="issue")
+expander(df, issue_question, page="issue")
 
 st.caption("This graph uses survey weights to represent population-level transitions between party self-placement and responses. However, it does not calculate standard errors using Taylor series linearization as recommended by ANES for formal inference.")
