@@ -16,3 +16,5 @@ project/functions/__pycache__/sankey.cpython-312.pyc
 project/functions/__pycache__/sidebar_density.cpython-312.pyc
 project/functions/__pycache__/sidebar_sankey.cpython-312.pyc
 project/functions/__pycache__/weights.cpython-312.pyc
+*.pyc
+__pycache__/
