@@ -103,7 +103,6 @@ def load_star_css(b64):
     """
     hover_base64 = base64.b64encode(hover_svg.encode("utf-8")).decode("utf-8")
 
-
     st.markdown(f"""
         <style>
         .stButton:has(button[kind="primary"]) {{
@@ -158,7 +157,7 @@ def show_saved_button(page, thermometer_question, list_of_groups):
                 if item["page"] == page:
                     graph_object = item["graph_object"]
                     st.plotly_chart(graph_object, use_container_width=True, key = f"chart-{key}")
-                    if st.button("Remove", key=item["id"]):
+                    if st.button("Remove", key=f"remove-btn-{key}"):
                         remove_saved_list(thermometer_question, list_of_groups, main = False, id = item["id"])
                         st.rerun()
                     key += 1

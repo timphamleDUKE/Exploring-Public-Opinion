@@ -10,6 +10,8 @@ from functions.ad_sankey import create_agree_disagree_sankey_holoviews
 
 hv.extension('bokeh')
 
+set_logo()
+
 # Custom CSS
 st.markdown("""
     <style>
@@ -36,8 +38,7 @@ with col4:
     checks = ideological_check() if group == "Ideological Groups" else political_check()
 
 with col5:
-    st.markdown('<div style="font-size: 0.875rem; font-weight: 400; margin-bottom: 0.5rem;">Visualization Type</div>', unsafe_allow_html=True)
-    viz_type = st.radio("", ["Traditional Sankey", "Agree/Disagree Flow"], label_visibility="collapsed")
+    viz_type = st.radio("Visualization Type", ["Traditional Sankey", "Agree/Disagree Flow"], index=0)
 
 dropdown_issue_question = st.selectbox("Issue Question", list_of_issues, index=0)
 issue_question = description_to_renamed.get(dropdown_issue_question)
