@@ -164,3 +164,85 @@ def find_answer_choices(question):
                 continue  # Skip if the key isn't an int
     return answer_map
 
+
+# Demographics Mapping
+demographics_codebook = codebook[(codebook["Category"] == "Social Characteristics")]
+list_of_demographics = demographics_codebook["Renamed"].dropna().unique().tolist()
+
+educ_facet_map = {
+    -9: None,
+    -8: None,
+    -4: None,
+    -2: None,
+    1: "Non-college",
+    2: "Non-college",
+    3: "Non-college",
+    4: "College grad+",
+    5: "College grad+"
+}
+educ_valid_facet_values = ["Non-college", "College grad+"]
+
+marriage_facet_map = {
+    -2: None,
+    1: "Married",
+    2: "Widowed", 
+    3: "Divorced", 
+    4: "Separated", 
+    5: "Never Married"
+}
+marriage_valid_facet_values = ["Married", "Widowed", "Divorced", "Separated", "Never Married"]
+
+income_facet_map = {
+    -9: None, 
+    -5: None,
+    -4: None,
+    1: "Under $9,999",
+    2: "$10,000 to $29,999",
+    3: "$30,000 to $59,999",
+    4: "$60,000 to $99,999",
+    5: "$100,000 to $249,999",
+    6: "$250,000 or more"
+}
+marriage_valid_facet_values = ["Under $9,999", "$10,000 to $29,999", "$30,000 to $59,999", "$60,000 to $99,999", "$100,000 to $249,999", "$250,000 or more"]
+
+religion_facet_map = {
+    -9: None,
+    -8: None,
+    -1: None,
+    1: "Religious",
+    2: "Religious",
+    3: "Religious",
+    4: "Religious",
+    5: "Religious",
+    6: "Religious",
+    7: "Religious",
+    8: "Religious",
+    9: "Non-Religious",
+    10: "Non-Religious",
+    11: "Religious",
+    12: "Non-Religious"
+}
+religion_valid_facet_values = ["Religious", "Non-Religious"]
+
+gender_facet_map = {
+    -9: None,
+    -1: None,
+    1: "Man",
+    2: "Woman",
+    3: "Other",
+    4: "Other"
+}
+gender_valid_facet_values = ["Man", "Woman", "Other"]
+
+race_ethnicity_facet_map = {
+    -9: None,
+    -8: None,
+    -4: None,
+    1: "White, non-Hispanic",
+    2: "Black, non-Hispanic",
+    3: "Hispanic",
+    4: "Other/Multiple races, non-Hispanic",
+    5: "Other/Multiple races, non-Hispanic",
+    6: "Other/Multiple races, non-Hispanic"
+}
+race_ethnicity_valid_facet_values = ["White, non-Hispanic", "Black, non-Hispanic", "Hispanic", "Other/Multiple races, non-Hispanic"]
