@@ -17,9 +17,11 @@ def densityGraph(df, question, groups, group, title=None, yaxis_range=None):
         fill_colors = ideological_fill_colors
 
     elif group == "Political Groups":
-        df["party"] = df["poli_party_reg"].map({
-            1: "Democratic Party", 2: "Republican Party",
-            4: "Other", 5: "Other", -8: "Other", -9: "N/A"
+        df["party"] = df["poli_party_self_7pt"].map({
+            1: "Democratic Party", 2: "Democratic Party", 
+            3: "Independent", 4: "Independent", 5: "Independent",
+            6: "Republican Party", 7: "Republican Party",
+            -9: "N/A", -4: "N/A", -1: "N/A"
         }).fillna("N/A")
         colors = political_colors
         fill_colors = political_fill_colors

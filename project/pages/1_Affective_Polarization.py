@@ -1,7 +1,6 @@
 import streamlit as st
-import pandas as pd
 from functions.sidebar_density import ideological_check, political_check, list_of_groups_check
-from functions.dictionaries import (set_logo, list_of_thermometer_topics, topic_to_list_of_thermometer_map, df, description_map, dropdown_to_renamed)
+from functions.dictionaries import set_logo, list_of_thermometer_topics, topic_to_list_of_thermometer_map, df, description_map, dropdown_to_renamed
 from functions.density import densityGraph
 from functions.expander import expander
 from functions.saved import star_button, show_saved_button
