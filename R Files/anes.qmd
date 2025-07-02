@@ -841,35 +841,38 @@ missing_analysis |>
     pct_high = mean(harris_high, na.rm = TRUE)
   )
 
-missing_analysis |>
-  group_by(poli_party_self_7pt_grouped) |>
-  summarise(
-    DK = mean(harris_dk, na.rm = TRUE),
-    `50` = mean(harris_50, na.rm = TRUE),
-    Low = mean(harris_low, na.rm = TRUE),
-    High = mean(harris_high, na.rm = TRUE)
-  ) |>
-  pivot_longer(cols = c(DK, `50`, Low, High), names_to = "Response", values_to = "Percent") |>
-  ggplot(aes(x = Percent, y = fct_rev(poli_party_self_7pt_grouped), fill = Response)) +
-  geom_col(position = "stack") +
-  scale_x_continuous(labels = percent_format()) +
-  scale_fill_brewer(palette = "Set2") +
-  labs(
-    title = "Thermometer Ratings for Kamala Harris by Party ID",
-    x = "Percentage of Respondents",
-    y = "Party ID",
-    fill = "Response Type"
-  ) +
-  theme_minimal()
+# missing_analysis |>
+#   group_by(poli_party_self_7pt_grouped) |>
+#   summarise(
+#     DK = mean(harris_dk, na.rm = TRUE),
+#     `50` = mean(harris_50, na.rm = TRUE),
+#     Low = mean(harris_low, na.rm = TRUE),
+#     High = mean(harris_high, na.rm = TRUE)
+#   ) |>
+#   pivot_longer(cols = c(DK, `50`, Low, High), names_to = "Response", values_to = "Percent") |>
+#   ggplot(aes(x = Percent, y = fct_rev(poli_party_self_7pt_grouped), fill = Response)) +
+#   geom_col(position = "stack") +
+#   scale_x_continuous(labels = percent_format()) +
+#   scale_fill_brewer(palette = "Set2") +
+#   labs(
+#     title = "Thermometer Ratings for Kamala Harris by Party ID",
+#     x = "Percentage of Respondents",
+#     y = "Party ID",
+#     fill = "Response Type"
+#   ) +
+#   theme_minimal()
+# 
+# model_data <- missing_analysis |>
+#   select(harris_thermometer_pre, poli_party_self_7pt_grouped, age_election_day, educ, marriage, income, religion, gender, race_ethnicity) |>
+#   drop_na()
+# 
+# model <- lm(harris_thermometer_pre ~ poli_party_self_7pt_grouped + age_election_day + 
+#                            educ + marriage + income + religion + gender + race_ethnicity, 
+#             data = model_data)
+# summary(model)
 
-model_data <- missing_analysis |>
-  select(harris_thermometer_pre, poli_party_self_7pt_grouped, age_election_day, educ, marriage, income, religion, gender, race_ethnicity) |>
-  drop_na()
-
-model <- lm(harris_thermometer_pre ~ poli_party_self_7pt_grouped + age_election_day + 
-                           educ + marriage + income + religion + gender + race_ethnicity, 
-            data = model_data)
-summary(model)
+# do the regression removing the respondents who are 50, fit it on people who are not 50, linear regression predicting the score
+# then use that model to fit it on those individuals who answered 50 and see how far it is on different demographics/ideologies
 ```
 
 ## Bayesian
