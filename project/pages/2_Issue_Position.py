@@ -45,18 +45,11 @@ with col4:
     checks = ideological_check() if group == "Ideological Groups" else political_check()
 
 with col5:
-<<<<<<< HEAD
     st.markdown('<div style="font-size: 0.875rem; font-weight: 400; margin-bottom: 0.5rem;">Visualization Type</div>', unsafe_allow_html=True)
     if supports_ad_sankey:
         viz_type = st.radio("", ["Traditional Sankey", "Agree/Disagree Flow"], label_visibility="collapsed")
     else:
         viz_type = st.radio("", ["Traditional Sankey"], label_visibility="collapsed")
-=======
-    viz_type = st.radio("Visualization Type", ["Traditional Sankey", "Agree/Disagree Flow"], index=0)
-
-dropdown_issue_question = st.selectbox("Issue Question", list_of_issues, index=0)
-issue_question = description_to_renamed.get(dropdown_issue_question)
->>>>>>> 07f7917175432fb2532bf5ba0cfd74ce2673e31c
 
 list_of_groups = list_of_groups_check(group, checks)
 st.markdown(f"### {description_map.get(issue_question)}")
