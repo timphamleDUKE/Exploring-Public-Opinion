@@ -4,7 +4,7 @@ Year,Variable Code,Pre/Post,Renamed,Category,Topic,Description,Answer Choices,Or
 2024,V240107c,,full_var_psu,Weights,,Full ANES sample variance PSU,,,,
 2024,V240107d,,full_var_stratum,Weights,,Full ANES sample variance stratum,,,,
 2024,V241458x,Pre,age_election_day,Social Characteristics,,Age (on election day),,,,
-2024,V241465x,Pre,educ,Social Characteristics,,What is the highest level of school you have completed or the highest degree you received?,"-9. Refused
+2024,V241465x,Pre,educ,Social Characteristics,ob,What is the highest level of school you have completed or the highest degree you received?,"-9. Refused
 -8. Don’t know
 -4. Error
 -2. Other/specify open-ended responses to be coded
@@ -740,19 +740,6 @@ Is it [much better, somewhat better, or slightly better / slightly better, somew
 6. Oppose a moderate amount
 7. Oppose a great deal","Do you favor, oppose, or neither favor nor oppose requiring children to be vaccinated in order to attend public schools?
 Do you favor that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]? / Do you oppose that [a great deal, a moderate amount, or a little / a little, a moderate amount, or a great deal]?",,TRUE
-2024,V242320,Post,obamacare,Issue Position,"Social Welfare, Healthcare, and Education","How much do you approve, disapprove, or neither approve nor disapprove of the Affordable Care Act of 2010 (Obamacare)?","-9. Refused
--7. Insufficient partial, interview deleted
--6. No post interview
--5. Sufficient partial, breakoff
--4. Error
--1. Inapplicable
-1. Approve a great deal
-2. Approve a moderate amount
-3. Approve a little
-4. Neither approve nor disapprove
-5. Disapprove a little
-6. Disapprove a moderate amount
-7. Disapprove a great deal","How much do you approve, disapprove, or neither approve nor disapprove of the Affordable Care Act of 2010, sometimes called Obamacare?",,TRUE
 2024,V242321,Post,climate_temps,Issue Position,Environment,"How much, if at all, do you think climate change is currently affecting severe weather events or temperature patterns in the United States?","-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted

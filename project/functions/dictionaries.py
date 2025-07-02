@@ -7,7 +7,6 @@ def set_logo():
 
     st.set_page_config(layout="wide")
 
-
     st.logo(
         image=logo,
         icon_image=logo,
@@ -74,18 +73,19 @@ topic_to_list_of_issue_map = (
     .to_dict()
 )
 
+
 # List of colors based on group by
 political_colors = {
     "Democratic Party": "blue",
     "Republican Party": "red",
-    "Other": "green",
+    "Independent": "green",
     "N/A": "rgb(141, 142, 147)"
 }
 
 political_fill_colors = {
     "Democratic Party": "rgba(0, 0, 255, 0.3)",     # Blue
     "Republican Party": "rgba(255, 0, 0, 0.3)",     # Red
-    "Other": "rgba(0, 128, 0, 0.3)",  # Green
+    "Independent": "rgba(0, 128, 0, 0.3)",  # Green
     "N/A": "rgba(141, 142, 147, 0.3)"
 }
 
@@ -114,14 +114,15 @@ target_label_map = {
     5: "Not at all willing"
 }
 
+
 # Descriptions
 description_map = dict(zip(codebook["Renamed"], codebook["Description"]))
 full_description_map = dict(zip(codebook["Renamed"], codebook["Original Question"]))
 description_to_renamed = dict(zip(codebook["Description"], codebook["Renamed"]))
 dropdown_to_renamed = dict(zip(codebook["Dropdown Text"], codebook["Renamed"]))
 
-# Sankey Color Mapping
 
+# Sankey Color Mapping
 sankey_colors = {
     1: "rgba(0,0,255,0.3)", # Blue
     2: "rgba(255,0,0,0.3)", # Red

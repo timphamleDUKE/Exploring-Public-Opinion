@@ -1,7 +1,6 @@
 import streamlit as st
-import pandas as pd
 from functions.sidebar_density import ideological_check, political_check, list_of_groups_check
-from functions.dictionaries import (set_logo, list_of_thermometer_topics, topic_to_list_of_thermometer_map, df, description_map, dropdown_to_renamed)
+from functions.dictionaries import set_logo, list_of_thermometer_topics, topic_to_list_of_thermometer_map, df, description_map, dropdown_to_renamed
 from functions.density import densityGraph
 from functions.expander import expander
 from functions.saved import star_button, show_saved_button
@@ -52,7 +51,7 @@ with tab1:
             ("Republican Party", "Democratic Party"),
             group="Political Groups",
             title=description_map.get("democrat_thermometer_pre"), 
-            yaxis_range=[0, 0.032]
+            yaxis_range=[0, 0.041]
         )
 
         st.plotly_chart(democratic_graph, use_container_width=True, key="dem_chart")
@@ -63,7 +62,7 @@ with tab1:
             ("Republican Party", "Democratic Party"),
             group="Political Groups",
             title=description_map.get("republican_thermometer_pre"),
-            yaxis_range=[0, 0.032]
+            yaxis_range=[0, 0.041]
         )
 
         st.plotly_chart(republican_graph, use_container_width=True, key="rep_chart")
@@ -104,7 +103,7 @@ with tab3:
             ("Republican Party", "Democratic Party"),
             group="Political Groups",
             title=description_map.get("harris_thermometer_pre"),
-            yaxis_range=[0, 0.047]
+            yaxis_range=[0, 0.072]
         )
 
         harris_graph_post = densityGraph(
@@ -113,7 +112,7 @@ with tab3:
             ("Republican Party", "Democratic Party"),
             group="Political Groups",
             title=description_map.get("harris_thermometer_post"),
-            yaxis_range=[0, 0.047]
+            yaxis_range=[0, 0.072]
         )
 
         st.plotly_chart(harris_graph_pre, use_container_width=True, key="harris_chart_pre")
@@ -127,7 +126,7 @@ with tab3:
             ("Republican Party", "Democratic Party"),
             group="Political Groups",
             title=description_map.get("trump_thermometer_pre"),
-            yaxis_range=[0, 0.047]
+            yaxis_range=[0, 0.072]
         )
 
         trump_graph_post = densityGraph(
@@ -136,7 +135,7 @@ with tab3:
             ("Republican Party", "Democratic Party"),
             group="Political Groups",
             title=description_map.get("trump_thermometer_post"),
-            yaxis_range=[0, 0.047]
+            yaxis_range=[0, 0.072]
         )
 
         st.plotly_chart(trump_graph_pre, use_container_width=True, key="trump_chart_pre")
@@ -170,5 +169,3 @@ st.caption(
     "and responses. However, it does not calculate standard errors using Taylor series linearization as "
     "recommended by ANES for formal inference."
 )
-
-st.write(st.session_state)
