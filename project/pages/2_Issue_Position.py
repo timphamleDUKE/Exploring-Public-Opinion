@@ -6,7 +6,7 @@ from functions.sankey import sankeyGraph
 from functions.sidebar_sankey import political_check, ideological_check, list_of_groups_check
 from functions.expander import expander
 from functions.css import load_custom_css
-from functions.ad_sankey import create_agree_disagree_sankey_holoviews
+from functions.ad_sankey import create_agree_disagree_sankey_holoviews, check_needs_ad_sankey
 
 hv.extension('bokeh')
 
@@ -28,6 +28,13 @@ with col1:
     topic = st.selectbox("Topic", list_of_issue_topics, index=0)
     list_of_issues = topic_to_list_of_issue_map.get(topic)
 
+# Issue question selection
+dropdown_issue_question = st.selectbox("Issue Question", list_of_issues, index=0)
+issue_question = description_to_renamed.get(dropdown_issue_question)
+
+# Check if this question supports A/D Sankey BEFORE creating the radio button
+supports_ad_sankey = check_needs_ad_sankey(issue_question)
+
 with col3:
     group = st.radio("Groups", ["Ideological Groups", "Political Groups"], index=0)
 
@@ -37,19 +44,21 @@ with col4:
 
 with col5:
     st.markdown('<div style="font-size: 0.875rem; font-weight: 400; margin-bottom: 0.5rem;">Visualization Type</div>', unsafe_allow_html=True)
-    viz_type = st.radio("", ["Traditional Sankey", "Agree/Disagree Flow"], label_visibility="collapsed")
-
-dropdown_issue_question = st.selectbox("Issue Question", list_of_issues, index=0)
-issue_question = description_to_renamed.get(dropdown_issue_question)
+    if supports_ad_sankey:
+        viz_type = st.radio("", ["Traditional Sankey", "Agree/Disagree Flow"], label_visibility="collapsed")
+    else:
+        viz_type = st.radio("", ["Traditional Sankey"], label_visibility="collapsed")
 
 list_of_groups = list_of_groups_check(group, checks)
 st.markdown(f"### {description_map.get(issue_question)}")
 
-if viz_type=="Agree/Disagree Flow":
+# Create visualization based on type
+if viz_type == "Agree/Disagree Flow":
     hv_obj = create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, group)
 else:
     hv_obj = sankeyGraph(df, issue_question, list_of_groups, group)
 
+# Render the plot
 if hv_obj is None:
     st.warning("No data available for this combination.")
 else:
