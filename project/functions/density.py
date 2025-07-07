@@ -3,38 +3,13 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from functions.dictionaries import *
 from functions.weights import get_anes_weighted_density_data
+import math
 
 def densityGraph(df, question, groups, group, title=None, yaxis_range=None):
 
-    # Map group values
-    if group == "Ideological Groups":
-        df["party"] = df["lib_con_7pt"].map({
-            1: "Liberal", 2: "Liberal", 3: "Liberal",
-            4: "Moderate",
-            5: "Conservative", 6: "Conservative", 7: "Conservative",
-            99: "Other", -4: "Other", -9: "Other"
-        }).fillna("N/A")
-        colors = ideological_colors
-        fill_colors = ideological_fill_colors
+    df, colors, fill_colors = map_group_info(df, group)
+    df = df[df[question].between(0, 100)]
 
-    elif group == "Political Groups":
-        df["party"] = df["poli_party_self_7pt"].map({
-            1: "Democratic Party", 2: "Democratic Party", 
-            3: "Independent", 4: "Independent", 5: "Independent",
-            6: "Republican Party", 7: "Republican Party",
-            -9: "N/A", -4: "N/A", -1: "N/A"
-        }).fillna("N/A")
-        colors = political_colors
-        fill_colors = political_fill_colors
-
-    # Filter the data
-    df = df[
-        (df["party"].isin(groups)) &
-        (df[question] >= 0) &
-        (df[question] <= 100)
-    ]
-
-    # Create plot
     fig = go.Figure()
 
     try:
@@ -64,79 +39,70 @@ def densityGraph(df, question, groups, group, title=None, yaxis_range=None):
     # Layout settings
     fig.update_layout(
         title=dict(
-            text = title if title else "",
-            font = dict(size = 24)
+            text=title or "",
+            font=dict(size=24)
         ),
-        xaxis_title=dict(text="Thermometer Rating (0–100)", font=dict(size=24)),
-        yaxis_title=dict(text="Density", font=dict(size=24)),
-        xaxis=dict(tickmode="linear", tick0=0, dtick=20, tickfont=dict(size=20)),
+        xaxis=dict(
+            title=dict(text="Thermometer Rating (0–100)", font=dict(size=20)),
+            tickmode="linear",
+            tick0=0,
+            dtick=20,
+            tickfont=dict(size=18)
+        ),
         yaxis=dict(
-            tickfont=dict(size=20), 
+            title=dict(text="Density", font=dict(size=20)),
+            tickfont=dict(size=18),
             range=yaxis_range
-            ),
-        legend=dict(font=dict(size=20)),
+        ),
+        legend=dict(font=dict(size=18)),
         hovermode="x unified",
         template="simple_white",
-        font=dict(size=20)
+        font=dict(size=18)
     )
 
     return fig
 
 
-
 def densityGraphFaceted(df, question, groups, group, facet_var, facet_map, valid_facet_values=None, title=None, yaxis_range=None):
-    # 1. Map facet variable
+    # 1. Apply facet mapping
     df["facet_label"] = df[facet_var].map(facet_map)
     df = df[df["facet_label"].notna()]
-    
     if valid_facet_values:
         df = df[df["facet_label"].isin(valid_facet_values)]
 
-    # 2. Map political or ideological groups
-    if group == "Ideological Groups":
-        df["party"] = df["lib_con_7pt"].map({
-            1: "Liberal", 2: "Liberal", 3: "Liberal",
-            4: "Moderate",
-            5: "Conservative", 6: "Conservative", 7: "Conservative",
-            99: "Other", -4: "Other", -9: "Other"
-        }).fillna("N/A")
-        colors = ideological_colors
-        fill_colors = ideological_fill_colors
+    # 2. Apply group mappings and filter
+    df, colors, fill_colors = map_group_info(df, group)
+    df = df[df["party"].isin(groups) & df[question].between(0, 100)]
 
-    elif group == "Political Groups":
-        df["party"] = df["poli_party_reg"].map({
-            1: "Democratic Party", 2: "Republican Party",
-            4: "Other", 5: "Other", -8: "Other", -9: "N/A"
-        }).fillna("N/A")
-        colors = political_colors
-        fill_colors = political_fill_colors
+    facet_values = [val for val in valid_facet_values if val in df["facet_label"].unique()]
+    n_facets = len(facet_values)
 
-    # 3. Filter
-    df = df[
-        (df["party"].isin(groups)) &
-        (df[question].between(0, 100))
-    ]
+    # 3. Determine layout
+    rows = 1 if n_facets <= 3 else 2
+    cols = n_facets if rows == 1 else math.ceil(n_facets / 2)
 
-    facet_values = sorted(df["facet_label"].unique())
-
-    # 4. Create subplots
     fig = make_subplots(
-        rows=1, cols=len(facet_values),
+        rows=rows, cols=cols,
         subplot_titles=facet_values,
-        shared_yaxes=True
+        shared_yaxes=True,
+        vertical_spacing=0.25 if rows > 1 else 0.05
     )
 
+    # 4. Add density traces
     try:
         for i, facet_value in enumerate(facet_values):
+            row = (i // cols) + 1
+            col = (i % cols) + 1
             df_facet = df[df["facet_label"] == facet_value]
+
             for party in groups:
-                subset = df_facet[df_facet["party"] == party][question].dropna()
-                if subset.nunique() < 2:
+                df_party = df_facet[df_facet["party"] == party]
+                if df_party[question].dropna().nunique() < 2:
                     st.warning(f"Not enough variation for '{party}' in {facet_var} group '{facet_value}' — skipping.")
                     continue
 
                 plotting_data = get_anes_weighted_density_data(
-                    df_facet[df_facet["party"] == party],
+                    df_party,
                     question,
                     [party],
                     group_var="party",
@@ -147,12 +113,9 @@ def densityGraphFaceted(df, question, groups, group, facet_var, facet_map, valid
                     st.warning(f"No KDE data for '{party}' in {facet_var} group '{facet_value}'")
                     continue
 
-                x_range = plotting_data[party]["x_range"]
-                y_values = plotting_data[party]["y_values"]
-
                 fig.add_trace(go.Scatter(
-                    x=x_range,
-                    y=y_values,
+                    x=plotting_data[party]["x_range"],
+                    y=plotting_data[party]["y_values"],
                     mode="lines",
                     name=party,
                     legendgroup=party,
@@ -160,25 +123,27 @@ def densityGraphFaceted(df, question, groups, group, facet_var, facet_map, valid
                     line=dict(color=colors.get(party, "gray"), width=2),
                     fill="tozeroy",
                     fillcolor=fill_colors.get(party, "rgba(128,128,128,0.3)")
-                ), row=1, col=i+1)
+                ), row=row, col=col)
 
     except Exception as e:
         st.error(f"Error generating weighted density plot: {e}")
         return go.Figure()
 
-    # 5. Layout
+    # 5. Update layout
     fig.update_layout(
-        title=dict(
-            text=title if title else "",
-            font=dict(size=24)
-        ),
-        xaxis_title="Thermometer Rating (0–100)",
-        yaxis_title="Density",
+        title=dict(text=title or "", font=dict(size=24)),
         template="simple_white",
         font=dict(size=18),
+        yaxis_title = "Density",
         hovermode="x unified",
-        legend=dict(font=dict(size=14))
+        legend=dict(font=dict(size=14)),
+        height=700 if rows > 1 else 450
     )
+
+    # 6. Axis titles for all subplots
+    for i in range(len(facet_values)):
+        suffix = "" if i == 0 else str(i + 1)
+        fig.layout[f"xaxis{suffix}"].title = "Thermometer Rating (0–100)"
 
     if yaxis_range:
         for axis in fig.layout:
