@@ -25,7 +25,6 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 st.title("Issue Position")
-st.divider()
 
 col1, col2, col3, col4, col5 = st.columns([3, 0.3, 1, 0.8, 1])
 
