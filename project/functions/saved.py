@@ -1,6 +1,11 @@
 import streamlit as st
 from functions.density import densityGraph
 from functions.dictionaries import description_map
+from functions.ad_sankey import create_agree_disagree_sankey_holoviews, check_needs_ad_sankey
+from functions.sankey import sankeyGraph
+import holoviews as hv
+from streamlit_bokeh import streamlit_bokeh
+
 import base64
 
 session_state = st.session_state
@@ -21,7 +26,7 @@ on_base64 = base64.b64encode(on_svg.encode("utf-8")).decode("utf-8")
 off_base64 = base64.b64encode(off_svg.encode("utf-8")).decode("utf-8")
 
 
-def star_button(page, df, thermometer_question, list_of_groups, group):
+def star_button(page, df, question, list_of_groups, group, title="", viz_type=""):
 
     if "saved_list" not in session_state:
         session_state["saved_list"] = []
@@ -30,7 +35,7 @@ def star_button(page, df, thermometer_question, list_of_groups, group):
         session_state["graph_ids"] = []
 
     # If saved_list contains the object change session_state accordingly
-    if check_saved_list(thermometer_question, list_of_groups) == True:
+    if check_saved_list(question, list_of_groups, viz_type=viz_type) == True:
         session_state["star_state"] = "on"
     else:
         session_state["star_state"] = "off"
@@ -46,41 +51,52 @@ def star_button(page, df, thermometer_question, list_of_groups, group):
         if session_state["star_state"] == "off":
             session_state["star_state"] = "on"
             # Add object to saved_list
-            if check_saved_list(thermometer_question, list_of_groups) == False:
-                add_saved_list(page, df, thermometer_question, list_of_groups, group)
+            if check_saved_list(question, list_of_groups, viz_type=viz_type) == False:
+                add_saved_list(page, df, question, list_of_groups, group, title, viz_type)
         else:
             session_state["star_state"] = "off"
-            if check_saved_list(thermometer_question, list_of_groups) == True:
-                remove_saved_list(thermometer_question, list_of_groups, True)
+            if check_saved_list(question, list_of_groups, viz_type=viz_type) == True:
+                remove_saved_list(question, list_of_groups, viz_type, main = True)
         # Rerun to update the display
         st.rerun()
     
-def check_saved_list(thermometer_question, list_of_groups):
+def check_saved_list(question, list_of_groups, viz_type):
     for item in session_state["saved_list"]:
-        if item["id"] == get_saved_list_object(thermometer_question, list_of_groups):
+        if item["id"] == get_saved_list_object(question, list_of_groups, viz_type):
             return True
     return False
 
-def add_saved_list(page, df, thermometer_question, list_of_groups, group):
+def add_saved_list(page, df, question, list_of_groups, group, title, viz_type):
     if page == "density":
         graph_object = densityGraph(
-            df, thermometer_question, list_of_groups, group, title=description_map.get(thermometer_question)
+            df, question, list_of_groups, group, title=description_map.get(question)
         )
 
+    if page == "sankey":
+        if viz_type == "Agree/Disagree Flow":
+            graph_object = create_agree_disagree_sankey_holoviews(df, question, list_of_groups, group, title=title)
+            bokeh_plot = hv.render(graph_object)
+            graph_object = bokeh_plot
+        else:
+            graph_object = sankeyGraph(df, question, list_of_groups, group, title=title)
+            bokeh_plot = hv.render(graph_object)
+            graph_object = bokeh_plot
+
     session_state["saved_list"].append({
-        "id": get_saved_list_object(thermometer_question, list_of_groups),
+        "id": get_saved_list_object(question, list_of_groups, viz_type),
         "page": page,
         "graph_object": graph_object
     })
-    session_state["graph_ids"].append(get_saved_list_object(thermometer_question, list_of_groups))
+    session_state["graph_ids"].append(get_saved_list_object(question, list_of_groups, viz_type))
+
 
     st.toast("Saved Visualization!")
 
 
-def remove_saved_list(thermometer_question, list_of_groups, main = False, id = None):
+def remove_saved_list(question, list_of_groups, viz_type, main = False, id = None):
     if main:
         for item in session_state["saved_list"]:
-            if item["id"] == get_saved_list_object(thermometer_question, list_of_groups):
+            if item["id"] == get_saved_list_object(question, list_of_groups, viz_type):
                 session_state["graph_ids"].remove(item["id"])
                 session_state["saved_list"].remove(item)
         st.toast("Removed Visualization!")
@@ -92,8 +108,8 @@ def remove_saved_list(thermometer_question, list_of_groups, main = False, id = N
         st.toast("Removed Visualization!")
 
 
-def get_saved_list_object(thermometer_question, list_of_groups):
-    return f"{thermometer_question}, {list_of_groups}"
+def get_saved_list_object(question, list_of_groups, viz_type=""):
+    return f"{question}, {list_of_groups}, {viz_type}"
     
 def load_star_css(b64):
     hover_svg = """
@@ -146,22 +162,31 @@ def load_star_css(b64):
         </style>
     """, unsafe_allow_html=True)
 
-def show_saved_button(page, thermometer_question, list_of_groups):
+def show_saved_button(page, question, list_of_groups, viz_type=""):
     @st.dialog("Saved List")
-    def show_saved_list(page, thermometer_question, list_of_groups):
+    def show_saved_list(page, question, list_of_groups):
         key = 0
         if "saved_list" not in session_state or len(session_state["saved_list"]) == 0:
             st.write("Save a visualization to display")
         else:
             for item in session_state["saved_list"]:
-                if item["page"] == page:
+                if page == "density":
                     graph_object = item["graph_object"]
                     st.plotly_chart(graph_object, use_container_width=True, key = f"chart-{key}")
                     if st.button("Remove", key=f"remove-btn-{key}"):
-                        remove_saved_list(thermometer_question, list_of_groups, main = False, id = item["id"])
+                        remove_saved_list(question, list_of_groups, viz_type, main = False, id = item["id"])
+                        st.rerun()
+                    key += 1
+                if page == "sankey":
+                    graph_object = item["graph_object"]
+                    # st.plotly_chart(graph_object, use_container_width=True, key = f"chart-{key}")
+                    streamlit_bokeh(graph_object, use_container_width=True)
+
+                    if st.button("Remove", key=f"remove-btn-{key}"):
+                        remove_saved_list(question, list_of_groups, viz_type, main = False, id = item["id"])
                         st.rerun()
                     key += 1
     
     if st.button("Saved List"):
-        show_saved_list(page, thermometer_question, list_of_groups)
+        show_saved_list(page, question, list_of_groups)
     

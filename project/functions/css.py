@@ -249,7 +249,7 @@ def load_custom_css():
     </style>
     """, unsafe_allow_html=True)
 
-def load_sidebar_css():
+def load_save_list_css():
     st.markdown("""
     <style>
     .stDialog {
@@ -257,8 +257,8 @@ def load_sidebar_css():
         width: 100% !important;
                 
     div[role="dialog"][aria-label="dialog"] {
-        width: 1000px !important;
-        max-width: 1000px !important;
+        width: 1100px !important;
+        max-width: 1100px !important;
     }
     </style>
     """, unsafe_allow_html=True)

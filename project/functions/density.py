@@ -40,7 +40,7 @@ def densityGraph(df, question, groups, group, title=None, yaxis_range=None):
     fig.update_layout(
         title=dict(
             text=title or "",
-            font=dict(size=24)
+            font=dict(size=24, weight=100)
         ),
         xaxis=dict(
             title=dict(text="Thermometer Rating (0–100)", font=dict(size=20)),
@@ -63,7 +63,7 @@ def densityGraph(df, question, groups, group, title=None, yaxis_range=None):
     return fig
 
 
-def densityGraphFaceted(df, question, groups, group, facet_var, facet_map, valid_facet_values=None, title=None, yaxis_range=None):
+def densityGraphFaceted(df, question, groups, group, facet_var, facet_map, valid_facet_values=None, title=None):
     # 1. Apply facet mapping
     df["facet_label"] = df[facet_var].map(facet_map)
     df = df[df["facet_label"].notna()]
@@ -84,7 +84,7 @@ def densityGraphFaceted(df, question, groups, group, facet_var, facet_map, valid
     fig = make_subplots(
         rows=rows, cols=cols,
         subplot_titles=facet_values,
-        shared_yaxes=True,
+        shared_yaxes="all",
         vertical_spacing=0.25 if rows > 1 else 0.05
     )
 
@@ -144,10 +144,5 @@ def densityGraphFaceted(df, question, groups, group, facet_var, facet_map, valid
     for i in range(len(facet_values)):
         suffix = "" if i == 0 else str(i + 1)
         fig.layout[f"xaxis{suffix}"].title = "Thermometer Rating (0–100)"
-
-    if yaxis_range:
-        for axis in fig.layout:
-            if axis.startswith("yaxis"):
-                fig.layout[axis].update(range=yaxis_range)
 
     return fig

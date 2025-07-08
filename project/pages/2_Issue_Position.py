@@ -5,12 +5,15 @@ from functions.dictionaries import set_logo, description_map, list_of_issue_topi
 from functions.sankey import sankeyGraph
 from functions.sidebar_sankey import political_check, ideological_check, list_of_groups_check
 from functions.expander import expander
-from functions.css import load_custom_css
+from functions.css import load_save_list_css
 from functions.ad_sankey import create_agree_disagree_sankey_holoviews, check_needs_ad_sankey
+from functions.saved import star_button, show_saved_button
+
 
 hv.extension('bokeh')
 
 set_logo()
+load_save_list_css()
 
 # Custom CSS
 st.markdown("""
@@ -52,13 +55,46 @@ with col5:
         viz_type = st.radio("", ["Traditional Sankey"], label_visibility="collapsed")
 
 list_of_groups = list_of_groups_check(group, checks)
-st.markdown(f"### {description_map.get(issue_question)}")
+
+show_saved = show_saved_button("sankey", issue_question, list_of_groups, viz_type=viz_type)
+
+def wrap_title(title, max_length=85):
+    if len(title) <= max_length:
+        return title
+    
+    words = title.split()
+    lines = []
+    current_line = []
+    current_length = 0
+    
+    for word in words:
+        if current_length + len(word) + 1 <= max_length:
+            current_line.append(word)
+            current_length += len(word) + 1
+        else:
+            lines.append(' '.join(current_line))
+            current_line = [word]
+            current_length = len(word)
+    
+    if current_line:
+        lines.append(' '.join(current_line))
+    
+    return '\n'.join(lines)
+
+title = wrap_title(description_map.get(issue_question))
+
+st.divider()
+col1, col2 = st.columns(2)
+col1.header("Issue Position Questions")
+
+with col2:
+    star_button("sankey", df, issue_question, list_of_groups, group, title=title, viz_type=viz_type)
 
 # Create visualization based on type
 if viz_type == "Agree/Disagree Flow":
-    hv_obj = create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, group)
+    hv_obj = create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, group, title=title)
 else:
-    hv_obj = sankeyGraph(df, issue_question, list_of_groups, group)
+    hv_obj = sankeyGraph(df, issue_question, list_of_groups, group, title=title)
 
 # Render the plot
 if hv_obj is None:
