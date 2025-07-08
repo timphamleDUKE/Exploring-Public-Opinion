@@ -62,87 +62,96 @@ def densityGraph(df, question, groups, group, title=None, yaxis_range=None):
 
     return fig
 
-
-def densityGraphFaceted(df, question, groups, group, facet_var, facet_map, valid_facet_values=None, title=None):
-    # 1. Apply facet mapping
+def densityGraphFaceted(df, question, groups, group, facet_var, facet_map, valid_facet_values=None, title=None, user_rating=None):
+    # 1) facet‐map and filter
     df["facet_label"] = df[facet_var].map(facet_map)
     df = df[df["facet_label"].notna()]
     if valid_facet_values:
         df = df[df["facet_label"].isin(valid_facet_values)]
 
-    # 2. Apply group mappings and filter
+    # 2) group map and filter
     df, colors, fill_colors = map_group_info(df, group)
     df = df[df["party"].isin(groups) & df[question].between(0, 100)]
 
-    facet_values = [val for val in valid_facet_values if val in df["facet_label"].unique()]
-    n_facets = len(facet_values)
+    facet_values = [v for v in (valid_facet_values or []) if v in df["facet_label"].unique()]
+    n = len(facet_values)
 
-    # 3. Determine layout
-    rows = 1 if n_facets <= 3 else 2
-    cols = n_facets if rows == 1 else math.ceil(n_facets / 2)
-
+    # 3) layout
+    rows = 1 if n <= 3 else 2
+    cols = n if rows == 1 else math.ceil(n / 2)
     fig = make_subplots(
         rows=rows, cols=cols,
         subplot_titles=facet_values,
         shared_yaxes="all",
-        vertical_spacing=0.25 if rows > 1 else 0.05
+        vertical_spacing=0.25 if rows>1 else 0.05
     )
 
-    # 4. Add density traces
-    try:
-        for i, facet_value in enumerate(facet_values):
-            row = (i // cols) + 1
-            col = (i % cols) + 1
-            df_facet = df[df["facet_label"] == facet_value]
+    # 4) draw density traces & record max y for each facet
+    max_y = [0]*n
+    for i, val in enumerate(facet_values):
+        row = (i // cols) + 1
+        col = (i % cols) + 1
+        df_f = df[df["facet_label"] == val]
 
-            for party in groups:
-                df_party = df_facet[df_facet["party"] == party]
-                if df_party[question].dropna().nunique() < 2:
-                    st.warning(f"Not enough variation for '{party}' in {facet_var} group '{facet_value}' — skipping.")
-                    continue
+        for party in groups:
+            df_p = df_f[df_f["party"] == party]
+            if df_p[question].dropna().nunique() < 2:
+                continue
 
-                plotting_data = get_anes_weighted_density_data(
-                    df_party,
-                    question,
-                    [party],
-                    group_var="party",
-                    seed=12345
-                )
+            data = get_anes_weighted_density_data(
+                df_p, question, [party], group_var="party", seed=12345
+            ).get(party)
+            if not data:
+                continue
 
-                if party not in plotting_data:
-                    st.warning(f"No KDE data for '{party}' in {facet_var} group '{facet_value}'")
-                    continue
-
-                fig.add_trace(go.Scatter(
-                    x=plotting_data[party]["x_range"],
-                    y=plotting_data[party]["y_values"],
+            # plot KDE
+            fig.add_trace(
+                go.Scatter(
+                    x=data["x_range"],
+                    y=data["y_values"],
                     mode="lines",
                     name=party,
                     legendgroup=party,
-                    showlegend=(i == 0),
-                    line=dict(color=colors.get(party, "gray"), width=2),
+                    showlegend=(i==0),
+                    line=dict(color=colors.get(party,"gray"), width=2),
                     fill="tozeroy",
-                    fillcolor=fill_colors.get(party, "rgba(128,128,128,0.3)")
-                ), row=row, col=col)
+                    fillcolor=fill_colors.get(party,"rgba(128,128,128,0.3)")
+                ),
+                row=row, col=col
+            )
+            # update that facet’s max
+            max_y[i] = max(max_y[i], max(data["y_values"]))
 
-    except Exception as e:
-        st.error(f"Error generating weighted density plot: {e}")
-        return go.Figure()
+    # 5) add the user‐rating line
+    if user_rating is not None:
+        for i in range(n):
+            row = (i // cols) + 1
+            col = (i % cols) + 1
+            fig.add_trace(
+                go.Scatter(
+                    x=[user_rating, user_rating],
+                    y=[0, max_y[i]],
+                    mode="lines",
+                    line=dict(color="black", dash="dash"),
+                    showlegend=False,
+                    hoverinfo="skip"
+                ),
+                row=row, col=col
+            )
 
-    # 5. Update layout
+    # 6) finalize layout
     fig.update_layout(
         title=dict(text=title or "", font=dict(size=24)),
         template="simple_white",
         font=dict(size=18),
-        yaxis_title = "Density",
+        yaxis_title="Density",
         hovermode="x unified",
         legend=dict(font=dict(size=14)),
         height=700 if rows > 1 else 450
     )
-
-    # 6. Axis titles for all subplots
-    for i in range(len(facet_values)):
-        suffix = "" if i == 0 else str(i + 1)
-        fig.layout[f"xaxis{suffix}"].title = "Thermometer Rating (0–100)"
+    # 7) x-axis labels
+    for i in range(n):
+        suf = "" if i==0 else str(i+1)
+        fig.layout[f"xaxis{suf}"].title = "Thermometer Rating (0–100)"
 
     return fig

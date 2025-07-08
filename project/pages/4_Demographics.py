@@ -6,7 +6,6 @@ from functions.expander import expander
 
 set_logo()
 st.title("Demographics Test")
-st.divider()
 
 # Sidebar
 with st.sidebar:
