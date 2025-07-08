@@ -169,5 +169,3 @@ st.caption(
     "and responses. However, it does not calculate standard errors using Taylor series linearization as "
     "recommended by ANES for formal inference."
 )
-
-st.write(st.session_state)
