@@ -3,6 +3,7 @@ import holoviews as hv
 from holoviews import opts, dim
 from functions.dictionaries import find_answer_choices, ideological_fill_colors, political_fill_colors, codebook
 import os
+import streamlit as st
 
 # Load codebook once at module level
 
@@ -84,21 +85,57 @@ def create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, g
     # Layer 1: Group to General Position
     for (grp, gen), cnt in df_valid.groupby(['group_label', 'general_position']).size().items():
         color = (ideological_fill_colors if group_type.startswith('Ideological') else political_fill_colors).get(grp, '#ccc')
-        flows.append((grp, gen, cnt, color))
-    # Layer 2: General Position to Specific Response (exclude 'Neither')
-    for (grp, gen, spec), cnt in df_valid[df_valid['general_position'] != 'Neither']\
-                                       .groupby(['group_label', 'general_position', 'specific_response']).size().items():
-        color = (ideological_fill_colors if group_type.startswith('Ideological') else political_fill_colors).get(grp, '#ccc')
-        flows.append((gen, spec, cnt, color))
+        flows.append((grp, gen, cnt, color, grp))  # Add group info for sorting
+    
+    # Layer 2: General Position to Specific Response 
+    # "Neither" responses stay at the middle column (don't flow to specific responses)
+    # Only "Favor" and "Oppose" flow to specific responses
+    for (grp, gen, spec), cnt in df_valid.groupby(['group_label', 'general_position', 'specific_response']).size().items():
+        # If it's a "Neither" response, don't create a flow to specific response
+        if gen == 'Neither':
+            continue  # Skip - these flows end at the middle column
+        # Also skip if the specific response contains "neither" (to avoid right-column neither nodes)
+        if 'neither' in str(spec).lower():
+            continue
+        else:
+            # For Favor/Oppose, create flows to specific responses
+            color = (ideological_fill_colors if group_type.startswith('Ideological') else political_fill_colors).get(grp, '#ccc')
+            flows.append((gen, spec, cnt, color, grp))  # Add group info for sorting
 
-    flows_df = pd.DataFrame(flows, columns=['Source', 'Target', 'Value', 'Color'])
+    flows_df = pd.DataFrame(flows, columns=['Source', 'Target', 'Value', 'Color', 'Group'])
+    
+    # Remove any flows that have "neither" as SOURCE (going to right column)
+    # Keep flows that have "neither" as TARGET (coming from left column)
+    flows_df = flows_df[~((flows_df['Source'].str.contains('neither', case=False, na=False)) & 
+                         (flows_df['Target'].str.contains('neither', case=False, na=False)))]
     
     # Create ordered node lists for proper positioning
     # Define the order for each layer
     group_nodes = list_of_groups  # First layer: group labels
-    general_position_nodes = ['Favor', 'Neither', 'Oppose']  # Second layer: centered Neither
-    specific_response_nodes = sorted([node for node in set(flows_df['Target']) 
-                                    if node not in group_nodes and node not in general_position_nodes])
+    
+    # Force Favor → Neither → Oppose ordering in middle column
+    # Only include positions that exist as either Source OR Target (not both for Neither)
+    existing_sources = set(flows_df['Source'])
+    existing_targets = set(flows_df['Target'])
+    
+    general_position_nodes = []
+    for pos in ['Favor', 'Neither', 'Oppose']:
+        # Include if it appears as source OR target
+        if pos in existing_sources or pos in existing_targets:
+            general_position_nodes.append(pos)
+    
+    # FIXED: Use target_order to preserve codebook ordering
+    # Strip numeric characters from target_order to match processed specific_response values
+    processed_target_order = [
+        str(resp).replace(r'\d+', '').strip() 
+        for resp in target_order
+    ]
+    
+    specific_response_nodes = [resp for resp in processed_target_order
+                              if resp in set(flows_df['Target']) 
+                              and resp not in group_nodes 
+                              and resp not in general_position_nodes
+                              and 'neither' not in resp.lower()]  # Exclude any "neither" responses from right column
     
     # Create the complete ordered node list
     all_nodes = group_nodes + general_position_nodes + specific_response_nodes
@@ -111,10 +148,24 @@ def create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, g
     # Create a mapping for desired node order
     node_order_map = {node: i for i, node in enumerate(ordered_nodes)}
     
-    # Sort flows by the desired node order
+    # Sort flows to ensure red-on-top, blue-on-bottom ordering
+    # Define priority: Conservative/Republican = 0 (top), Liberal/Democratic = 1 (bottom)
+    def get_group_priority(group):
+        if group in ['Conservative', 'Republican Party']:
+            return 0  # Top
+        elif group in ['Liberal', 'Democratic Party']:
+            return 1  # Bottom
+        else:
+            return 0.5  # Middle
+    
+    flows_df['group_priority'] = flows_df['Group'].apply(get_group_priority)
+    
+    # Sort by target node first, then by group priority to maintain consistent ordering
     flows_df['source_order'] = flows_df['Source'].map(node_order_map)
     flows_df['target_order'] = flows_df['Target'].map(node_order_map)
-    flows_df = flows_df.sort_values(['source_order', 'target_order']).drop(['source_order', 'target_order'], axis=1)
+    flows_df = flows_df.sort_values(['target_order', 'group_priority', 'source_order']).drop(['source_order', 'target_order', 'group_priority', 'Group'], axis=1)
+    
+    unique_nodes = list(set(flows_df['Source']).union(set(flows_df['Target'])))
 
     # Try to build and style the Sankey
     try:
@@ -126,8 +177,8 @@ def create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, g
                 edge_color='Color',
                 edge_alpha=1,
                 edge_line_width=1,
-                node_color=dim('Source').categorize({n: '#ececec' for n in ordered_nodes}),
-                node_fill_color=dim('Source').categorize({n: '#ececec' for n in ordered_nodes}),
+                node_color=dim('Source').categorize({node: '#ececec' for node in unique_nodes}),
+                node_fill_color=dim('Source').categorize({node: '#ececec' for node in unique_nodes}),
                 node_alpha=1.0,
                 node_fill_alpha=1.0,
                 node_line_color='black',
@@ -139,7 +190,7 @@ def create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, g
                 active_tools=[],
                 bgcolor='white',
                 show_values=False,
-                node_sort=False  # Set to False and rely on data ordering
+                node_sort=False
             )
         )
         return sankey
