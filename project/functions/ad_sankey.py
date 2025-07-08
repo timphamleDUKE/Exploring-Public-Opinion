@@ -19,7 +19,7 @@ def check_needs_ad_sankey(issue_question):
     return bool(val)
 
 
-def create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, group_type):
+def create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, group_type, title=""):
     """
     Build a 3-layer "agree/disagree" flow Sankey using HoloViews.
     Only creates the plot if the codebook indicates this question should have an A/D Sankey.
@@ -139,7 +139,10 @@ def create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, g
                 active_tools=[],
                 bgcolor='white',
                 show_values=False,
-                node_sort=False  # Set to False and rely on data ordering
+                node_sort=False,  # Set to False and rely on data ordering
+                title = title,
+                title_format="{label}",  # Use the label as title
+                fontsize={'title': '20pt'}  # Set title font size here
             )
         )
         return sankey

@@ -9,7 +9,7 @@ import streamlit as st
 # Enable bokeh backend for HoloViews
 hv.extension('bokeh')
 
-def sankeyGraph(df, question, list_of_groups, group):
+def sankeyGraph(df, question, list_of_groups, group, title=""):
 
     if group == "Ideological Groups":
         source_col = "lib_con_7pt"
@@ -109,11 +109,14 @@ def sankeyGraph(df, question, list_of_groups, group):
             label_text_font_size='10pt',
             label_position = "right",
             node_padding=50,
-            tools=['hover'],           # Only keep hover tool
-            active_tools=[],           # Disable default active tools like box zoom
+            tools=['hover'],
+            active_tools=[],
             bgcolor='white',
             show_values = False,
-            node_sort = False
+            node_sort = False,
+            title = title,
+            title_format="{label}",  # Use the label as title
+            fontsize={'title': '20pt'}  # Set title font size here
         )
     )
 

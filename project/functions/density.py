@@ -40,7 +40,7 @@ def densityGraph(df, question, groups, group, title=None, yaxis_range=None):
     fig.update_layout(
         title=dict(
             text=title or "",
-            font=dict(size=24)
+            font=dict(size=24, weight=100)
         ),
         xaxis=dict(
             title=dict(text="Thermometer Rating (0–100)", font=dict(size=20)),

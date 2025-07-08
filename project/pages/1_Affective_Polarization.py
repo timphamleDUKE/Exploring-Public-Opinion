@@ -4,10 +4,10 @@ from functions.dictionaries import set_logo, list_of_thermometer_topics, topic_t
 from functions.density import densityGraph
 from functions.expander import expander
 from functions.saved import star_button, show_saved_button
-from functions.css import load_sidebar_css
+from functions.css import load_save_list_css
 
 set_logo()
-load_sidebar_css()
+load_save_list_css()
 
 st.title("Affective Polarization")
 
@@ -169,3 +169,5 @@ st.caption(
     "and responses. However, it does not calculate standard errors using Taylor series linearization as "
     "recommended by ANES for formal inference."
 )
+
+st.write(st.session_state)
