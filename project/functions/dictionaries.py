@@ -6,13 +6,13 @@ import os
 def set_logo():
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    logo = os.path.join(script_dir, '..', 'images', 'logos', 'polarization-logo.png')
+    logo_path = os.path.join(script_dir, '..', 'images', 'logos', 'polarization-logo.png')
 
     st.set_page_config(layout="wide")
 
     st.logo(
-        image=logo,
-        icon_image=logo,
+        image=logo_path,
+        icon_image=logo_path,
         link = "https://www.polarizationlab.com/"
     )
 
