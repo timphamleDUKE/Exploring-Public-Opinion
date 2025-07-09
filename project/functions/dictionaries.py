@@ -6,7 +6,7 @@ import os
 def set_logo():
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    logo = os.path.join(script_dir, '..', 'images', 'logos', 'polarization-logo.PNG')
+    logo = os.path.join(script_dir, '..', 'images', 'logos', 'polarization-logo.png')
 
     st.set_page_config(layout="wide")
 
