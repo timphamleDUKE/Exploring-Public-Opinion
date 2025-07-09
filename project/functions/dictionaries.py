@@ -10,8 +10,7 @@ def set_logo():
     st.logo(
         image=logo,
         icon_image=logo,
-        link = "https://www.polarizationlab.com/",
-        size = "large"
+        link = "https://www.polarizationlab.com/"
     )
 
     st.markdown("""
@@ -317,3 +316,26 @@ facet_display_map = {
     "gender": "Gender",
     "race_ethnicity": "Race/Ethnicity"
 }
+
+def wrap_title(title, max_length=85):
+    if len(title) <= max_length:
+        return title
+    
+    words = title.split()
+    lines = []
+    current_line = []
+    current_length = 0
+    
+    for word in words:
+        if current_length + len(word) + 1 <= max_length:
+            current_line.append(word)
+            current_length += len(word) + 1
+        else:
+            lines.append(' '.join(current_line))
+            current_line = [word]
+            current_length = len(word)
+    
+    if current_line:
+        lines.append(' '.join(current_line))
+    
+    return '\n'.join(lines)
