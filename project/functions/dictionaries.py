@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+import os
 
 # Setting logo
 def set_logo():
@@ -29,8 +30,13 @@ def set_logo():
 
 
 # Dataframe
-df = pd.read_csv("../data/anes_2024_clean.csv")
-codebook = pd.read_csv("../data/codebook.csv")
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
+df_path = os.path.join(script_dir, '..', '..', 'data', 'anes_2024_clean.csv')
+df = pd.read_csv(df_path)
+
+codebook_path = os.path.join(script_dir, '..', '..', 'data', 'codebook.csv')
+codebook = pd.read_csv(codebook_path)
 
 
 # List of thermometer questions
