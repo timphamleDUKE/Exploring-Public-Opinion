@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import base64
 import os
-from functions.dictionaries import set_logo
+from functions.dictionaries import set_logo, df
 from functions.css import load_custom_css
 
 set_logo()
@@ -13,7 +13,6 @@ st.title("About")
 tab1, tab2 = st.tabs(["The Data", "The Team"])
 
 # Tab 1: The Data
-df = pd.read_csv("../data/anes_2024_clean.csv")
 with tab1:
     col1, col2 = st.columns([3, 1])
     
@@ -32,7 +31,11 @@ with tab1:
         """)
         
     with col2:
-        st.image("images/logos/anes-logo.png", use_container_width=True)
+
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        anes_logo_path = os.path.join(script_dir, '..', 'images', 'logos', 'anes-logo.png')
+
+        st.image(anes_logo_path, use_container_width=True)
     
     # Add space between text and dataframe
     st.markdown("<br>", unsafe_allow_html=True)
@@ -74,9 +77,14 @@ with tab2:
         """
         st.markdown(html, unsafe_allow_html=True)
     
+    alexa_pic_path = os.path.join(script_dir, '..', 'images', 'pfp', 'AF.png')
+    tim_pic_path = os.path.join(script_dir, '..', 'images', 'pfp', 'TL.png')
+    joie_pic_path = os.path.join(script_dir, '..', 'images', 'pfp', 'JJ.png')
+    dario_pic_path = os.path.join(script_dir, '..', 'images', 'pfp', 'DM.png')
+
     authors = [
         {
-            "image_path": "images/pfp/AF_cropped.JPG",
+            "image_path": alexa_pic_path,
             "name": "Alexa Fahrer",
             "class_year": "Class of 2026",
             "major": "Statistical Science & Public Policy",
@@ -84,7 +92,7 @@ with tab2:
             "linkedin_url": "https://www.linkedin.com/in/alexa-fahrer-138456133/"
         },
         {
-            "image_path": "images/pfp/TL_cropped.JPG",
+            "image_path": tim_pic_path,
             "name": "Tim Le",
             "class_year": "Class of 2028",
             "major": "Computer Science & Statistical Science",
@@ -92,7 +100,7 @@ with tab2:
             "linkedin_url": "https://www.linkedin.com/in/tim-le-836296283/"
         },
         {
-            "image_path": "images/pfp/JJ_cropped.JPG",
+            "image_path": joie_pic_path,
             "name": "Joie Jacobs",
             "class_year": "Class of 2028",
             "major": "Accounting & Math",
@@ -100,7 +108,7 @@ with tab2:
             "linkedin_url": "https://www.linkedin.com/in/joie-jacobs-09801b332/"
         },
         {
-            "image_path": "images/pfp/DM_cropped.JPG",
+            "image_path": dario_pic_path,
             "name": "Dario Moscatello",
             "class_year": "Class of 2026",
             "major": "Business Administration",
