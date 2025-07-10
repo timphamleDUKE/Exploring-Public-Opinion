@@ -1,7 +1,8 @@
 import streamlit as st
 from functions.sidebar_density import ideological_check, political_check, list_of_groups_check
 from functions.dictionaries import set_logo, list_of_thermometer_topics, topic_to_list_of_thermometer_map, df, description_map, dropdown_to_renamed
-from functions.density import densityGraph
+from functions.facet import *
+from functions.density import densityGraph, densityGraphFaceted
 from functions.expander import expander
 from functions.saved import star_button, show_saved_button
 from functions.css import load_save_list_css
@@ -143,6 +144,10 @@ with tab2:
         
         list_of_groups = list_of_groups_check(group, checks)
 
+        demog_options = sorted(facet_display_map.values())
+        facet_display = st.selectbox("Facet By", demog_options, index=0)
+        facet_var = {v: k for k, v in facet_display_map.items()}[facet_display]
+
         # Saved List Button
         show_saved = show_saved_button("density", thermometer_question, list_of_groups)
 
@@ -162,8 +167,34 @@ with tab2:
 
     st.plotly_chart(density_graph, use_container_width=True)
 
-    # Expander
+    st.divider()
+    st.header("Faceted Visualizations")
+
+    facet_settings = facet_config.get(facet_var)
+
+    if facet_settings:
+        if "map_func" in facet_settings:
+            df["facet_label"] = facet_settings["map_func"](df)
+            facet_map = dict(zip(df[facet_var], df["facet_label"]))
+            valid_facet_values = facet_settings["valid_values"]
+        else:
+            facet_map = facet_settings.get("map_plot", facet_settings["map"])
+            valid_facet_values = facet_settings.get("valid_values_plot", facet_settings["valid_values"])
+            df["facet_label"] = df[facet_var].map(facet_map)
+
+
+    density_graph = densityGraphFaceted(
+        df,
+        thermometer_question,
+        list_of_groups,
+        group,
+        title=description_map.get(thermometer_question),
+        valid_facet_values=valid_facet_values
+    )
+
+    st.plotly_chart(density_graph, use_container_width=True)
     expander(df, thermometer_question, "affective")
+
 
 # Caption
 st.divider()

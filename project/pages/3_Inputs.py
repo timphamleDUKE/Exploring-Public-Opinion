@@ -3,6 +3,7 @@ import streamlit as st
 from functions.dictionaries import *
 from functions.density import densityGraphFaceted
 from functions.sidebar_density import ideological_check, political_check, list_of_groups_check
+from functions.facet import *
 
 # Setup
 set_logo()
