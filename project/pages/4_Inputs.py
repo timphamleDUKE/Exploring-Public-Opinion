@@ -8,7 +8,7 @@ from functions.sidebar_density import ideological_check, political_check, list_o
 set_logo()
 st.title("User Input Test")
 
-# === Sidebar ===
+# Sidebar
 with st.sidebar:
     st.title("Please Select:")
     topic = st.selectbox("Topic", list_of_thermometer_topics)
@@ -19,7 +19,7 @@ with st.sidebar:
     checks = ideological_check() if group == "Ideological Groups" else political_check()
     list_of_groups = list_of_groups_check(group, checks)
 
-# === User Inputs ===
+# Inputs
 st.header("Your information")
 user_inputs = {
     "age_election_day": st.slider("Age", 18, 100, 18),
@@ -36,7 +36,7 @@ user_rating = st.number_input(
     min_value=0, max_value=100, value=50, step=1
 )
 
-# === Plot Generation ===
+# Plots
 if st.button("Generate Plots"):
     st.divider()
     st.header(description_map.get(thermometer_question))
