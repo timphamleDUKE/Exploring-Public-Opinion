@@ -63,6 +63,11 @@ def densityGraph(df, question, groups, group, title=None, yaxis_range=None):
     return fig
 
 def densityGraphFaceted(df, question, groups, group, facet_var, facet_map, valid_facet_values=None, title=None, user_rating=None):
+    import streamlit as st  # if not already imported
+    from plotly.subplots import make_subplots
+    import plotly.graph_objects as go
+    import math
+
     # 1) facet‐map and filter
     df["facet_label"] = df[facet_var].map(facet_map)
     df = df[df["facet_label"].notna()]
@@ -73,21 +78,28 @@ def densityGraphFaceted(df, question, groups, group, facet_var, facet_map, valid
     df, colors, fill_colors = map_group_info(df, group)
     df = df[df["party"].isin(groups) & df[question].between(0, 100)]
 
+    # 3) get valid facet values that exist in filtered data
     facet_values = [v for v in (valid_facet_values or []) if v in df["facet_label"].unique()]
     n = len(facet_values)
 
-    # 3) layout
+    # 🛡️ Protect against empty facet_values
+    if n == 0:
+        st.warning("No data available for the selected facet values.")
+        return go.Figure()
+
+    # 4) layout
     rows = 1 if n <= 3 else 2
-    cols = n if rows == 1 else math.ceil(n / 2)
+    cols = max(1, n) if rows == 1 else max(1, math.ceil(n / 2))
+
     fig = make_subplots(
         rows=rows, cols=cols,
         subplot_titles=facet_values,
         shared_yaxes="all",
-        vertical_spacing=0.25 if rows>1 else 0.05
+        vertical_spacing=0.25 if rows > 1 else 0.05
     )
 
-    # 4) draw density traces & record max y for each facet
-    max_y = [0]*n
+    # 5) draw density traces
+    max_y = [0] * n
     for i, val in enumerate(facet_values):
         row = (i // cols) + 1
         col = (i % cols) + 1
@@ -101,10 +113,10 @@ def densityGraphFaceted(df, question, groups, group, facet_var, facet_map, valid
             data = get_anes_weighted_density_data(
                 df_p, question, [party], group_var="party", seed=12345
             ).get(party)
+
             if not data:
                 continue
 
-            # plot KDE
             fig.add_trace(
                 go.Scatter(
                     x=data["x_range"],
@@ -112,17 +124,16 @@ def densityGraphFaceted(df, question, groups, group, facet_var, facet_map, valid
                     mode="lines",
                     name=party,
                     legendgroup=party,
-                    showlegend=(i==0),
-                    line=dict(color=colors.get(party,"gray"), width=2),
+                    showlegend=(i == 0),
+                    line=dict(color=colors.get(party, "gray"), width=2),
                     fill="tozeroy",
-                    fillcolor=fill_colors.get(party,"rgba(128,128,128,0.3)")
+                    fillcolor=fill_colors.get(party, "rgba(128,128,128,0.3)")
                 ),
                 row=row, col=col
             )
-            # update that facet’s max
             max_y[i] = max(max_y[i], max(data["y_values"]))
 
-    # 5) add the user‐rating line
+    # 6) add user-rating line
     if user_rating is not None:
         for i in range(n):
             row = (i // cols) + 1
@@ -139,7 +150,7 @@ def densityGraphFaceted(df, question, groups, group, facet_var, facet_map, valid
                 row=row, col=col
             )
 
-    # 6) finalize layout
+    # 7) layout and labels
     fig.update_layout(
         title=dict(text=title or "", font=dict(size=24)),
         template="simple_white",
@@ -149,9 +160,9 @@ def densityGraphFaceted(df, question, groups, group, facet_var, facet_map, valid
         legend=dict(font=dict(size=14)),
         height=700 if rows > 1 else 450
     )
-    # 7) x-axis labels
+
     for i in range(n):
-        suf = "" if i==0 else str(i+1)
+        suf = "" if i == 0 else str(i + 1)
         fig.layout[f"xaxis{suf}"].title = "Thermometer Rating (0–100)"
 
     return fig
