@@ -13,7 +13,7 @@ st.title("About")
 tab1, tab2 = st.tabs(["The Data", "The Team"])
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-df_path = os.path.join(script_dir, '..', 'data', 'anes_2024_clean.csv')
+df_path = os.path.join(script_dir, '..', '..', 'data', 'anes_2024_clean.csv')
 df = pd.read_csv(df_path)
 
 # Tab 1: The Data
