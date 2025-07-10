@@ -8,8 +8,8 @@ def ideological_check():
     return liberal_check, conservative_check, moderate_check
 
 def political_check():
-    democratic_check = st.checkbox("Democratic Party", value = True)
-    republican_check = st.checkbox("Republican Party", value = True)
+    democratic_check = st.checkbox("Democrats", value = True)
+    republican_check = st.checkbox("Republicans", value = True)
     independent_check = st.checkbox("Independent", value = False)
     return democratic_check, republican_check, independent_check
 
@@ -28,9 +28,9 @@ def list_of_groups_check(group, checks):
     elif group == "Political Groups":
         democratic, republican, independent= checks
         if democratic:
-            list_of_groups.append("Democratic Party")
+            list_of_groups.append("Democrats")
         if republican:
-            list_of_groups.append("Republican Party")
+            list_of_groups.append("Republicans")
         if independent:
             list_of_groups.append("Independent")
 
@@ -43,7 +43,7 @@ lib_con_map_7pt_reverse = {
 }
 
 political_map_reverse = {
-    "Democratic Party": [1, 2, 3],
+    "Democrats": [1, 2, 3],
     "Independent": [4],
-    "Republican Party": [5, 6, 7]
+    "Republicans": [5, 6, 7]
 }

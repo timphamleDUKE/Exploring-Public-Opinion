@@ -70,15 +70,15 @@ topic_to_list_of_issue_map = (
 
 # List of colors based on group by
 political_colors = {
-    "Democratic Party": "blue",
-    "Republican Party": "red",
+    "Democrats": "blue",
+    "Republicans": "red",
     "Independent": "green",
     "N/A": "rgb(141, 142, 147)"
 }
 
 political_fill_colors = {
-    "Democratic Party": "rgba(0, 0, 255, 0.3)",     # Blue
-    "Republican Party": "rgba(255, 0, 0, 0.3)",     # Red
+    "Democrats": "rgba(0, 0, 255, 0.3)",     # Blue
+    "Republicans": "rgba(255, 0, 0, 0.3)",     # Red
     "Independent": "rgba(0, 128, 0, 0.3)",  # Green
     "N/A": "rgba(141, 142, 147, 0.3)"
 }
@@ -123,9 +123,9 @@ def map_group_info(df, group):
 
     elif group == "Political Groups":
         df["party"] = df["poli_party_self_7pt"].map({
-            1: "Democratic Party", 2: "Democratic Party",
+            1: "Democrats", 2: "Democrats",
             3: "Independent", 4: "Independent", 5: "Independent",
-            6: "Republican Party", 7: "Republican Party",
+            6: "Republicans", 7: "Republicans",
             -9: "N/A", -4: "N/A", -1: "N/A"
         }).fillna("N/A")
         colors = political_colors

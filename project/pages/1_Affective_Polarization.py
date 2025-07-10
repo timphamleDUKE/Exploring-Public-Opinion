@@ -42,13 +42,13 @@ with st.sidebar:
 tab1, tab2, tab3 = st.tabs(["Parties", "Ideologies", "Candidates"])
 
 with tab1:
-    st.subheader("Thermometer Ratings: Democratic & Republican Parties")
+    st.subheader("Thermometer Ratings: Democratics & Republicans")
     col1, col2 = st.columns(2)
     with col1:
         democratic_graph = densityGraph(
             df,
             "democrat_thermometer_pre",
-            ("Republican Party", "Democratic Party"),
+            ("Republicans", "Democrats"),
             group="Political Groups",
             title=description_map.get("democrat_thermometer_pre"), 
             yaxis_range=[0, 0.041]
@@ -59,7 +59,7 @@ with tab1:
         republican_graph = densityGraph(
             df,
             "republican_thermometer_pre",
-            ("Republican Party", "Democratic Party"),
+            ("Republicans", "Democrats"),
             group="Political Groups",
             title=description_map.get("republican_thermometer_pre"),
             yaxis_range=[0, 0.041]
@@ -100,7 +100,7 @@ with tab3:
         harris_graph_pre = densityGraph(
             df,
             "harris_thermometer_pre",
-            ("Republican Party", "Democratic Party"),
+            ("Republicans", "Democrats"),
             group="Political Groups",
             title=description_map.get("harris_thermometer_pre"),
             yaxis_range=[0, 0.072]
@@ -109,7 +109,7 @@ with tab3:
         harris_graph_post = densityGraph(
             df,
             "harris_thermometer_post",
-            ("Republican Party", "Democratic Party"),
+            ("Republicans", "Democrats"),
             group="Political Groups",
             title=description_map.get("harris_thermometer_post"),
             yaxis_range=[0, 0.072]
@@ -123,7 +123,7 @@ with tab3:
         trump_graph_pre = densityGraph(
             df,
             "trump_thermometer_pre",
-            ("Republican Party", "Democratic Party"),
+            ("Republicans", "Democrats"),
             group="Political Groups",
             title=description_map.get("trump_thermometer_pre"),
             yaxis_range=[0, 0.072]
@@ -132,7 +132,7 @@ with tab3:
         trump_graph_post = densityGraph(
             df,
             "trump_thermometer_post",
-            ("Republican Party", "Democratic Party"),
+            ("Republicans", "Democrats"),
             group="Political Groups",
             title=description_map.get("trump_thermometer_post"),
             yaxis_range=[0, 0.072]
