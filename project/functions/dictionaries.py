@@ -13,7 +13,8 @@ def set_logo():
     st.logo(
         image=logo_path,
         icon_image=logo_path,
-        link = "https://www.polarizationlab.com/"
+        link = "https://www.polarizationlab.com/",
+        size = "large"
     )
 
     st.markdown("""
