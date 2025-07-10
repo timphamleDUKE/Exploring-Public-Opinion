@@ -63,10 +63,6 @@ def densityGraph(df, question, groups, group, title=None, yaxis_range=None):
     return fig
 
 def densityGraphFaceted(df, question, groups, group, facet_var, facet_map, valid_facet_values=None, title=None, user_rating=None):
-    import streamlit as st  # if not already imported
-    from plotly.subplots import make_subplots
-    import plotly.graph_objects as go
-    import math
 
     # 1) facet‐map and filter
     df["facet_label"] = df[facet_var].map(facet_map)
@@ -82,7 +78,7 @@ def densityGraphFaceted(df, question, groups, group, facet_var, facet_map, valid
     facet_values = [v for v in (valid_facet_values or []) if v in df["facet_label"].unique()]
     n = len(facet_values)
 
-    # 🛡️ Protect against empty facet_values
+    # Protect against empty facet_values
     if n == 0:
         st.warning("No data available for the selected facet values.")
         return go.Figure()
