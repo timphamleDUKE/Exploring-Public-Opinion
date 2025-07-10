@@ -22,7 +22,7 @@ with tab1:
         democratic_graph = densityGraph(
             df,
             "democrat_thermometer_pre",
-            ("Republicans", "Democrats"),
+            ("Republican", "Democrat"),
             group="Political Groups",
             title=description_map.get("democrat_thermometer_pre"), 
             yaxis_range=[0, 0.041]
@@ -33,7 +33,7 @@ with tab1:
         republican_graph = densityGraph(
             df,
             "republican_thermometer_pre",
-            ("Republicans", "Democrats"),
+            ("Republican", "Democrat"),
             group="Political Groups",
             title=description_map.get("republican_thermometer_pre"),
             yaxis_range=[0, 0.041]
@@ -76,7 +76,7 @@ with tab1:
         harris_graph_pre = densityGraph(
             df,
             "harris_thermometer_pre",
-            ("Republicans", "Democrats"),
+            ("Republican", "Democrat"),
             group="Political Groups",
             title=description_map.get("harris_thermometer_pre"),
             yaxis_range=[0, 0.072]
@@ -85,7 +85,7 @@ with tab1:
         harris_graph_post = densityGraph(
             df,
             "harris_thermometer_post",
-            ("Republicans", "Democrats"),
+            ("Republican", "Democrat"),
             group="Political Groups",
             title=description_map.get("harris_thermometer_post"),
             yaxis_range=[0, 0.072]
@@ -99,7 +99,7 @@ with tab1:
         trump_graph_pre = densityGraph(
             df,
             "trump_thermometer_pre",
-            ("Republicans", "Democrats"),
+            ("Republican", "Democrat"),
             group="Political Groups",
             title=description_map.get("trump_thermometer_pre"),
             yaxis_range=[0, 0.072]
@@ -108,7 +108,7 @@ with tab1:
         trump_graph_post = densityGraph(
             df,
             "trump_thermometer_post",
-            ("Republicans", "Democrats"),
+            ("Republican", "Democrat"),
             group="Political Groups",
             title=description_map.get("trump_thermometer_post"),
             yaxis_range=[0, 0.072]
