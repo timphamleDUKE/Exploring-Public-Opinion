@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import base64
 import os
-from functions.dictionaries import set_logo, df
+from functions.dictionaries import set_logo
 from functions.css import load_custom_css
 
 set_logo()
@@ -11,6 +11,10 @@ st.title("About")
 
 # Tabs
 tab1, tab2 = st.tabs(["The Data", "The Team"])
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+df_path = os.path.join(script_dir, '..', 'data', 'anes_2024_clean.csv')
+df = pd.read_csv(df_path)
 
 # Tab 1: The Data
 with tab1:
