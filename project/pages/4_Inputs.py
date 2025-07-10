@@ -8,7 +8,7 @@ from functions.sidebar_density import ideological_check, political_check, list_o
 set_logo()
 st.title("User Input Test")
 
-# Sidebar
+# === Sidebar Selection ===
 with st.sidebar:
     st.title("Please Select:")
     topic = st.selectbox("Topic", list_of_thermometer_topics)
@@ -19,40 +19,41 @@ with st.sidebar:
     checks = ideological_check() if group == "Ideological Groups" else political_check()
     list_of_groups = list_of_groups_check(group, checks)
 
-# Inputs
+# === User Inputs ===
 st.header("Your information")
-user_inputs = {
-    "age_election_day": st.slider("Age", 18, 100, 18),
-    "educ": st.selectbox("Education", facet_config["educ"]["valid_values"]),
-    "gender": st.selectbox("Gender", facet_config["gender"]["valid_values"]),
-    "income": st.selectbox("Income", facet_config["income"]["valid_values"]),
-    "marriage": st.selectbox("Marital Status", facet_config["marriage"]["valid_values"]),
-    "race_ethnicity": st.selectbox("Race/Ethnicity", facet_config["race_ethnicity"]["valid_values"]),
-    "religion": st.selectbox("Religion", facet_config["religion"]["valid_values"]),
-}
+
+# Dynamically build user input fields from facet_config keys
+user_inputs = {}
+for key in ["age_election_day", "educ", "gender", "income", "marriage", "race_ethnicity", "religion"]:
+    label = facet_display_map.get(key, key.replace("_", " ").title())
+    valid_options = facet_config[key]["valid_values"]
+    if key == "age_election_day":
+        user_inputs[key] = st.slider(label, 18, 100, 18)
+    else:
+        user_inputs[key] = st.selectbox(label, valid_options)
 
 user_rating = st.number_input(
     f"Your rating for “{description_map[thermometer_question]}”",
     min_value=0, max_value=100, value=50, step=1
 )
 
-# Plots
+# === Generate Plots ===
 if st.button("Generate Plots"):
     st.divider()
     st.header(description_map.get(thermometer_question))
 
     cols_per_row = 2
-    items = list(facet_display_map.items())
+    facet_items = list(facet_display_map.items())
 
-    for row_start in range(0, len(items), cols_per_row):
+    for row_start in range(0, len(facet_items), cols_per_row):
         row_cols = st.columns(cols_per_row)
 
-        for idx, (facet_var, pretty_name) in enumerate(items[row_start:row_start + cols_per_row]):
+        for idx, (facet_var, pretty_name) in enumerate(facet_items[row_start:row_start + cols_per_row]):
             with row_cols[idx]:
                 st.subheader(f"Faceted by {pretty_name}")
-
                 settings = facet_config[facet_var]
 
+                # Step 1: Build facet label column
                 if "map_func" in settings:
                     buckets = settings["map_func"](df)
                     df["facet_label"] = buckets
@@ -64,23 +65,25 @@ if st.button("Generate Plots"):
                         st.stop()
                     df["facet_label"] = df[facet_var].map(facet_map_dict)
 
-                valid_facet_values = settings.get("valid_values_plot", settings.get("valid_values", []))
-
-                # Get user's selected value for this facet
+                # Step 2: Get user-selected facet label (match UI input to plotted label)
+                user_val = user_inputs[facet_var]
                 if facet_var == "age_election_day":
-                    tiny = pd.DataFrame({facet_var: [user_inputs[facet_var]]})
-                    user_label = build_age_facet_map(tiny).iat[0]
-                    valid_facet_values = [user_label]
+                    user_label = build_age_facet_map(pd.DataFrame({facet_var: [user_val]})).iat[0]
+                elif "map_plot" in settings:
+                    reverse_map = {v: k for k, v in settings["map"].items()}
+                    key = reverse_map.get(user_val)
+                    user_label = settings["map_plot"].get(key)
                 else:
-                    valid_facet_values = [user_inputs[facet_var]]
+                    user_label = user_val
 
+                valid_facet_values = [user_label]
+
+                # Step 3: Generate plot
                 fig = densityGraphFaceted(
                     df,
                     thermometer_question,
                     list_of_groups,
                     group,
-                    facet_var=facet_var,
-                    facet_map=facet_map_dict,
                     valid_facet_values=valid_facet_values,
                     title=None,
                     user_rating=user_rating

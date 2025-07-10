@@ -56,8 +56,6 @@ density_graph = densityGraphFaceted(
     list_of_groups,
     group,
     title=description_map.get(thermometer_question),
-    facet_var=facet_var,
-    facet_map=facet_map,
     valid_facet_values=valid_facet_values
 )
 

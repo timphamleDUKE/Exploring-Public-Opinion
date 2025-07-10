@@ -62,19 +62,13 @@ def densityGraph(df, question, groups, group, title=None, yaxis_range=None):
 
     return fig
 
-def densityGraphFaceted(df, question, groups, group, facet_var, facet_map, valid_facet_values=None, title=None, user_rating=None):
+def densityGraphFaceted(df, question, groups, group, valid_facet_values=None, title=None, user_rating=None):
 
-    # 1) facet‐map and filter
-    df["facet_label"] = df[facet_var].map(facet_map)
-    df = df[df["facet_label"].notna()]
-    if valid_facet_values:
-        df = df[df["facet_label"].isin(valid_facet_values)]
-
-    # 2) group map and filter
+    # Group map and filter
     df, colors, fill_colors = map_group_info(df, group)
     df = df[df["party"].isin(groups) & df[question].between(0, 100)]
 
-    # 3) get valid facet values that exist in filtered data
+    # Get valid facet values that exist in filtered data
     facet_values = [v for v in (valid_facet_values or []) if v in df["facet_label"].unique()]
     n = len(facet_values)
 
@@ -83,7 +77,7 @@ def densityGraphFaceted(df, question, groups, group, facet_var, facet_map, valid
         st.warning("No data available for the selected facet values.")
         return go.Figure()
 
-    # 4) layout
+    # Layout
     rows = 1 if n <= 3 else 2
     cols = max(1, n) if rows == 1 else max(1, math.ceil(n / 2))
 
@@ -94,7 +88,6 @@ def densityGraphFaceted(df, question, groups, group, facet_var, facet_map, valid
         vertical_spacing=0.25 if rows > 1 else 0.05
     )
 
-    # 5) draw density traces
     max_y = [0] * n
     for i, val in enumerate(facet_values):
         row = (i // cols) + 1
@@ -129,24 +122,23 @@ def densityGraphFaceted(df, question, groups, group, facet_var, facet_map, valid
             )
             max_y[i] = max(max_y[i], max(data["y_values"]))
 
-    # 6) add user-rating line
-    if user_rating is not None:
-        for i in range(n):
-            row = (i // cols) + 1
-            col = (i % cols) + 1
-            fig.add_trace(
-                go.Scatter(
-                    x=[user_rating, user_rating],
-                    y=[0, max_y[i]],
-                    mode="lines",
-                    line=dict(color="black", dash="dash"),
-                    showlegend=False,
-                    hoverinfo="skip"
-                ),
-                row=row, col=col
-            )
+    # User-rating line
+    for i in range(n):
+        row = (i // cols) + 1
+        col = (i % cols) + 1
+        fig.add_trace(
+            go.Scatter(
+                x=[user_rating, user_rating],
+                y=[0, max_y[i]],
+                mode="lines",
+                line=dict(color="black", dash="dash"),
+                showlegend=False,
+                hoverinfo="skip"
+            ),
+            row=row, col=col
+        )
 
-    # 7) layout and labels
+    # 6) layout and labels
     fig.update_layout(
         title=dict(text=title or "", font=dict(size=24)),
         template="simple_white",
