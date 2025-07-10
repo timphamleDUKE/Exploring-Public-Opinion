@@ -8,7 +8,7 @@ from functions.sidebar_density import ideological_check, political_check, list_o
 set_logo()
 st.title("User Input Test")
 
-# === Sidebar Selection ===
+# Sidebar
 with st.sidebar:
     st.title("Please Select:")
     topic = st.selectbox("Topic", list_of_thermometer_topics)
@@ -19,10 +19,9 @@ with st.sidebar:
     checks = ideological_check() if group == "Ideological Groups" else political_check()
     list_of_groups = list_of_groups_check(group, checks)
 
-# === User Inputs ===
+# User inputs
 st.header("Your information")
 
-# Dynamically build user input fields from facet_config keys
 user_inputs = {}
 for key in ["age_election_day", "educ", "gender", "income", "marriage", "race_ethnicity", "religion"]:
     label = facet_display_map.get(key, key.replace("_", " ").title())
@@ -37,7 +36,7 @@ user_rating = st.number_input(
     min_value=0, max_value=100, value=50, step=1
 )
 
-# === Generate Plots ===
+# Plots
 if st.button("Generate Plots"):
     st.divider()
     st.header(description_map.get(thermometer_question))
@@ -53,7 +52,7 @@ if st.button("Generate Plots"):
                 st.subheader(f"Faceted by {pretty_name}")
                 settings = facet_config[facet_var]
 
-                # Step 1: Build facet label column
+                # Build facet label column
                 if "map_func" in settings:
                     buckets = settings["map_func"](df)
                     df["facet_label"] = buckets
@@ -65,7 +64,7 @@ if st.button("Generate Plots"):
                         st.stop()
                     df["facet_label"] = df[facet_var].map(facet_map_dict)
 
-                # Step 2: Get user-selected facet label (match UI input to plotted label)
+                # Get user-selected facet label
                 user_val = user_inputs[facet_var]
                 if facet_var == "age_election_day":
                     user_label = build_age_facet_map(pd.DataFrame({facet_var: [user_val]})).iat[0]
@@ -78,7 +77,7 @@ if st.button("Generate Plots"):
 
                 valid_facet_values = [user_label]
 
-                # Step 3: Generate plot
+                # Generate plot
                 fig = densityGraphFaceted(
                     df,
                     thermometer_question,
