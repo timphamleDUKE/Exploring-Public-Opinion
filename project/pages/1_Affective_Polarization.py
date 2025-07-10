@@ -11,35 +11,9 @@ load_save_list_css()
 
 st.title("Affective Polarization")
 
-# Sidebar
-with st.sidebar:
-    st.title("Please Select:")
-
-    topic = st.selectbox("Topic", list_of_thermometer_topics, index=0)
-    list_of_thermometer = topic_to_list_of_thermometer_map.get(topic)
-
-    dropdown_question = st.selectbox("Thermometer Question", list_of_thermometer, index=0)
-    thermometer_question = dropdown_to_renamed.get(dropdown_question)
-
-    group = st.radio("Groups", ["Ideological Groups", "Political Groups"])
-
-    st.markdown(
-        '<div style="font-size: 0.875rem; font-weight: 400; margin-bottom: 0.5rem;">Options</div>',
-        unsafe_allow_html=True
-    )
-
-    if group == "Ideological Groups":
-        checks = ideological_check()
-    else:
-        checks = political_check()
-    
-    list_of_groups = list_of_groups_check(group, checks)
-
-    # Saved List Button
-    show_saved = show_saved_button("density", thermometer_question, list_of_groups)
-
 # Tabs
-tab1, tab2, tab3 = st.tabs(["Parties", "Ideologies", "Candidates"])
+
+tab1, tab2 = st.tabs(["Featured", "Explore"])
 
 with tab1:
     st.subheader("Thermometer Ratings: Democratics & Republicans")
@@ -66,8 +40,9 @@ with tab1:
         )
 
         st.plotly_chart(republican_graph, use_container_width=True, key="rep_chart")
+    
+    st.divider()
 
-with tab2:
     st.subheader("Thermometer Ratings: Liberals & Conservatives")
     col1, col2 = st.columns(2)
     with col1:
@@ -93,7 +68,8 @@ with tab2:
 
         st.plotly_chart(conservative_graph, use_container_width=True, key="cons_chart")
 
-with tab3:
+    st.divider()
+
     st.subheader("Thermometer Ratings: Presidential Candidates")
     col1, col2 = st.columns(2)
     with col1:
@@ -143,27 +119,54 @@ with tab3:
         st.plotly_chart(trump_graph_post, use_container_width=True, key="trump_chart_post")
 
 # Display Plot
-st.divider()
-col1, col2 = st.columns(2)
-col1.header("Thermometer Questions")
+with tab2:
+    with st.sidebar:
+        st.title("Please Select:")
 
-with col2:
-    star_button("density", df, thermometer_question, list_of_groups, group)
+        topic = st.selectbox("Topic", list_of_thermometer_topics, index=0)
+        list_of_thermometer = topic_to_list_of_thermometer_map.get(topic)
 
-density_graph = densityGraph(
-    df,
-    thermometer_question,
-    list_of_groups,
-    group,
-    title=description_map.get(thermometer_question)
-)
+        dropdown_question = st.selectbox("Thermometer Question", list_of_thermometer, index=0)
+        thermometer_question = dropdown_to_renamed.get(dropdown_question)
 
-st.plotly_chart(density_graph, use_container_width=True)
+        group = st.radio("Groups", ["Ideological Groups", "Political Groups"])
 
-# Expander
-expander(df, thermometer_question, "affective")
+        st.markdown(
+            '<div style="font-size: 0.875rem; font-weight: 400; margin-bottom: 0.5rem;">Options</div>',
+            unsafe_allow_html=True
+        )
+
+        if group == "Ideological Groups":
+            checks = ideological_check()
+        else:
+            checks = political_check()
+        
+        list_of_groups = list_of_groups_check(group, checks)
+
+        # Saved List Button
+        show_saved = show_saved_button("density", thermometer_question, list_of_groups)
+
+    col1, col2 = st.columns(2)
+    col1.header("Thermometer Questions")
+
+    with col2:
+        star_button("density", df, thermometer_question, list_of_groups, group)
+
+    density_graph = densityGraph(
+        df,
+        thermometer_question,
+        list_of_groups,
+        group,
+        title=description_map.get(thermometer_question)
+    )
+
+    st.plotly_chart(density_graph, use_container_width=True)
+
+    # Expander
+    expander(df, thermometer_question, "affective")
 
 # Caption
+st.divider()
 st.caption(
     "This graph uses survey weights to represent population-level transitions between party self-placement "
     "and responses. However, it does not calculate standard errors using Taylor series linearization as "

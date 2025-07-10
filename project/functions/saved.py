@@ -125,7 +125,6 @@ def load_star_css(b64):
             display: flex;
             justify-content: flex-end !important;
             align-items: center !important;
-            padding-top: 1rem;
         }}
         
         /* Target button regardless of wrapper structure */
