@@ -43,15 +43,11 @@ if facet_settings:
     if "map_func" in facet_settings:
         df["facet_label"] = facet_settings["map_func"](df)
         facet_map = dict(zip(df[facet_var], df["facet_label"]))
+        valid_facet_values = facet_settings["valid_values"]
     else:
-        facet_map = facet_settings["map"]
+        facet_map = facet_settings.get("map_plot", facet_settings["map"])
+        valid_facet_values = facet_settings.get("valid_values_plot", facet_settings["valid_values"])
         df["facet_label"] = df[facet_var].map(facet_map)
-
-    valid_facet_values = facet_settings["valid_values"]
-else:
-    st.error(f"Facet configuration for '{facet_var}' not found.")
-    st.stop()
-
 
 
 density_graph = densityGraphFaceted(

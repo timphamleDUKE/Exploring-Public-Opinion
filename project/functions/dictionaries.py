@@ -270,6 +270,19 @@ gender_facet_map = {
 }
 gender_valid_facet_values = ["Man", "Woman", "Other"]
 
+race_ethnicity_facet_map_plot = {
+    -9: None,
+    -8: None,
+    -4: None,
+    1: "White, non-Hispanic",
+    2: "Black, non-Hispanic",
+    3: "Hispanic",
+    4: "Asian or Native Hawaiian/other Pacific Islander, <br> non-Hispanic",
+    5: "Native American/Alaska Native or other race, <br> non-Hispanic",
+    6: "Multiple races, non-Hispanic"
+}
+race_ethnicity_valid_facet_values_plot = ["White, non-Hispanic", "Black, non-Hispanic", "Hispanic", "Asian or Native Hawaiian/other Pacific Islander, <br> non-Hispanic", "Native American/Alaska Native or other race, <br> non-Hispanic", "Multiple races, non-Hispanic"]
+
 race_ethnicity_facet_map = {
     -9: None,
     -8: None,
@@ -277,11 +290,11 @@ race_ethnicity_facet_map = {
     1: "White, non-Hispanic",
     2: "Black, non-Hispanic",
     3: "Hispanic",
-    4: "Other/Multiple races, non-Hispanic",
-    5: "Other/Multiple races, non-Hispanic",
-    6: "Other/Multiple races, non-Hispanic"
+    4: "Asian or Native Hawaiian/other Pacific Islander, non-Hispanic",
+    5: "Native American/Alaska Native or other race, non-Hispanic",
+    6: "Multiple races, non-Hispanic"
 }
-race_ethnicity_valid_facet_values = ["White, non-Hispanic", "Black, non-Hispanic", "Hispanic", "Other/Multiple races, non-Hispanic"]
+race_ethnicity_valid_facet_values = ["White, non-Hispanic", "Black, non-Hispanic", "Hispanic", "Asian or Native Hawaiian/other Pacific Islander, non-Hispanic", "Native American/Alaska Native or other race, non-Hispanic", "Multiple races, non-Hispanic"]
 
 # Facet configuration map
 facet_config = {
@@ -311,7 +324,9 @@ facet_config = {
     },
     "race_ethnicity": {
         "map": race_ethnicity_facet_map,
-        "valid_values": race_ethnicity_valid_facet_values
+        "valid_values": race_ethnicity_valid_facet_values,
+        "map_plot": race_ethnicity_facet_map_plot,
+        "valid_values_plot": race_ethnicity_valid_facet_values_plot,
     }
 }
 
