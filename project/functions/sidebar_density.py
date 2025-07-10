@@ -9,8 +9,8 @@ def ideological_check():
     return liberal_check, conservative_check, moderate_check, other_check
 
 def political_check():
-    democratic_check = st.checkbox("Democrats", value = True)
-    republican_check = st.checkbox("Republicans", value = True)
+    democratic_check = st.checkbox("Democrat", value = True)
+    republican_check = st.checkbox("Republican", value = True)
     other_check = st.checkbox("Independent", value = False)
     na_check = st.checkbox("N/A", value = False)
     return democratic_check, republican_check, other_check, na_check
@@ -32,9 +32,9 @@ def list_of_groups_check(group, checks):
     elif group == "Political Groups":
         democratic, republican, other, na = checks
         if democratic:
-            list_of_groups.append("Democrats")
+            list_of_groups.append("Democrat")
         if republican:
-            list_of_groups.append("Republicans")
+            list_of_groups.append("Republican")
         if other:
             list_of_groups.append("Independent")
         if na:
