@@ -64,7 +64,7 @@ col1, col2 = st.columns(2)
 col1.header("Issue Position Questions")
 
 with col2:
-    star_button("sankey", df, issue_question, list_of_groups, group, title=title, viz_type=viz_type)
+    star_button("star-btn-sankey", "sankey", df, issue_question, list_of_groups, group, title=title, viz_type=viz_type)
 
 # Create visualization based on type
 if viz_type == "Agree/Disagree Flow":

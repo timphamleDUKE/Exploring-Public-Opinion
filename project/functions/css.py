@@ -257,8 +257,8 @@ def load_save_list_css():
         width: 100% !important;
                 
     div[role="dialog"][aria-label="dialog"] {
-        width: 1100px !important;
-        max-width: 1100px !important;
+        width: 1500px !important;
+        max-width: 1500px !important;
     }
     </style>
     """, unsafe_allow_html=True)

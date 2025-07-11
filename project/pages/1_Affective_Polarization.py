@@ -17,7 +17,7 @@ st.title("Affective Polarization")
 tab1, tab2 = st.tabs(["Featured", "Explore"])
 
 with tab1:
-    st.subheader("Thermometer Ratings: Democratics & Republicans")
+    st.header("Thermometer Ratings: Democratics & Republicans")
     col1, col2 = st.columns(2)
     with col1:
         democratic_graph = densityGraph(
@@ -44,7 +44,7 @@ with tab1:
     
     st.divider()
 
-    st.subheader("Thermometer Ratings: Liberals & Conservatives")
+    st.header("Thermometer Ratings: Liberals & Conservatives")
     col1, col2 = st.columns(2)
     with col1:
         liberal_graph = densityGraph(
@@ -71,7 +71,7 @@ with tab1:
 
     st.divider()
 
-    st.subheader("Thermometer Ratings: Presidential Candidates")
+    st.header("Thermometer Ratings: Presidential Candidates")
     col1, col2 = st.columns(2)
     with col1:
         harris_graph_pre = densityGraph(
@@ -151,11 +151,11 @@ with tab2:
         # Saved List Button
         show_saved = show_saved_button("density", thermometer_question, list_of_groups)
 
-    col1, col2 = st.columns(2)
-    col1.header("Thermometer Questions")
+    densityCol1, densityCol2 = st.columns(2)
+    densityCol1.header("Thermometer Ratings")
 
-    with col2:
-        star_button("density", df, thermometer_question, list_of_groups, group)
+    with densityCol2:
+        star_button("star-btn-density", "density", df, thermometer_question, list_of_groups, group)
 
     density_graph = densityGraph(
         df,
@@ -168,7 +168,9 @@ with tab2:
     st.plotly_chart(density_graph, use_container_width=True)
 
     st.divider()
-    st.header("Faceted Visualizations")
+
+    facetCol1, facetCol2 = st.columns(2)
+    facetCol1.header("Faceted Thermometer Ratings")
 
     facet_settings = facet_config.get(facet_var)
 
@@ -182,6 +184,8 @@ with tab2:
             valid_facet_values = facet_settings.get("valid_values_plot", facet_settings["valid_values"])
             df["facet_label"] = df[facet_var].map(facet_map)
 
+    with facetCol2:
+        star_button("star-btn-facet","density", df, thermometer_question, list_of_groups, group, facet=facet_display, valid_facet_values=valid_facet_values)
 
     density_graph = densityGraphFaceted(
         df,
@@ -203,3 +207,5 @@ st.caption(
     "and responses. However, it does not calculate standard errors using Taylor series linearization as "
     "recommended by ANES for formal inference."
 )
+
+st.write(st.session_state)
