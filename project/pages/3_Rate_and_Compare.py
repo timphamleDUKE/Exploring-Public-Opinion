@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+import os
 from functions.dictionaries import *
 from functions.density import densityGraphFaceted
 from functions.sidebar_density import ideological_check, political_check, list_of_groups_check
@@ -7,7 +8,7 @@ from functions.facet import *
 
 # Setup
 set_logo()
-st.title("User Input Test")
+st.title("Rate and Compare")
 
 # Sidebar
 with st.sidebar:
@@ -17,8 +18,14 @@ with st.sidebar:
     thermometer_question = dropdown_to_renamed[thermometer_label]
 
     group = st.radio("Groups", ["Ideological Groups", "Political Groups"])
+    st.markdown(
+            '<div style="font-size: 0.875rem; font-weight: 400; margin-bottom: 0.5rem;">Options</div>',
+            unsafe_allow_html=True
+    )
     checks = ideological_check() if group == "Ideological Groups" else political_check()
     list_of_groups = list_of_groups_check(group, checks)
+
+
 
 # User inputs
 st.header("Your information")
