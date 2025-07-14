@@ -7,8 +7,8 @@ import streamlit as st
 
 # Load codebook once at module level
 
-def check_needs_ad_sankey(issue_question):
-    """Check if question needs A/D Sankey based on codebook"""
+def check_needs_binary_sankey(issue_question):
+    """Check if question needs Binary Sankey based on codebook"""
     question_row = codebook[codebook['Renamed'] == issue_question]
     if question_row.empty or 'A/D Sankey' not in question_row.columns:
         return False
@@ -20,12 +20,12 @@ def check_needs_ad_sankey(issue_question):
     return bool(val)
 
 
-def create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, group_type, title=""):
+def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups, group_type, title=""):
     """
-    Build a 3-layer "agree/disagree" flow Sankey using HoloViews.
+    Build a 3-layer "binary flow" Sankey using HoloViews.
     Only creates the plot if the codebook indicates this question should have an A/D Sankey.
     """
-    if not check_needs_ad_sankey(issue_question):
+    if not check_needs_binary_sankey(issue_question):
         return None
 
     # Map respondents into three groups
@@ -116,6 +116,10 @@ def create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, g
 
     flows_df = pd.DataFrame(flows, columns=['Source', 'Target', 'Value', 'Color', 'Group'])
     
+    # Filter flows to exclude unwanted target nodes
+    excluded_responses = ['neither favor nor oppose', 'about the same amount']
+    flows_df = flows_df[~flows_df['Target'].str.lower().isin([ex.lower() for ex in excluded_responses])]
+    
     # Create ordered node lists for proper positioning
     # Define the order for each layer
     group_nodes = list_of_groups  # First layer: group labels
@@ -145,10 +149,13 @@ def create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, g
         cleaned_response = re.sub(r'\d+', '', cleaned_response).strip()
         processed_target_order.append(cleaned_response)
     
+    # Filter out unwanted specific response nodes
+    excluded_responses = ['neither favor nor oppose', 'about the same amount']
     specific_response_nodes = [resp for resp in processed_target_order
                               if resp in set(flows_df['Target']) 
                               and resp not in group_nodes 
-                              and resp not in general_position_nodes]
+                              and resp not in general_position_nodes
+                              and resp.lower() not in [ex.lower() for ex in excluded_responses]]
     
     # Create the complete ordered node list
     all_nodes = group_nodes + general_position_nodes + specific_response_nodes
@@ -211,4 +218,4 @@ def create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, g
         print(f"Error creating Sankey: {e}")
         return None
 
-# End of agree/disagree sankey module
+# End of binary flow sankey module

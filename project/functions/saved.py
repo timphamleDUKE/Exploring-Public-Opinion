@@ -1,7 +1,7 @@
 import streamlit as st
 from functions.density import densityGraph, densityGraphFaceted
 from functions.dictionaries import description_map
-from functions.ad_sankey import create_agree_disagree_sankey_holoviews, check_needs_ad_sankey
+from functions.ad_sankey import create_binary_flow_sankey_holoviews, check_needs_binary_sankey
 from functions.sankey import sankeyGraph
 import holoviews as hv
 from streamlit_bokeh import streamlit_bokeh
@@ -84,8 +84,8 @@ def add_saved_list(btn_key, page, df, question, list_of_groups, group, title, vi
             viz_label = f"Faceted by {facet}"
 
     elif page == "sankey":
-        if viz_type == "Agree/Disagree Flow":
-            graph_object = create_agree_disagree_sankey_holoviews(df, question, list_of_groups, group, title=title)
+        if viz_type == "Binary Flow":
+            graph_object = create_binary_flow_sankey_holoviews(df, question, list_of_groups, group, title=title)
             bokeh_plot = hv.render(graph_object)
             graph_object = bokeh_plot
         else:
