@@ -73,15 +73,15 @@ topic_to_list_of_issue_map = (
 political_colors = {
     "Democrat": "blue",
     "Republican": "red",
-    "Independent": "rgb(141, 142, 147)",
-    "N/A": "green"
+    "Independent": "green",
+    "N/A": "rgb(141, 142, 147)"
 }
 
 political_fill_colors = {
     "Democrat": "rgba(0, 0, 255, 0.3)",     # Blue
     "Republican": "rgba(255, 0, 0, 0.3)",     # Red
-    "Independent": "rgba(141, 142, 147, 0.3)",  # grey
-    "N/A": "rgba(0, 128, 0, 0.3)" # green
+    "Independent": "rgba(0, 128, 0, 0.3)",  # Green
+    "N/A": "rgba(141, 142, 147, 0.3)"
 }
 
 ideological_colors = {
@@ -94,8 +94,8 @@ ideological_colors = {
 ideological_fill_colors = {
     "Liberal": "rgba(0, 0, 255, 0.3)",     # Blue
     "Conservative": "rgba(255, 0, 0, 0.3)",     # Red
-    "Moderate": "rgba(141, 142, 147, 0.3)",  # Grey
-    "Other": "rgba(0, 128, 0, 0.3)" # Green
+    "Moderate": "rgba(141, 142, 147, 0.3)",  # Green
+    "Other": "rgba(0, 128, 0, 0.3)"
 }
 
 target_label_map = {
