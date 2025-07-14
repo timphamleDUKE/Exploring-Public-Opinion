@@ -34,7 +34,7 @@ def create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, g
         df_valid['group_label'] = df_valid['lib_con_7pt'].map(lambda x: 'Liberal' if x <= 3 else 'Conservative' if x >= 5 else 'Moderate')
     else:
         df_valid = df[(df[issue_question] >= 1) & (df['poli_party_self_7pt'] >= 1)].copy()
-        df_valid['group_label'] = df_valid['poli_party_self_7pt'].map(lambda x: 'Democratic Party' if x <= 3 else 'Republican Party' if x >= 5 else 'Independent')
+        df_valid['group_label'] = df_valid['poli_party_self_7pt'].map(lambda x: 'Democrat' if x <= 3 else 'Republican' if x >= 5 else 'Independent')
 
     if df_valid.empty:
         return None
@@ -164,9 +164,9 @@ def create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, g
     # Sort flows to ensure red-on-top, blue-on-bottom ordering
     # Define priority: Conservative/Republican = 0 (top), Liberal/Democratic = 1 (bottom)
     def get_group_priority(group):
-        if group in ['Conservative', 'Republican Party']:
+        if group in ['Conservative', 'Republican']:
             return 0  # Top
-        elif group in ['Liberal', 'Democratic Party']:
+        elif group in ['Liberal', 'Democratic']:
             return 1  # Bottom
         else:
             return 0.5  # Middle
