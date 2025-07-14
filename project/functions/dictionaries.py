@@ -1,15 +1,18 @@
 import pandas as pd
 import streamlit as st
+import os
 
 # Setting logo
 def set_logo():
-    logo = "images/logos/polarization-logo.PNG"
+
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    logo_path = os.path.join(script_dir, '..', 'images', 'logos', 'polarization-logo.png')
 
     st.set_page_config(layout="wide")
 
     st.logo(
-        image=logo,
-        icon_image=logo,
+        image=logo_path,
+        icon_image=logo_path,
         link = "https://www.polarizationlab.com/",
         size = "large"
     )
@@ -30,8 +33,13 @@ def set_logo():
 
 
 # Dataframe
-df = pd.read_csv("../data/anes_2024_clean.csv")
-codebook = pd.read_csv("../data/codebook.csv")
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
+df_path = os.path.join(script_dir, '..', '..', 'data', 'anes_2024_clean.csv')
+df = pd.read_csv(df_path)
+
+codebook_path = os.path.join(script_dir, '..', '..', 'data', 'codebook.csv')
+codebook = pd.read_csv(codebook_path)
 
 
 # List of thermometer questions
@@ -63,15 +71,15 @@ topic_to_list_of_issue_map = (
 
 # List of colors based on group by
 political_colors = {
-    "Democratic Party": "blue",
-    "Republican Party": "red",
+    "Democrat": "blue",
+    "Republican": "red",
     "Independent": "green",
     "N/A": "rgb(141, 142, 147)"
 }
 
 political_fill_colors = {
-    "Democratic Party": "rgba(0, 0, 255, 0.3)",     # Blue
-    "Republican Party": "rgba(255, 0, 0, 0.3)",     # Red
+    "Democrat": "rgba(0, 0, 255, 0.3)",     # Blue
+    "Republican": "rgba(255, 0, 0, 0.3)",     # Red
     "Independent": "rgba(0, 128, 0, 0.3)",  # Green
     "N/A": "rgba(141, 142, 147, 0.3)"
 }
@@ -116,9 +124,9 @@ def map_group_info(df, group):
 
     elif group == "Political Groups":
         df["party"] = df["poli_party_self_7pt"].map({
-            1: "Democratic Party", 2: "Democratic Party",
+            1: "Democrat", 2: "Democrat",
             3: "Independent", 4: "Independent", 5: "Independent",
-            6: "Republican Party", 7: "Republican Party",
+            6: "Republican", 7: "Republican",
             -9: "N/A", -4: "N/A", -1: "N/A"
         }).fillna("N/A")
         colors = political_colors
@@ -177,143 +185,25 @@ def find_answer_choices(question):
                 continue  # Skip if the key isn't an int
     return answer_map
 
-
-# Demographics Mapping
-demographics_codebook = codebook[(codebook["Category"] == "Social Characteristics")]
-list_of_demographics = demographics_codebook["Renamed"].dropna().unique().tolist()
-
-def build_age_facet_map(df):
-    def map_age_to_group(age):
-        if pd.isna(age):
-            return None
-        elif age < 30:
-            return "18-29"
-        elif age < 45:
-            return "30-44"
-        elif age < 60:
-            return "45-59"
+def wrap_title(title, max_length=85):
+    if len(title) <= max_length:
+        return title
+    
+    words = title.split()
+    lines = []
+    current_line = []
+    current_length = 0
+    
+    for word in words:
+        if current_length + len(word) + 1 <= max_length:
+            current_line.append(word)
+            current_length += len(word) + 1
         else:
-            return "60+"
-
-    return df["age_election_day"].apply(map_age_to_group)
-age_valid_facet_values = ["18-29", "30-44", "45-59", "60+"]
-
-educ_facet_map = {
-    -9: None,
-    -8: None,
-    -4: None,
-    -2: None,
-    1: "Non-college",
-    2: "Non-college",
-    3: "Non-college",
-    4: "College grad+",
-    5: "College grad+"
-}
-educ_valid_facet_values = ["Non-college", "College grad+"]
-
-marriage_facet_map = {
-    -2: None,
-    1: "Married",
-    2: "Widowed", 
-    3: "Divorced", 
-    4: "Separated", 
-    5: "Never Married"
-}
-marriage_valid_facet_values = ["Married", "Widowed", "Divorced", "Separated", "Never Married"]
-
-income_facet_map = {
-    -9: None, 
-    -5: None,
-    -4: None,
-    1: "Under $9,999",
-    2: "$10,000 to $29,999",
-    3: "$30,000 to $59,999",
-    4: "$60,000 to $99,999",
-    5: "$100,000 to $249,999",
-    6: "$250,000 or more"
-}
-income_valid_facet_values = ["Under $9,999", "$10,000 to $29,999", "$30,000 to $59,999", "$60,000 to $99,999", "$100,000 to $249,999", "$250,000 or more"]
-
-religion_facet_map = {
-    -9: None,
-    -8: None,
-    -1: None,
-    1: "Religious",
-    2: "Religious",
-    3: "Religious",
-    4: "Religious",
-    5: "Religious",
-    6: "Religious",
-    7: "Religious",
-    8: "Religious",
-    9: "Non-Religious",
-    10: "Non-Religious",
-    11: "Religious",
-    12: "Non-Religious"
-}
-religion_valid_facet_values = ["Religious", "Non-Religious"]
-
-gender_facet_map = {
-    -9: None,
-    -1: None,
-    1: "Man",
-    2: "Woman",
-    3: "Other",
-    4: "Other"
-}
-gender_valid_facet_values = ["Man", "Woman", "Other"]
-
-race_ethnicity_facet_map = {
-    -9: None,
-    -8: None,
-    -4: None,
-    1: "White, non-Hispanic",
-    2: "Black, non-Hispanic",
-    3: "Hispanic",
-    4: "Other/Multiple races, non-Hispanic",
-    5: "Other/Multiple races, non-Hispanic",
-    6: "Other/Multiple races, non-Hispanic"
-}
-race_ethnicity_valid_facet_values = ["White, non-Hispanic", "Black, non-Hispanic", "Hispanic", "Other/Multiple races, non-Hispanic"]
-
-# Facet configuration map
-facet_config = {
-    "age_election_day": {
-        "map_func": build_age_facet_map,
-        "valid_values": age_valid_facet_values
-    },
-    "educ": {
-        "map": educ_facet_map,
-        "valid_values": educ_valid_facet_values
-    },
-    "marriage": {
-        "map": marriage_facet_map,
-        "valid_values": marriage_valid_facet_values
-    },
-    "income": {
-        "map": income_facet_map,
-        "valid_values": income_valid_facet_values
-    },
-    "religion": {
-        "map": religion_facet_map,
-        "valid_values": religion_valid_facet_values
-    },
-    "gender": {
-        "map": gender_facet_map,
-        "valid_values": gender_valid_facet_values
-    },
-    "race_ethnicity": {
-        "map": race_ethnicity_facet_map,
-        "valid_values": race_ethnicity_valid_facet_values
-    }
-}
-
-facet_display_map = {
-    "age_election_day": "Age",
-    "educ": "Education",
-    "marriage": "Marital Status",
-    "income": "Income",
-    "religion": "Religion",
-    "gender": "Gender",
-    "race_ethnicity": "Race/Ethnicity"
-}
+            lines.append(' '.join(current_line))
+            current_line = [word]
+            current_length = len(word)
+    
+    if current_line:
+        lines.append(' '.join(current_line))
+    
+    return '\n'.join(lines)

@@ -1,7 +1,7 @@
 import streamlit as st
 import holoviews as hv
 from streamlit_bokeh import streamlit_bokeh
-from functions.dictionaries import set_logo, description_map, list_of_issue_topics, topic_to_list_of_issue_map, description_to_renamed, df
+from functions.dictionaries import set_logo, description_map, list_of_issue_topics, topic_to_list_of_issue_map, description_to_renamed, df, wrap_title
 from functions.sankey import sankeyGraph
 from functions.sidebar_sankey import political_check, ideological_check, list_of_groups_check
 from functions.expander import expander
@@ -57,29 +57,6 @@ list_of_groups = list_of_groups_check(group, checks)
 
 show_saved = show_saved_button("sankey", issue_question, list_of_groups, viz_type=viz_type)
 
-def wrap_title(title, max_length=85):
-    if len(title) <= max_length:
-        return title
-    
-    words = title.split()
-    lines = []
-    current_line = []
-    current_length = 0
-    
-    for word in words:
-        if current_length + len(word) + 1 <= max_length:
-            current_line.append(word)
-            current_length += len(word) + 1
-        else:
-            lines.append(' '.join(current_line))
-            current_line = [word]
-            current_length = len(word)
-    
-    if current_line:
-        lines.append(' '.join(current_line))
-    
-    return '\n'.join(lines)
-
 title = wrap_title(description_map.get(issue_question))
 
 st.divider()
@@ -87,7 +64,7 @@ col1, col2 = st.columns(2)
 col1.header("Issue Position Questions")
 
 with col2:
-    star_button("sankey", df, issue_question, list_of_groups, group, title=title, viz_type=viz_type)
+    star_button("star-btn-sankey", "sankey", df, issue_question, list_of_groups, group, title=title, viz_type=viz_type)
 
 # Create visualization based on type
 if viz_type == "Agree/Disagree Flow":
