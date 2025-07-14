@@ -34,7 +34,7 @@ def create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, g
         df_valid['group_label'] = df_valid['lib_con_7pt'].map(lambda x: 'Liberal' if x <= 3 else 'Conservative' if x >= 5 else 'Moderate')
     else:
         df_valid = df[(df[issue_question] >= 1) & (df['poli_party_self_7pt'] >= 1)].copy()
-        df_valid['group_label'] = df_valid['poli_party_self_7pt'].map(lambda x: 'Democrat' if x <= 3 else 'Republican' if x >= 5 else 'Independent')
+        df_valid['group_label'] = df_valid['poli_party_self_7pt'].map(lambda x: 'Democratic Party' if x <= 3 else 'Republican Party' if x >= 5 else 'Independent')
 
     if df_valid.empty:
         return None
@@ -116,10 +116,6 @@ def create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, g
 
     flows_df = pd.DataFrame(flows, columns=['Source', 'Target', 'Value', 'Color', 'Group'])
     
-    # Filter flows to exclude unwanted target nodes
-    excluded_responses = ['neither favor nor oppose', 'about the same amount']
-    flows_df = flows_df[~flows_df['Target'].str.lower().isin([ex.lower() for ex in excluded_responses])]
-    
     # Create ordered node lists for proper positioning
     # Define the order for each layer
     group_nodes = list_of_groups  # First layer: group labels
@@ -149,13 +145,10 @@ def create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, g
         cleaned_response = re.sub(r'\d+', '', cleaned_response).strip()
         processed_target_order.append(cleaned_response)
     
-    # Filter out unwanted specific response nodes
-    excluded_responses = ['neither favor nor oppose', 'about the same amount']
     specific_response_nodes = [resp for resp in processed_target_order
                               if resp in set(flows_df['Target']) 
                               and resp not in group_nodes 
-                              and resp not in general_position_nodes
-                              and resp.lower() not in [ex.lower() for ex in excluded_responses]]
+                              and resp not in general_position_nodes]
     
     # Create the complete ordered node list
     all_nodes = group_nodes + general_position_nodes + specific_response_nodes
@@ -171,9 +164,9 @@ def create_agree_disagree_sankey_holoviews(df, issue_question, list_of_groups, g
     # Sort flows to ensure red-on-top, blue-on-bottom ordering
     # Define priority: Conservative/Republican = 0 (top), Liberal/Democratic = 1 (bottom)
     def get_group_priority(group):
-        if group in ['Conservative', 'Republican']:
+        if group in ['Conservative', 'Republican Party']:
             return 0  # Top
-        elif group in ['Liberal', 'Democrat']:
+        elif group in ['Liberal', 'Democratic Party']:
             return 1  # Bottom
         else:
             return 0.5  # Middle
