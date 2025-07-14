@@ -1,14 +1,14 @@
 import pandas as pd
 import holoviews as hv
 from holoviews import opts, dim
-from functions.dictionaries import find_answer_choices, ideological_fill_colors, political_fill_colors, codebook
+from functions.dictionaries import find_answer_choices, ideological_fill_colors, political_fill_colors, codebook, find_weight_col
+from functions.weights import SurveyDesign
 import os
 import streamlit as st
 
 # Load codebook once at module level
 
 def check_needs_binary_sankey(issue_question):
-    """Check if question needs Binary Sankey based on codebook"""
     question_row = codebook[codebook['Renamed'] == issue_question]
     if question_row.empty or 'A/D Sankey' not in question_row.columns:
         return False
@@ -21,24 +21,63 @@ def check_needs_binary_sankey(issue_question):
 
 
 def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups, group_type, title=""):
-    """
-    Build a 3-layer "binary flow" Sankey using HoloViews.
-    Only creates the plot if the codebook indicates this question should have an A/D Sankey.
-    """
     if not check_needs_binary_sankey(issue_question):
         return None
 
-    # Map respondents into three groups
+    weight_col = find_weight_col(issue_question)
+    design = SurveyDesign(df, weight=weight_col, strata="full_var_stratum", psu="full_var_psu")
+    df = design.df
+
+    # Apply the SAME filtering logic as sankey.py
     if group_type == "Ideological Groups":
-        df_valid = df[(df[issue_question] >= 1) & (df['lib_con_7pt'] >= 1)].copy()
-        df_valid['group_label'] = df_valid['lib_con_7pt'].map(lambda x: 'Liberal' if x <= 3 else 'Conservative' if x >= 5 else 'Moderate')
+        source_col = "lib_con_7pt"
+        # Use the same valid_values filtering as sankey.py
+        from functions.sidebar_sankey import lib_con_map_7pt_reverse
+        valid_values = []
+        for group in list_of_groups:
+            for value in lib_con_map_7pt_reverse[group]:
+                valid_values.append(value)
+        
+        df_valid = df[
+            df[source_col].isin(valid_values) & 
+            df[issue_question].between(0, 7)  # Same range as sankey.py
+        ].copy()
+        
+        # Apply the same 7pt to 3pt mapping as sankey.py
+        df_valid[source_col] = df_valid[source_col].apply(lambda x: 1 if 1 <= x <= 3 else x)
+        df_valid[source_col] = df_valid[source_col].apply(lambda x: 2 if 5 <= x <= 7 else x)
+        df_valid[source_col] = df_valid[source_col].apply(lambda x: 3 if x == 4 else x)
+        
+        # Map to labels using the same logic
+        from functions.dictionaries import lib_con_map_3pt
+        df_valid['group_label'] = df_valid[source_col].map(lib_con_map_3pt)
+        
     else:
-        df_valid = df[(df[issue_question] >= 1) & (df['poli_party_self_7pt'] >= 1)].copy()
-        df_valid['group_label'] = df_valid['poli_party_self_7pt'].map(lambda x: 'Democratic Party' if x <= 3 else 'Republican Party' if x >= 5 else 'Independent')
+        source_col = "poli_party_self_7pt"
+        # Use the same valid_values filtering as sankey.py
+        from functions.sidebar_sankey import political_map_reverse
+        valid_values = []
+        for group in list_of_groups:
+            for value in political_map_reverse[group]:
+                valid_values.append(value)
+        
+        df_valid = df[
+            df[source_col].isin(valid_values) & 
+            df[issue_question].between(0, 7)  # Same range as sankey.py
+        ].copy()
+        
+        # Apply the same 7pt to 3pt mapping as sankey.py
+        df_valid[source_col] = df_valid[source_col].apply(lambda x: 1 if 1 <= x <= 3 else x)
+        df_valid[source_col] = df_valid[source_col].apply(lambda x: 2 if 5 <= x <= 7 else x)
+        df_valid[source_col] = df_valid[source_col].apply(lambda x: 3 if x == 4 else x)
+        
+        # Map to labels using the same logic
+        from functions.dictionaries import political_map_3pt
+        df_valid['group_label'] = df_valid[source_col].map(political_map_3pt)
 
     if df_valid.empty:
         return None
-
+    
     # Get mapping of answer choices and ordering
     try:
         answer_choice_map = find_answer_choices(issue_question)
@@ -97,24 +136,54 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups, grou
         .str.strip()
     )
 
-    df_valid = df_valid[df_valid['group_label'].isin(list_of_groups)]
+    # No need to filter by list_of_groups again since we already did it above
     if df_valid.empty:
         return None
 
     # Build flows between group_label -> general_position -> specific_response
+    # FIXED: Use weighted counts instead of .size()
     flows = []
-    # Layer 1: Group to General Position
-    for (grp, gen), cnt in df_valid.groupby(['group_label', 'general_position']).size().items():
-        color = (ideological_fill_colors if group_type.startswith('Ideological') else political_fill_colors).get(grp, '#ccc')
-        flows.append((grp, gen, cnt, color, grp))  # Add group info for sorting
     
-    # Layer 2: General Position to Specific Response 
-    # All general positions (Favor, Neither, Oppose) flow to their specific responses
-    for (grp, gen, spec), cnt in df_valid.groupby(['group_label', 'general_position', 'specific_response']).size().items():
+    # Layer 1: Group to General Position (using weighted counts)
+    layer1_flows = (
+        df_valid[[weight_col, 'group_label', 'general_position']]
+        .dropna()
+        .groupby(['group_label', 'general_position'], as_index=False)
+        .agg(count=(weight_col, "sum"))
+    )
+    
+    # Calculate total for percent calculation
+    total = layer1_flows['count'].sum()
+    
+    for _, row in layer1_flows.iterrows():
+        grp = row['group_label']
+        gen = row['general_position']
+        cnt = row['count']
+        percent = (cnt / total) * 100  # Calculate percent
         color = (ideological_fill_colors if group_type.startswith('Ideological') else political_fill_colors).get(grp, '#ccc')
-        flows.append((gen, spec, cnt, color, grp))  # Add group info for sorting
+        flows.append((grp, gen, cnt, percent, color, grp))  # Add percent to tuple
+    
+    # Layer 2: General Position to Specific Response (using weighted counts)
+    layer2_flows = (
+        df_valid[[weight_col, 'group_label', 'general_position', 'specific_response']]
+        .dropna()
+        .groupby(['group_label', 'general_position', 'specific_response'], as_index=False)
+        .agg(count=(weight_col, "sum"))
+    )
+    
+    # Calculate total for layer 2 (you might want to use the same total or calculate separately)
+    total_layer2 = layer2_flows['count'].sum()
+    
+    for _, row in layer2_flows.iterrows():
+        grp = row['group_label']
+        gen = row['general_position']
+        spec = row['specific_response']
+        cnt = row['count']
+        percent = (cnt / total_layer2) * 100  # Calculate percent
+        color = (ideological_fill_colors if group_type.startswith('Ideological') else political_fill_colors).get(grp, '#ccc')
+        flows.append((gen, spec, cnt, percent, color, grp))  # Add percent to tuple
 
-    flows_df = pd.DataFrame(flows, columns=['Source', 'Target', 'Value', 'Color', 'Group'])
+    flows_df = pd.DataFrame(flows, columns=['Source', 'Target', 'Value', 'Percent', 'Color', 'Group'])
     
     # Filter flows to exclude unwanted target nodes
     excluded_responses = ['neither favor nor oppose', 'about the same amount']
@@ -189,7 +258,7 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups, grou
 
     # Try to build and style the Sankey
     try:
-        sankey = hv.Sankey(flows_df, kdims=['Source', 'Target'], vdims=['Value', 'Color'])
+        sankey = hv.Sankey(flows_df, kdims=['Source', 'Target'], vdims=['Value', 'Percent', 'Color'])
         sankey = sankey.opts(
             opts.Sankey(
                 width=600,
@@ -210,12 +279,27 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups, grou
                 active_tools=[],
                 bgcolor='white',
                 show_values=False,
-                node_sort=False
+                node_sort=False,
+                title = title,
+                title_format="{label}",  # Use the label as title
+                fontsize={'title': '20pt'}  # Set title font size here
             )
         )
+
+        sankey = sankey.opts(
+        opts.Sankey(
+            hover_tooltips=[
+                ('Flow', '@Source → @Target'),
+                ('Weighted Count', '@Value{0,0}'),
+                ('Percent', '@Percent{0.00}%')
+            ]
+        )
+        )
+
         return sankey
     except Exception as e:
         print(f"Error creating Sankey: {e}")
         return None
+    
 
 # End of binary flow sankey module
