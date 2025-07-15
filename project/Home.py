@@ -24,32 +24,7 @@ def render_about_section():
     (how people feel about opposing parties) and issue positions (where Americans stand on key political topics).
     """)
 
-# Enhanced stats section
-def render_stats_section():
-    st.markdown("""
-    <div class="stats-container">
-        <div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
-            <div class="stat-item" title="Number of survey responses analyzed in this project">
-                <span class="stat-number">5,521</span>
-                <div class="stat-label">Responses Analyzed</div>
-            </div>
-            <div class="stat-item" title="Political topics and issues examined">
-                <span class="stat-number">21</span>
-                <div class="stat-label">Topics Explored</div>
-            </div>
-            <div class="stat-item" title="Project development timeline">
-                <span class="stat-number">3 Months</span>
-                <div class="stat-label">Project Duration</div>
-            </div>
-            <div class="stat-item" title="Team members who contributed to this analysis">
-                <span class="stat-number">4</span>
-                <div class="stat-label">Team Members</div>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-# Enhanced card configuration
+# Enhanced card configuration - Fixed to have 3 unique cards
 FEATURE_CARDS = [
     {
         "title": "Affective Polarization",
@@ -91,14 +66,35 @@ FEATURE_CARDS = [
         "button_text": "Analyze Issue Positions",
         "page": "pages/2_Issue_Position.py",
         "key": "ip_button"
+    },
+    {
+        "title": "Rate and Compare", 
+        "icon": """<svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" stroke="#764ba2" stroke-width="2" fill="none"/>
+                <path d="M9 12 L11 14 L15 10" stroke="#667eea" stroke-width="2" fill="none"/>
+                <path d="M6 8 L6 16 M18 8 L18 16" stroke="#764ba2" stroke-width="1.5" opacity="0.6"/>
+                <circle cx="6" cy="8" r="2" fill="#764ba2" opacity="0.3"/>
+                <circle cx="18" cy="16" r="2" fill="#667eea" opacity="0.3"/>
+               </svg>""",
+        "description": """
+        Compare your own political views and positions with those of the broader American 
+        public. Take our interactive survey and see how your opinions align with different 
+        demographic groups and political affiliations across the country.
+        """,
+        "button_text": "Compare Yourself to the US",
+        "page": "pages/3_Rate_and_Compare.py",
+        "key": "rc_button"
     }
 ]
 
 def render_feature_cards():
-    """Render feature cards with enhanced styling"""
+    """Render feature cards with enhanced styling - stacked layout"""
+    
+    # First row: Two cards side by side
     cols = st.columns(2, gap="large")
     
-    for idx, card in enumerate(FEATURE_CARDS):
+    for idx in range(2):  # Only first two cards
+        card = FEATURE_CARDS[idx]
         with cols[idx]:
             st.markdown(f"""
             <div class="feature-card">
@@ -114,6 +110,27 @@ def render_feature_cards():
                     import time
                     time.sleep(0.5)  # Brief pause for UX
                     st.switch_page(card['page'])
+    
+    # Add some spacing between rows
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Second row: Third card spanning full width
+    card = FEATURE_CARDS[2]
+    
+    st.markdown(f"""
+    <div class="feature-card">
+        <div style="margin-bottom: 1rem; text-align: center;">{card['icon']}</div>
+        <h3 class="card-title" style="text-align: center;">{card['title']}</h3>
+        <p class="card-description" style="text-align: center;">{card['description']}</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Button with navigation and loading state
+    if st.button(card['button_text'], key=card['key'], use_container_width=True):
+        with st.spinner(f'Loading {card["title"]} analysis...'):
+            import time
+            time.sleep(0.5)  # Brief pause for UX
+            st.switch_page(card['page'])
 
 # Main application flow
 def main():
@@ -130,17 +147,9 @@ def main():
         </p>
     </div>
     """, unsafe_allow_html=True)
-    
-    # Render stats
-    # render_stats_section()
 
     # Section header for features
     st.markdown("<br>", unsafe_allow_html=True)
-    # st.markdown("""
-    # <div style="text-align: center;">
-    #     <h2 style="color: #31333F; margin-bottom: 2rem;">Explore Our Site</h2>
-    # </div>
-    # """, unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
     
     # Render feature cards
