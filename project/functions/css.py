@@ -54,15 +54,21 @@ def load_custom_css():
         border-radius: 20px;
         padding: 2.5rem;
         margin-bottom: 1.5rem;
+        # box-shadow: 0 8px 32px rgba(102, 126, 234, 0.1);
         border: 1px solid rgba(102, 126, 234, 0.1);
         transition: all 0.4s ease;
         position: relative;
         overflow: hidden;
         height: 100%;
-        width: 100%;
         text-align: center;
         backdrop-filter: blur(10px);
     }
+    
+    # .feature-card:hover {
+    #     transform: translateY(-8px);
+    #     box-shadow: 0 20px 50px rgba(102, 126, 234, 0.15);
+    #     border-color: rgba(102, 126, 234, 0.2);
+    # }
     
     .feature-card::before {
         content: '';
