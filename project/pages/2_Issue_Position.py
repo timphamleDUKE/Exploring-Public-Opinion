@@ -17,48 +17,57 @@ load_save_list_css()
 # Custom CSS
 st.markdown("""
     <style>
-    .stCheckbox { 
-        margin-bottom: 0.1rem !important; 
-        line-height: 1.2 !important;
-    }
-    .stCheckbox > label, .stCheckbox > label > div, .stRadio > div > label { 
-        margin-bottom: 0 !important; 
-        padding-bottom: 0 !important; 
-        line-height: 1.2 !important;
-    }
-    .stRadio > div { 
-        gap: 0.25rem !important; 
-    }
-    .stCheckbox > label > div[data-testid="stMarkdownContainer"] > p {
-        margin-bottom: 0 !important;
-        line-height: 1.2 !important;
-    }
+    .stCheckbox { margin-bottom: 0.1rem !important; }
+    .stCheckbox > label, .stCheckbox > label > div, .stRadio > div > label { margin-bottom: 0 !important; padding-bottom: 0 !important; }
+    .stRadio > div { gap: 0.25rem !important; }
     </style>
     """, unsafe_allow_html=True)
 
 st.title("Issue Position")
 
-topic = st.selectbox("Topic", list_of_issue_topics, index=0)
-list_of_issues = topic_to_list_of_issue_map.get(topic)
+tab1, tab2 = st.tabs(["Analyze", "Help"])
 
-    col1, col2, col3, col4, col5 = st.columns([3, 0.3, 1, 0.8, 1])
+with tab1:
 
-    with col1:
-        topic = st.selectbox("Topic", list_of_issue_topics, index=0)
-        list_of_issues = topic_to_list_of_issue_map.get(topic)
+    topic = st.selectbox("Topic", list_of_issue_topics, index=0)
+    list_of_issues = topic_to_list_of_issue_map.get(topic)
 
-# Sidebar for settings
-with st.sidebar:
-    st.title("Please Select")
-    
-    group = st.radio("Groups", ["Ideological Groups", "Political Groups"], index=0)
-    
-    st.markdown("**Options**")
-    checks = ideological_check() if group == "Ideological Groups" else political_check()
-    
-    st.markdown("**Visualization Type**")
-    if supports_binary_sankey:
-        viz_type = st.radio("", ["Direct Flow", "Binary Flow"], label_visibility="collapsed")
+    # Issue question selection
+    dropdown_issue_question = st.selectbox("Issue Question", list_of_issues, index=0)
+    issue_question = description_to_renamed.get(dropdown_issue_question)
+
+    # Check if this question supports Binary Sankey BEFORE creating the radio button
+    supports_binary_sankey = check_needs_binary_sankey(issue_question)
+
+    with st.sidebar:
+        group = st.radio("Groups", ["Ideological Groups", "Political Groups"], index=0)
+
+        st.markdown('<div style="font-size: 0.875rem; font-weight: 400; margin-bottom: 0.5rem;">Options</div>', unsafe_allow_html=True)
+        checks = ideological_check() if group == "Ideological Groups" else political_check()
+
+
+        st.markdown('<div style="font-size: 0.875rem; font-weight: 400; margin-bottom: 0.5rem;">Visualization Type</div>', unsafe_allow_html=True)
+        if supports_binary_sankey:
+            viz_type = st.radio("", ["Direct Flow", "Binary Flow"], label_visibility="collapsed")
+        else:
+            viz_type = st.radio("", ["Direct Flow"], label_visibility="collapsed")
+        
+        list_of_groups = list_of_groups_check(group, checks)
+
+        show_saved = show_saved_button("sankey", issue_question, list_of_groups, viz_type=viz_type)
+
+    title = wrap_title(description_map.get(issue_question))
+
+    st.divider()
+    col1, col2 = st.columns(2)
+    col1.header("Issue Position Questions")
+
+    with col2:
+        star_button("star-btn-sankey", "sankey", df, issue_question, list_of_groups, group, title=title, viz_type=viz_type)
+
+    # Create visualization based on type
+    if viz_type == "Binary Flow":
+        hv_obj = create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups, group, title=title)
     else:
         hv_obj = sankeyGraph(df, issue_question, list_of_groups, group, title=title)
 
