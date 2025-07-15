@@ -1,6 +1,6 @@
 import streamlit as st
 from functions.sidebar_density import ideological_check, political_check, list_of_groups_check
-from functions.dictionaries import set_logo, list_of_thermometer_topics, topic_to_list_of_thermometer_map, df, description_map, dropdown_to_renamed
+from functions.dictionaries import set_logo, list_of_thermometer_topics, topic_to_list_of_thermometer_map, df, description_map, dropdown_to_renamed, PAGES
 from functions.facet import *
 from functions.density import densityGraph, densityGraphFaceted
 from functions.expander import expander
@@ -14,7 +14,7 @@ st.title("Affective Polarization")
 
 # Tabs
 
-tab1, tab2 = st.tabs(["Featured", "Explore"])
+tab1, tab2, tab3 = st.tabs(["Featured", "Explore", "Help"])
 
 with tab1:
     st.header("Thermometer Ratings: Democratics & Republicans")
@@ -199,6 +199,10 @@ with tab2:
     st.plotly_chart(density_graph, use_container_width=True)
     expander(df, thermometer_question, "affective")
 
+with tab3:
+    st.markdown(f"""
+        {PAGES[0]['description']}
+    """, unsafe_allow_html=True)
 
 # Caption
 st.divider()

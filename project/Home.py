@@ -154,7 +154,7 @@ def main():
     
     # Render feature cards
     render_feature_cards()
-    
+
     # Footer
     st.markdown("<br><br>", unsafe_allow_html=True)
     st.markdown("---")

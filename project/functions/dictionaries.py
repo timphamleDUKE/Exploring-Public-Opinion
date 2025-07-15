@@ -207,3 +207,75 @@ def wrap_title(title, max_length=85):
         lines.append(' '.join(current_line))
     
     return '\n'.join(lines)
+
+PAGES = [
+        {
+            "title": "Affective Polarization",
+            "icon": """<svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2 18 Q6 4 10 8 Q14 12 18 18" stroke="#764ba2" stroke-width="2" fill="none"/>
+                    <path d="M2 18 Q6 4 10 8 Q14 12 18 18 L18 20 L2 20 Z" fill="#764ba2" opacity="0.25"/>
+                    <path d="M6 18 Q10 14 14 10 Q18 6 22 18" stroke="#667eea" stroke-width="2" fill="none"/>
+                    <path d="M6 18 Q10 14 14 10 Q18 6 22 18 L22 20 L6 20 Z" fill="#667eea" opacity="0.25"/>
+                    <line x1="2" y1="20" x2="22" y2="20" stroke="#999" stroke-width="1"/>
+                </svg>""",
+            "description": """
+            Defined as how much warmer partisans feel about their own party versus the opposing party, measured using feeling thermometer ratings on a 0-100 degree scale.
+
+            The Featured tab contains density graphs depicting thermometer ratings showing how different parties rate each other,
+            how people of different ideologies rate each other,
+            and how different parties rate each presidential candidate from the 2024 Election (both pre- and post-election).
+            
+            The Explore tab allows users to filter through various ANES 2024 survey questions related to feeling thermometer ratings
+            and see how different ideological and political groups rated each other. Users can also facet these graphs to view more detailed findings.
+
+            """,
+            "button_text": "Explore Affective Polarization",
+            "page": "pages/1_Affective_Polarization.py",
+            "key": "ap_button"
+        },
+        {
+            "title": "Issue Position", 
+            "icon": """<svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="1" y="4" width="2" height="4" rx="1" fill="#764ba2"/>
+                    <rect x="1" y="10" width="2" height="6" rx="1" fill="#764ba2"/>
+                    <rect x="1" y="18" width="2" height="2" rx="1" fill="#764ba2"/>
+                    <rect x="21" y="6" width="2" height="3" rx="1" fill="#667eea"/>
+                    <rect x="21" y="11" width="2" height="8" rx="1" fill="#667eea"/>
+                    <rect x="21" y="20" width="2" height="2" rx="1" fill="#667eea"/>
+                    <path d="M3 6 C8 6 16 7 21 7.5 L21 9 C16 8.5 8 7.5 3 8 Z" fill="#764ba2" opacity="0.4"/>
+                    <path d="M3 8 C8 9 16 12 21 15 L21 17 C16 14 8 10 3 8.5 Z" fill="#764ba2" opacity="0.5"/>
+                    <path d="M3 13 C8 14 16 16 21 17 L21 19 C16 18 8 15 3 15 Z" fill="#764ba2" opacity="0.6"/>
+                    <path d="M3 19 C8 19.5 16 20.5 21 21 L21 22 C16 21.5 8 20 3 19.5 Z" fill="#764ba2" opacity="0.3"/>
+                </svg>""",
+            "description": """
+            Defined as the widening gap in policy opinions between ideological groups, with people taking increasingly opposing stances on key political issues.
+
+            This page allows users to filter through various issue-based questions from the ANES 2024 survey and see how different ideological and political groups
+            responded to these policy questions. Users can view these responses through sankey flow diagrams, displaying either direct response flows or simplified binary flows 
+            to better understand how political preferences align across different topics.
+
+            """,
+            "button_text": "Analyze Issue Positions",
+            "page": "pages/2_Issue_Position.py",
+            "key": "ip_button"
+        },
+        {
+            "title": "Rate and Compare", 
+            "icon": """<svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="#764ba2" stroke-width="2" fill="none"/>
+                    <path d="M9 12 L11 14 L15 10" stroke="#667eea" stroke-width="2" fill="none"/>
+                    <path d="M6 8 L6 16 M18 8 L18 16" stroke="#764ba2" stroke-width="1.5" opacity="0.6"/>
+                    <circle cx="6" cy="8" r="2" fill="#764ba2" opacity="0.3"/>
+                    <circle cx="18" cy="16" r="2" fill="#667eea" opacity="0.3"/>
+                </svg>""",
+            "description": """
+            Users can answer the same feeling thermometer questions from the ANES 2024 survey to see how their ratings compare to the general US public. 
+            
+            After providing your ratings, density plots are generated and faceted by different demographic and political inputs, showing your personal rating 
+            positioned relative to the broader population's responses. This allows you to see where you fall on the spectrum of American political attitudes.
+            """,
+            "button_text": "Compare Yourself to the US",
+            "page": "pages/3_Rate_and_Compare.py",
+            "key": "rc_button"
+        }
+        ]
