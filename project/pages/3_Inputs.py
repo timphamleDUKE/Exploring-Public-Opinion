@@ -7,65 +7,110 @@ from functions.facet import *
 
 # Setup
 set_logo()
-st.title("User Input Test")
 
-# Sidebar
+# Custom CSS for clean styling
+st.markdown("""
+<style>
+    .section-header {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 8px;
+        border-left: 4px solid #4a90e2;
+        margin: 1.5rem 0 1rem 0;
+    }
+    
+    .stButton > button {
+        background: #7c3aed;
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 6px;
+        font-weight: 500;
+        width: 100%;
+    }
+    
+    .user-info-box {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 6px;
+        margin: 1rem 0;
+        border: 1px solid #dee2e6;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+st.title("User Input Analysis")
+
+# Sidebar for Analysis Settings
 with st.sidebar:
-    st.title("Please Select:")
+    st.title("Please Select")
+    
     topic = st.selectbox("Topic", list_of_thermometer_topics)
-    thermometer_label = st.selectbox("Thermometer Question", topic_to_list_of_thermometer_map[topic])
+    thermometer_label = st.selectbox("Question", topic_to_list_of_thermometer_map[topic])
     thermometer_question = dropdown_to_renamed[thermometer_label]
-
+    
     group = st.radio("Groups", ["Ideological Groups", "Political Groups"])
     checks = ideological_check() if group == "Ideological Groups" else political_check()
     list_of_groups = list_of_groups_check(group, checks)
 
-# User inputs
-st.header("Your information")
-
+# User Information
 user_inputs = {}
-for key in ["age_election_day", "educ", "gender", "income", "marriage", "race_ethnicity", "religion"]:
-    label = facet_display_map.get(key, key.replace("_", " ").title())
-    valid_options = facet_config[key]["valid_values"]
-    if key == "age_election_day":
-        user_inputs[key] = st.slider(label, 18, 100, 18)
-    else:
-        user_inputs[key] = st.selectbox(label, valid_options)
 
-user_rating = st.number_input(
-    f"Your rating for “{description_map[thermometer_question]}”",
-    min_value=0, max_value=100, value=50, step=1
+# Organize inputs in a clean grid
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    user_inputs["age_election_day"] = st.slider("Age", 18, 100, 35)
+    user_inputs["educ"] = st.selectbox("Education", facet_config["educ"]["valid_values"])
+
+with col2:
+    st.markdown("<div style='height: 1rem;'></div>", unsafe_allow_html=True)  # Reduced spacing
+    user_inputs["gender"] = st.selectbox("Gender", facet_config["gender"]["valid_values"])
+    user_inputs["marriage"] = st.selectbox("Marital Status", facet_config["marriage"]["valid_values"])
+
+with col3:
+    st.markdown("<div style='height: 1rem;'></div>", unsafe_allow_html=True)  # Reduced spacing
+    user_inputs["race_ethnicity"] = st.selectbox("Race/Ethnicity", facet_config["race_ethnicity"]["valid_values"])
+    user_inputs["income"] = st.selectbox("Income", facet_config["income"]["valid_values"])
+
+user_inputs["religion"] = st.selectbox("Religion", facet_config["religion"]["valid_values"])
+
+# Rating
+user_rating = st.slider(
+    f'Your rating for "{description_map[thermometer_question]}"',
+    min_value=0, max_value=100, value=50
 )
 
-# Plots
-if st.button("Generate Plots"):
+# Generate Analysis
+if st.button("Generate Analysis"):
     st.divider()
-    st.header(description_map.get(thermometer_question))
-
-    cols_per_row = 2
+    st.header(f"Analysis: {description_map.get(thermometer_question)}")
+    
+    # Create plots in a 2-column layout
     facet_items = list(facet_display_map.items())
-
-    for row_start in range(0, len(facet_items), cols_per_row):
-        row_cols = st.columns(cols_per_row)
-
-        for idx, (facet_var, pretty_name) in enumerate(facet_items[row_start:row_start + cols_per_row]):
-            with row_cols[idx]:
-                st.subheader(f"Faceted by {pretty_name}")
+    
+    for i in range(0, len(facet_items), 2):
+        col1, col2 = st.columns(2)
+        columns = [col1, col2]
+        
+        for j, (facet_var, pretty_name) in enumerate(facet_items[i:i+2]):
+            with columns[j]:
+                st.subheader(f"By {pretty_name}")
+                
                 settings = facet_config[facet_var]
-
-                # Build facet label column
+                
+                # Build facet mapping
                 if "map_func" in settings:
                     buckets = settings["map_func"](df)
                     df["facet_label"] = buckets
-                    facet_map_dict = dict(zip(df[facet_var], buckets))
                 else:
                     facet_map_dict = settings.get("map_plot", settings.get("map"))
                     if facet_map_dict is None:
                         st.error(f"No mapping found for facet '{facet_var}'")
-                        st.stop()
+                        continue
                     df["facet_label"] = df[facet_var].map(facet_map_dict)
-
-                # Get user-selected facet label
+                
+                # Get user's group
                 user_val = user_inputs[facet_var]
                 if facet_var == "age_election_day":
                     user_label = build_age_facet_map(pd.DataFrame({facet_var: [user_val]})).iat[0]
@@ -75,9 +120,9 @@ if st.button("Generate Plots"):
                     user_label = settings["map_plot"].get(key)
                 else:
                     user_label = user_val
-
+                
                 valid_facet_values = [user_label]
-
+                
                 # Generate plot
                 fig = densityGraphFaceted(
                     df,
@@ -88,9 +133,11 @@ if st.button("Generate Plots"):
                     title=None,
                     user_rating=user_rating
                 )
-
+                
                 fig.update_layout(
-                    height=300,
-                    margin=dict(l=20, r=20, t=50, b=20)
+                    height=350,
+                    margin=dict(l=20, r=20, t=30, b=20),
+                    font=dict(size=11)
                 )
+                
                 st.plotly_chart(fig, use_container_width=True)
