@@ -25,7 +25,7 @@ def sankeyGraph(df, question, list_of_groups, group, title=""):
     # Clean data using SurveyDesign if weights are enabled
     weight_col = find_weight_col(question)
 
-    design = SurveyDesign(df, weight=weight_col, strata="full_var_stratum", psu="full_var_psu")
+    design = SurveyDesign(df, weight="post_full", strata="full_var_stratum", psu="full_var_psu")
     df = design.df
 
     # Filter valid values
