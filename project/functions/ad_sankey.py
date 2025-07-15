@@ -210,7 +210,10 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups, grou
                 active_tools=[],
                 bgcolor='white',
                 show_values=False,
-                node_sort=False
+                node_sort=False,
+                title=title,
+                title_format="{label}",
+                fontsize={'title': '20pt'}
             )
         )
         return sankey

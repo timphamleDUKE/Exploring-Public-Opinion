@@ -17,19 +17,29 @@ load_save_list_css()
 # Custom CSS
 st.markdown("""
     <style>
-    .stCheckbox { margin-bottom: 0.1rem !important; }
-    .stCheckbox > label, .stCheckbox > label > div, .stRadio > div > label { margin-bottom: 0 !important; padding-bottom: 0 !important; }
-    .stRadio > div { gap: 0.25rem !important; }
+    .stCheckbox { 
+        margin-bottom: 0.1rem !important; 
+        line-height: 1.2 !important;
+    }
+    .stCheckbox > label, .stCheckbox > label > div, .stRadio > div > label { 
+        margin-bottom: 0 !important; 
+        padding-bottom: 0 !important; 
+        line-height: 1.2 !important;
+    }
+    .stRadio > div { 
+        gap: 0.25rem !important; 
+    }
+    .stCheckbox > label > div[data-testid="stMarkdownContainer"] > p {
+        margin-bottom: 0 !important;
+        line-height: 1.2 !important;
+    }
     </style>
     """, unsafe_allow_html=True)
 
 st.title("Issue Position")
 
-col1, col2, col3, col4, col5 = st.columns([3, 0.3, 1, 0.8, 1])
-
-with col1:
-    topic = st.selectbox("Topic", list_of_issue_topics, index=0)
-    list_of_issues = topic_to_list_of_issue_map.get(topic)
+topic = st.selectbox("Topic", list_of_issue_topics, index=0)
+list_of_issues = topic_to_list_of_issue_map.get(topic)
 
 # Issue question selection
 dropdown_issue_question = st.selectbox("Issue Question", list_of_issues, index=0)
@@ -38,15 +48,16 @@ issue_question = description_to_renamed.get(dropdown_issue_question)
 # Check if this question supports Binary Sankey BEFORE creating the radio button
 supports_binary_sankey = check_needs_binary_sankey(issue_question)
 
-with col3:
+# Sidebar for settings
+with st.sidebar:
+    st.title("Please Select")
+    
     group = st.radio("Groups", ["Ideological Groups", "Political Groups"], index=0)
-
-with col4:
-    st.markdown('<div style="font-size: 0.875rem; font-weight: 400; margin-bottom: 0.5rem;">Options</div>', unsafe_allow_html=True)
+    
+    st.markdown("**Options**")
     checks = ideological_check() if group == "Ideological Groups" else political_check()
-
-with col5:
-    st.markdown('<div style="font-size: 0.875rem; font-weight: 400; margin-bottom: 0.5rem;">Visualization Type</div>', unsafe_allow_html=True)
+    
+    st.markdown("**Visualization Type**")
     if supports_binary_sankey:
         viz_type = st.radio("", ["Direct Flow", "Binary Flow"], label_visibility="collapsed")
     else:
