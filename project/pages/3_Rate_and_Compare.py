@@ -8,10 +8,7 @@ from functions.facet import *
 
 # Setup
 set_logo()
-<<<<<<< HEAD:project/pages/3_Inputs.py
-=======
 st.title("Rate and Compare")
->>>>>>> 96abd87ebaf4e8cc961e4cf5d67281cef9f65050:project/pages/3_Rate_and_Compare.py
 
 # Custom CSS for clean styling
 st.markdown("""
@@ -44,8 +41,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("User Input Analysis")
-
 # Sidebar for Analysis Settings
 with st.sidebar:
     st.title("Please Select")
@@ -62,15 +57,9 @@ with st.sidebar:
     checks = ideological_check() if group == "Ideological Groups" else political_check()
     list_of_groups = list_of_groups_check(group, checks)
 
-<<<<<<< HEAD:project/pages/3_Inputs.py
-# User Information
-=======
-
-
 # User inputs
 st.header("Your information")
 
->>>>>>> 96abd87ebaf4e8cc961e4cf5d67281cef9f65050:project/pages/3_Rate_and_Compare.py
 user_inputs = {}
 
 # Organize inputs in a clean grid
@@ -156,8 +145,4 @@ if st.button("Generate Analysis"):
                     margin=dict(l=20, r=20, t=30, b=20),
                     font=dict(size=11)
                 )
-<<<<<<< HEAD:project/pages/3_Inputs.py
-                
-=======
->>>>>>> 96abd87ebaf4e8cc961e4cf5d67281cef9f65050:project/pages/3_Rate_and_Compare.py
                 st.plotly_chart(fig, use_container_width=True)
