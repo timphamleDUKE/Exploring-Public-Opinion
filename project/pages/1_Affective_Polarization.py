@@ -12,11 +12,13 @@ load_save_list_css()
 
 st.title("Affective Polarization")
 
-# Tabs
+st.write("Affective polarization refers to the emotional gap between how warmly people feel about their own political party compared to the opposing one. It’s often measured using feeling thermometer ratings, where respondents rate a target on a 0–100 scale. Higher ratings mean warmer or more favorable feelings, while lower ratings reflect colder or more negative feelings.")
 
-tab1, tab2, tab3 = st.tabs(["Featured", "Explore", "Help"])
+# Tabs
+tab1, tab2 = st.tabs(["Featured", "Explore"])
 
 with tab1:
+    st.write("Explore key trends in affective polarization with density plots showing how Democrats, Republicans, and people across the ideological spectrum rate each other. You’ll also see how each party rated the 2024 presidential candidates, both before and after the election.")
     st.header("Thermometer Ratings: Democratics & Republicans")
     col1, col2 = st.columns(2)
     with col1:
@@ -145,11 +147,13 @@ with tab2:
         list_of_groups = list_of_groups_check(group, checks)
 
         demog_options = sorted(facet_display_map.values())
-        facet_display = st.selectbox("Facet By", demog_options, index=0)
+        facet_display = st.selectbox("Compare By", demog_options, index=0)
         facet_var = {v: k for k, v in facet_display_map.items()}[facet_display]
 
         # Saved List Button
         show_saved = show_saved_button("density", thermometer_question, list_of_groups)
+
+    st.write("Dig deeper into the data using interactive tools. Filter ANES 2024 feeling thermometer responses by party, ideology, and more. Customize the graphs to compare groups of the survey respondents.")
 
     densityCol1, densityCol2 = st.columns(2)
     densityCol1.header("Thermometer Ratings")
@@ -170,7 +174,7 @@ with tab2:
     st.divider()
 
     facetCol1, facetCol2 = st.columns(2)
-    facetCol1.header("Faceted Thermometer Ratings")
+    facetCol1.header("Group Comparisons: Thermometer Ratings")
 
     facet_settings = facet_config.get(facet_var)
 
@@ -198,11 +202,6 @@ with tab2:
 
     st.plotly_chart(density_graph, use_container_width=True)
     expander(df, thermometer_question, "affective")
-
-with tab3:
-    st.markdown(f"""
-        {PAGES[0]['description']}
-    """, unsafe_allow_html=True)
 
 # Caption
 st.divider()
