@@ -2,10 +2,6 @@ import pandas as pd
 import holoviews as hv
 from holoviews import opts, dim
 from functions.dictionaries import find_answer_choices, ideological_fill_colors, political_fill_colors, codebook
-import os
-import streamlit as st
-
-# Load codebook once at module level
 
 def check_needs_binary_sankey(issue_question):
     """Check if question needs Binary Sankey based on codebook"""
@@ -220,5 +216,3 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups, grou
     except Exception as e:
         print(f"Error creating Sankey: {e}")
         return None
-
-# End of binary flow sankey module

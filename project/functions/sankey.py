@@ -4,7 +4,6 @@ import pandas as pd
 from functions.dictionaries import lib_con_map_3pt, sankey_colors, find_weight_col, find_answer_choices, political_map_3pt
 from functions.sidebar_sankey import lib_con_map_7pt_reverse, political_map_reverse
 from functions.weights import SurveyDesign
-import streamlit as st
 
 # Enable bokeh backend for HoloViews
 hv.extension('bokeh')
