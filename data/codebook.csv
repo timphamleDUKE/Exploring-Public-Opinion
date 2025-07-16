@@ -4,7 +4,7 @@ Year,Variable Code,Pre/Post,Renamed,Category,Topic,Description,Answer Choices,Or
 2024,V240107c,,full_var_psu,Weights,,Full ANES sample variance PSU,,,,
 2024,V240107d,,full_var_stratum,Weights,,Full ANES sample variance stratum,,,,
 2024,V241458x,Pre,age_election_day,Social Characteristics,,Age (on election day),,,,
-2024,V241465x,Pre,educ,Social Characteristics,ob,What is the highest level of school you have completed or the highest degree you received?,"-9. Refused
+2024,V241465x,Pre,educ,Social Characteristics,,What is the highest level of school you have completed or the highest degree you received?,"-9. Refused
 -8. Don’t know
 -4. Error
 -2. Other/specify open-ended responses to be coded
@@ -27,7 +27,8 @@ Year,Variable Code,Pre/Post,Renamed,Category,Topic,Description,Answer Choices,Or
 3. $30,000 to $59,999
 4. $60,000 to $99,999
 5. $100,000 to $249,999
-6. $250,000 or more",,,
+6. $250,000 or more
+",,,
 2024,V241422,Pre,religion,Social Characteristics,,"What is your present religion, if any?","-9. Refused
 -8. Don’t know
 -1. Inapplicable
@@ -345,7 +346,7 @@ Please enter the rating number in the number box. Ratings between 50 degrees and
 3. Oppose not strongly
 4. Oppose strongly","Do you favor or oppose the death penalty for persons convicted of murder? 
 Do you [favor / oppose] the death penalty for persons convicted of murder strongly or not strongly?",,TRUE
-2024,V241312x,Pre,us_world_involvement,Issue Position,Military and Foreign Policy,"Do you agree or disagree with this statement: ""This country would be better off if we just stayed home and did not concern ourselves with problems in other parts of the world."" Do you agree or disagree with this statement?","-2. DK/RF in V241309 or V241310
+2024,V241312x,Pre,us_world_involvement,Issue Position,Military and Foreign Policy,"Do you agree or disagree with this statement: ""This country would be better off if we just stayed home and did not concern ourselves with problems in other parts of the world.""","-2. DK/RF in V241309 or V241310
 -1. Applicable
 1. Agree strongly
 2. Agree somewhat
@@ -455,6 +456,12 @@ Do you favor that [a great deal, a moderate amount, or a little / a little, a mo
 5. Feels somewhat strongly gay/lesbian couples should not be permitted to adopt
 6. Feels very strongly gay/lesbian couples should not be permitted to adopt","Do you think gay or lesbian couples should be legally permitted to adopt children?
 How strongly do you feel that way? [Very strongly, somewhat strongly, or not strongly / Not strongly, somewhat strongly, or very strongly]?",,TRUE
+2024,V241382,Pre,gay_marriage_view,Issue Position,Social and Cultural Issues,Which comes closest to your view on gay marriage?,"-9. Refused
+-8. Don’t know
+-1. Inapplicable
+1. Gay and lesbian couples should be allowed to legally marry
+2. Gay and lesbian couples should be allowed to form civil unions but not legally marry
+3. There should be no legal recognition of gay or lesbian couples’ relationship",Which comes closest to your view? You can just tell me the number of your choice.,,FALSE
 2024,v241385x,Pre,gay_marriage,Issue Position,Social and Cultural Issues,"Do you favor or oppose, or neither favor nor oppose the right of gay and lesbian couples to legally marry?","-2. DK/RF in V241383 or V241384
 -1. Inapplicable
 1. Favor a great deal
