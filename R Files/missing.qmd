@@ -3,3 +3,596 @@ title: "missing"
 format: html
 ---
 
+```{r}
+#| label: packages
+#| message: FALSE
+
+library(tidyverse)
+library(readr)
+library(here)
+library(survey)
+library(ggplot2)
+library(survey)
+
+```
+
+```{r}
+#| label: data
+#| message: FALSE
+#| warning: FALSE
+
+anes_2024 <- read_csv("../data/anes_2024_clean.csv")
+codebook <- read_csv("../data/codebook.csv")
+```
+
+```{r}
+#| label: weights
+#| message: FALSE
+#| warning: FALSE
+
+anes_subset <- subset(anes_2024, 
+                      !is.na(full_var_psu) & 
+                      !is.na(full_var_stratum) & 
+                      !is.na(post_full))
+
+# Define the design object using post-election weights (example)
+anes_design <- svydesign(
+  ids = ~full_var_psu,
+  strata = ~full_var_stratum,
+  weights = ~post_full,
+  data = anes_subset,
+  nest = TRUE
+)
+
+# Use svytable() to get proper weighted counts
+tab <- svytable(~gun_difficulty, design = anes_design)
+df <- as.data.frame(tab)
+names(df) <- c("response", "weighted_count")
+```
+
+
+```{r}
+#| label: anes-2024-explore
+#| message: FALSE
+#| warning: FALSE
+
+anes_2024 |>
+  summarize(
+    var_count = ncol(anes_2024),
+    participant_count = nrow(anes_2024)
+  )
+
+```
+
+
+```{r}
+#| label: top-missing-question
+#| message: FALSE
+#| warning: FALSE
+
+missing_count <- anes_2024 |>
+  summarise(
+    across(
+      everything(),
+      ~ sum(.x < 0 | is.na(.x))
+    )
+  ) |>
+  pivot_longer(
+    cols = everything(),
+    names_to = "variable",
+    values_to = "neg_count"
+  ) |>
+  arrange(desc(neg_count)) |>
+  mutate(variable = fct_reorder(variable, neg_count))
+
+top_10_missing_count <- missing_count |>
+  head(10)
+
+ggplot(top_10_missing_count, aes(x = neg_count, y = variable)) +
+  geom_bar(
+    stat = "identity",
+    fill = "#b4b5b9",
+    color = "#b4b5b9") +
+  geom_bar(
+    data = top_10_missing_count[1, ],  # first row (highest count)
+    aes(x = neg_count, y = variable),
+    stat = "identity",
+    fill = "#7b3ad4",
+    color = "#7b3ad4",
+    size = 1
+  ) +
+  labs(
+    title = "Top 10 Unanswered Questions",
+    x = "Respondents Missed",
+    y = "Question",
+    caption = "Data source: ANES 2024"
+  ) +
+  geom_text(aes(label = neg_count, hjust = 1.15), color = "white") +
+  theme_minimal() +
+  theme(
+    text = element_text(family = "sans"),
+    axis.title.x = element_text(color = "black"),      # x-axis title color
+    axis.title.y = element_text(color = "black"),       # y-axis title color
+    axis.text.x = element_text(color = "black"),  # x-axis tick labels color
+    axis.text.y = element_text(color = "black")      # y-axis tick labels color
+  )
+  
+```
+```{r}
+#| label: least-missing-question
+#| message: FALSE
+#| warning: FALSE
+
+least_10_missing_count <- missing_count |>
+  arrange(neg_count) |>
+  slice(-(1:4)) |>
+  head(10)
+
+ggplot(least_10_missing_count, aes(x = neg_count, y = variable)) +
+  geom_bar(
+    stat = "identity",
+    fill = "#b4b5b9",
+    color = "#b4b5b9") +
+  geom_bar(
+    data = least_10_missing_count[1, ],  # first row (highest count)
+    aes(x = neg_count, y = variable),
+    stat = "identity",
+    fill = "#7b3ad4",
+    color = "#7b3ad4",
+    size = 1
+  ) +
+  labs(
+    title = "Least 10 Unanswered Questions",
+    x = "Respondents Missed",
+    y = "Question",
+    caption = "Data source: ANES 2024"
+  ) +
+  geom_text(aes(label = neg_count, hjust = 1.15), color = "white") +
+  theme_minimal() +
+  theme(
+    text = element_text(family = "sans"),
+    axis.title.x = element_text(color = "black"),      # x-axis title color
+    axis.title.y = element_text(color = "black"),       # y-axis title color
+    axis.text.x = element_text(color = "black"),  # x-axis tick labels color
+    axis.text.y = element_text(color = "black")      # y-axis tick labels color
+  )
+
+
+```
+```{r}
+#| label: least-missing-demographic
+#| message: FALSE
+#| warning: FALSE
+
+least_10_demographic_count <- missing_count |>
+  arrange((neg_count)) |>
+  slice(-(1:4)) |>
+  filter(variable %in% 
+           c("age_election_day", 
+             "educ", 
+             "marriage", 
+             "income", 
+             "religion", 
+             "gender", 
+             "race_ethnicity")) |>
+  head(10)
+
+ggplot(least_10_demographic_count, aes(x = neg_count, y = variable)) +
+  geom_bar(
+    stat = "identity",
+    fill = "#b4b5b9",
+    color = "#b4b5b9") +
+  geom_bar(
+    data = least_10_demographic_count[1, ],  # first row (highest count)
+    aes(x = neg_count, y = variable),
+    stat = "identity",
+    fill = "#7b3ad4",
+    color = "#7b3ad4",
+    size = 1
+  ) +
+  labs(
+    title = "Missed Demographic Questions",
+    x = "Respondents Missed",
+    y = "Question",
+    caption = "Data source: ANES 2024"
+  ) +
+  geom_text(aes(label = neg_count, hjust = 1.15), color = "white") +
+  theme_minimal() +
+  theme(
+    text = element_text(family = "sans"),
+    axis.title.x = element_text(color = "black"),      # x-axis title color
+    axis.title.y = element_text(color = "black"),       # y-axis title color
+    axis.text.x = element_text(color = "black"),  # x-axis tick labels color
+    axis.text.y = element_text(color = "black")      # y-axis tick labels color
+  )
+
+```
+
+
+```{r}
+#| label: top-missing-explore
+#| message: FALSE
+#| warning: FALSE
+
+# Which race didn't answer lib_con_2pt question the most?
+# Of that race, what is the percentage that didn't answer the question
+anes_2024 |>
+  mutate(race_label = recode(race_ethnicity,
+    '-9' = "Refused",
+    '-8' = "Don’t know",
+    '-4' = "Error",
+     '1' = "White, non-Hispanic",
+     '2' = "Black, non-Hispanic",
+     '3' = "Hispanic",
+     '4' = "Asian or Native Hawaiian/other Pacific Islander, non-Hispanic",
+     '5' = "Native American/Alaska Native or other race, non-Hispanic",
+     '6' = "Multiple races, non-Hispanic"
+  )) |>
+  group_by(race_label) |>
+  summarize(
+    missing_count = sum(lib_con_2pt < 0 | is.na(lib_con_2pt)),
+    missing_percentage = missing_count/n() * 100
+  ) |>
+  arrange(desc(missing_percentage))
+
+# Which gender didn't answer lib_con_2pt question the most?
+# Of that race, what is the percentage that didn't answer the question
+anes_2024 |>
+  mutate(gender_label = recode(gender,
+    '-9' = "Refused",
+    '-1' = "Inapplicable",
+     '1' = "Man",
+     '2' = "Woman",
+     '3' = "Nonbinary",
+     '4' = "Something else, please specify"
+  )) |>
+  group_by(gender_label) |>
+  summarize(
+    missing_count = sum(lib_con_2pt < 0 | is.na(lib_con_2pt)),
+    missing_percentage = missing_count/n() * 100
+  ) |>
+  arrange(desc(missing_percentage))
+
+# Which race didn't answer gay marriage question the most?
+# Of that race, what is the percentage that didn't answer the question
+anes_2024 |>
+  mutate(race_label = recode(race_ethnicity,
+    '-9' = "Refused",
+    '-8' = "Don’t know",
+    '-4' = "Error",
+     '1' = "White, non-Hispanic",
+     '2' = "Black, non-Hispanic",
+     '3' = "Hispanic",
+     '4' = "Asian or Native Hawaiian/other Pacific Islander, non-Hispanic",
+     '5' = "Native American/Alaska Native or other race, non-Hispanic",
+     '6' = "Multiple races, non-Hispanic"
+  )) |>
+  group_by(race_label) |>
+  summarize(
+    missing_count = sum(gay_marriage < 0 | is.na(gay_marriage)),
+    missing_percentage = missing_count/n() * 100
+  ) |>
+  arrange(desc(missing_percentage))
+
+```
+
+
+```{r}
+#| label: top-missing-weighted-explore
+#| message: FALSE
+#| warning: FALSE
+
+# 1) Recode and build survey design in one go
+anes_design_data <- anes_2024 |>
+  filter(
+    !is.na(full_var_psu),
+    !is.na(full_var_stratum),
+    !is.na(post_full)
+  )
+
+anes_design <- svydesign(
+  ids     = ~full_var_psu,
+  strata  = ~full_var_stratum,
+  weights = ~post_full,
+  data    = anes_design_data |>
+    mutate(
+      race_label = recode(race_ethnicity,
+        `-9` = "Refused",
+        `-8` = "Don’t know",
+        `-4` = "Error",
+         `1` = "White, non-Hispanic",
+         `2` = "Black, non-Hispanic",
+         `3` = "Hispanic",
+         `4` = "Asian or Native Hawaiian/other Pacific Islander, non-Hispanic",
+         `5` = "Native American/Alaska Native or other race, non-Hispanic",
+         `6` = "Multiple races, non-Hispanic"
+      ),
+      gender_label = recode(gender,
+        `-9` = "Refused",
+        `-1` = "Inapplicable",
+         `1` = "Man",
+         `2` = "Woman",
+         `3` = "Nonbinary",
+         `4` = "Something else"
+      ),
+      educ_label = recode(educ,
+        `-9` = "Refused",
+        `-8` = "Don't Know",
+        `-4` = "Error",
+        `-2` = "Other/specify open-ended responses to be coded",
+         `1` = "Less than high school credential",
+         `2` = "High school credential",
+         `3` = "Some post-high school, no bachelor’s degree",
+         `4` = "Bachelor’s degree",
+         `5` = "Graduate degree"
+      )
+    ),
+  nest = TRUE
+)
+
+# A helper to get both weighted total & weighted %
+compute_missing_by <- function(design, group_var, question_var) {
+  # 1) get the raw weighted cross‐tab
+  tab <- svytable(
+    as.formula(paste0("~", group_var, " + I(", question_var, " < 0 | is.na(", question_var, "))")),
+    design = design
+  )
+  
+  # 2) coerce to DF and name columns
+  df <- as.data.frame(tab)
+  names(df) <- c(group_var, "missing_flag", "weighted_count")
+  
+  # 3) make missing_flag logical
+  df <- df %>%
+    mutate(missing_flag = (missing_flag == TRUE))
+  
+  # 4) summarise per group
+  df %>%
+    group_by_at(group_var) %>%
+    summarise(
+      missing_count = sum(weighted_count[missing_flag]),
+      total_count   = sum(weighted_count),
+      missing_pct   = missing_count / total_count * 100
+    ) %>%
+    arrange(desc(missing_pct))
+}
+
+# Examples:
+
+race_libcon_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "race_label",
+  question_var= "lib_con_2pt"
+)
+gender_libcon_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "gender_label",
+  question_var= "lib_con_2pt"
+)
+
+race_gaymarriage_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "race_label",
+  question_var= "gay_marriage"
+)
+gender_gaymarriage_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "gender_label",
+  question_var= "gay_marriage"
+)
+
+race_politicalparty_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "race_label",
+  question_var= "poli_party_reg"
+)
+gender_politicalparty_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "gender_label",
+  question_var= "poli_party_reg"
+)
+
+race_presvote_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "race_label",
+  question_var= "pres_vote"
+)
+
+gender_presvote_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "gender_label",
+  question_var= "pres_vote"
+)
+
+race_blackthermometer_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "race_label",
+  question_var= "black_thermometer"
+)
+race_whitethermometer_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "race_label",
+  question_var= "white_thermometer"
+)
+race_asianthermometer_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "race_label",
+  question_var= "asian_thermometer"
+)
+race_hispanicthermometer_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "race_label",
+  question_var= "hispanic_thermometer"
+)
+
+# race_christian_missing <- compute_missing_by(
+#  design      = anes_design,
+#  group_var   = "race_label",
+#  question_var= "christian_thermometer"
+#)
+
+# Inspect the results
+race_libcon_missing
+gender_libcon_missing
+
+race_gaymarriage_missing
+gender_gaymarriage_missing
+
+race_politicalparty_missing
+gender_politicalparty_missing
+
+race_presvote_missing
+gender_presvote_missing
+
+race_blackthermometer_missing
+race_whitethermometer_missing
+race_asianthermometer_missing
+race_hispanicthermometer_missing
+
+```
+
+```{r}
+#| label: top-missing-educated
+
+# 1) Recode and build survey design in one go
+anes_design_data <- anes_2024 |>
+  filter(
+    !is.na(full_var_psu),
+    !is.na(full_var_stratum),
+    !is.na(post_full)
+  )
+
+anes_design <- svydesign(
+  ids     = ~full_var_psu,
+  strata  = ~full_var_stratum,
+  weights = ~post_full,
+  data    = anes_design_data |>
+    mutate(
+      race_label = recode(race_ethnicity,
+        `-9` = "Refused",
+        `-8` = "Don’t know",
+        `-4` = "Error",
+         `1` = "White, non-Hispanic",
+         `2` = "Black, non-Hispanic",
+         `3` = "Hispanic",
+         `4` = "Asian or Native Hawaiian/other Pacific Islander, non-Hispanic",
+         `5` = "Native American/Alaska Native or other race, non-Hispanic",
+         `6` = "Multiple races, non-Hispanic"
+      ),
+      gender_label = recode(gender,
+        `-9` = "Refused",
+        `-1` = "Inapplicable",
+         `1` = "Man",
+         `2` = "Woman",
+         `3` = "Nonbinary",
+         `4` = "Something else"
+      ),
+      educ_label = recode(educ,
+        `-9` = "Refused",
+        `-8` = "Don't Know",
+        `-4` = "Error",
+        `-2` = "Other/specify open-ended responses to be coded",
+         `1` = "Less than high school credential",
+         `2` = "High school credential",
+         `3` = "Some post-high school, no bachelor’s degree",
+         `4` = "Bachelor’s degree",
+         `5` = "Graduate degree"
+      )
+    ),
+  nest = TRUE
+)
+
+# A helper to get both weighted total & weighted %
+compute_missing_by <- function(design, group_var, question_var) {
+  # 1) get the raw weighted cross‐tab
+  tab <- svytable(
+    as.formula(paste0("~", group_var, " + I(", question_var, " < 0 | is.na(", question_var, "))")),
+    design = design
+  )
+  
+  # 2) coerce to DF and name columns
+  df <- as.data.frame(tab)
+  names(df) <- c(group_var, "missing_flag", "weighted_count")
+  
+  # 3) make missing_flag logical
+  df <- df %>%
+    mutate(missing_flag = (missing_flag == TRUE))
+  
+  # 4) summarise per group
+  df %>%
+    group_by_at(group_var) %>%
+    summarise(
+      missing_count = sum(weighted_count[missing_flag]),
+      total_count   = sum(weighted_count),
+      missing_pct   = missing_count / total_count * 100
+    ) %>%
+    arrange(desc(missing_pct))
+}
+
+educ_libcon_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "educ_label",
+  question_var= "lib_con_2pt"
+)
+
+educ_gaymarriage_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "educ_label",
+  question_var= "gay_marriage"
+)
+
+educ_politicalparty_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "educ_label",
+  question_var= "poli_party_reg"
+)
+
+educ_presvote_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "educ_label",
+  question_var= "pres_vote"
+)
+
+educ_imports_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "educ_label",
+  question_var= "import_limits"
+)
+
+educ_blackthermometer_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "educ_label",
+  question_var= "black_thermometer"
+)
+
+educ_whitethermometer_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "educ_label",
+  question_var= "white_thermometer"
+)
+
+educ_asianthermometer_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "educ_label",
+  question_var= "asian_thermometer"
+)
+
+educ_hispanicthermometer_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "educ_label",
+  question_var= "hispanic_thermometer"
+)
+
+educ_libcon_missing
+educ_gaymarriage_missing
+educ_politicalparty_missing
+educ_presvote_missing
+educ_imports_missing
+educ_blackthermometer_missing
+educ_whitethermometer_missing
+educ_asianthermometer_missing
+educ_hispanicthermometer_missing
+
+# People with less than/equal to a high school credential are most likely to answer questions
+
+```
