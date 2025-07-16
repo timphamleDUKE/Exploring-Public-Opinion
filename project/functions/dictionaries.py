@@ -100,7 +100,7 @@ ideological_fill_colors = {
 
 target_label_map = {
     -9: "Refused",
-    -8: "Don’t know",
+    -8: "Don't know",
     -1: "Inapplicable",
     1: "Extremely willing",
     2: "Very willing",
@@ -219,15 +219,39 @@ PAGES = [
                     <line x1="2" y1="20" x2="22" y2="20" stroke="#999" stroke-width="1"/>
                 </svg>""",
             "description": """
-            Defined as how much warmer partisans feel about their own party versus the opposing party, measured using feeling thermometer ratings on a 0-100 degree scale.
+            **Affective Polarization Analysis**
 
-            The Featured tab contains density graphs depicting thermometer ratings showing how different parties rate each other,
-            how people of different ideologies rate each other,
-            and how different parties rate each presidential candidate from the 2024 Election (both pre- and post-election).
-            
-            The Explore tab allows users to filter through various ANES 2024 survey questions related to feeling thermometer ratings
-            and see how different ideological and political groups rated each other. Users can also facet these graphs to view more detailed findings.
+            Affective polarization reflects the emotional divide in American politics - defined as how much warmer partisans feel about their own party versus the opposing party, measured using feeling thermometer ratings on a 0-100 degree scale. This page provides an interactive tool to explore these emotional divides using data from the 2024 American National Election Studies (ANES) survey.
 
+            **How to Use This Tool:**
+
+            **Choose your analysis approach** using the tabs at the top:
+            - Select **Featured** for curated key findings
+            - Select **Explore** for custom analysis
+
+            **Using the Featured Section:**
+            - Browse pre-built density graphs showing critical polarization patterns
+            - View how different parties rate each other emotionally
+            - Examine ideological group attitudes and 2024 candidate evaluations
+            - Compare pre- and post-election sentiment changes
+
+            **Using the Explore Section:**
+            1. **Select your topic** from the sidebar dropdown to choose which group or candidate to analyze
+            2. **Choose your question** from the thermometer rating options available
+            3. **Pick your comparison groups** by selecting either Ideological Groups (Liberal, Conservative, Moderate) or Political Groups (Democratic, Republican, Independent)
+            4. **Customize group selection** using the checkboxes to focus on specific groups of interest
+            5. **Apply demographic filters** by selecting faceting options (age, education, gender, etc.) to break down results by population segments
+            6. **Generate your visualization** - the density curves will automatically update to show how your selected groups rate the chosen target
+            7. **Interpret the results** by examining where each group's curve peaks and how much overlap exists between different political identities
+
+            **Reading the Charts:**
+            - Higher peaks indicate more concentrated opinions
+            - Curves shifted toward 100 show warmer feelings
+            - Curves shifted toward 0 show cooler feelings
+            - Wider spreads indicate more diverse opinions within groups
+            - Overlapping curves suggest similar sentiment patterns
+
+            This tool enables you to conduct your own research into the emotional dynamics that drive American political divisions, allowing for both broad trend analysis and detailed demographic breakdowns.
             """,
             "button_text": "Explore Affective Polarization",
             "page": "pages/1_Affective_Polarization.py",
@@ -248,12 +272,45 @@ PAGES = [
                     <path d="M3 19 C8 19.5 16 20.5 21 21 L21 22 C16 21.5 8 20 3 19.5 Z" fill="#764ba2" opacity="0.3"/>
                 </svg>""",
             "description": """
-            Defined as the widening gap in policy opinions between ideological groups, with people taking increasingly opposing stances on key political issues.
+            **Issue Position Analysis**
 
-            This page allows users to filter through various issue-based questions from the ANES 2024 survey and see how different ideological and political groups
-            responded to these policy questions. Users can view these responses through sankey flow diagrams, displaying either direct response flows or simplified binary flows 
-            to better understand how political preferences align across different topics.
+            Issue position polarization is defined as the widening gap in policy opinions between ideological groups, with people taking increasingly opposing stances on key political issues. This page provides an interactive tool to explore how different groups respond to policy questions using data from the 2024 American National Election Studies (ANES) survey.
 
+            **How to Use This Tool:**
+
+            **Choose your analysis approach** using the tabs at the top:
+            - Select **Analyze** for interactive policy analysis
+            - Select **Help** for detailed instructions
+
+            **Using the Analyze Section:**
+
+            **Step 1: Select Your Policy Area**
+            - Choose a **Topic** from the dropdown menu (Economy, Social Issues, etc.)
+            - Select a specific **Issue Question** to analyze
+
+            **Step 2: Configure Your Analysis**
+            - **Groups**: Choose between Ideological Groups (Liberal, Conservative, Moderate) or Political Groups (Democratic, Republican, Independent)
+            - **Options**: Use checkboxes to select which specific groups to compare
+            - **Visualization Type**: Choose between Direct Flow (shows all response categories) or Binary Flow (simplified into opposing positions)
+
+            **Step 3: Interpret Your Results**
+            - **Direct Flow**: Shows the complete range of responses from each group to every answer option
+            - **Binary Flow**: Consolidates responses into broader categories (Favor/Oppose, Agree/Disagree, etc.) to highlight fundamental disagreements
+            - **Flow Width**: Thicker flows indicate more people from that group gave that response
+            - **Color Coding**: Flows are colored by the originating group (red for Conservative/Republican, blue for Liberal/Democratic)
+
+            **Understanding Sankey Diagrams:**
+            - **Left side**: Shows the political/ideological groups
+            - **Right side**: Shows the policy response options
+            - **Flows**: The connecting bands show how each group responded
+            - **Flow thickness**: Proportional to the number of respondents
+
+            **Reading Polarization Patterns:**
+            - **High polarization**: Groups flow to opposite ends of the response spectrum
+            - **Low polarization**: Groups show similar response patterns with overlapping flows
+            - **Moderate positions**: Look for flows to middle-ground response options
+
+            This tool enables you to explore how political identity shapes policy preferences across a wide range of contemporary issues, revealing the extent and nature of ideological divisions in American public opinion.
             """,
             "button_text": "Analyze Issue Positions",
             "page": "pages/2_Issue_Position.py",
@@ -269,10 +326,52 @@ PAGES = [
                     <circle cx="18" cy="16" r="2" fill="#667eea" opacity="0.3"/>
                 </svg>""",
             "description": """
-            Users can answer the same feeling thermometer questions from the ANES 2024 survey to see how their ratings compare to the general US public. 
-            
-            After providing your ratings, density plots are generated and faceted by different demographic and political inputs, showing your personal rating 
-            positioned relative to the broader population's responses. This allows you to see where you fall on the spectrum of American political attitudes.
+            **Rate and Compare Analysis**
+
+            This interactive tool allows you to answer the same feeling thermometer questions from the ANES 2024 survey and see how your personal ratings compare to the general US public. After providing your ratings and demographic information, personalized density plots are generated showing your position relative to the broader population's responses across different demographic and political segments.
+
+            **How to Use This Tool:**
+
+            **Choose your analysis approach** using the tabs at the top:
+            - Select **Compare** for personalized comparison analysis
+            - Select **Help** for detailed instructions
+
+            **Using the Compare Section:**
+
+            **Step 1: Select Your Analysis Topic**
+            - Choose a **Topic** from the dropdown menu (Political Groups, Candidates, etc.)
+            - Select a specific **Question** to rate and compare
+
+            **Step 2: Configure Comparison Groups**
+            - **Groups**: Choose between Ideological Groups (Liberal, Conservative, Moderate) or Political Groups (Democratic, Republican, Independent)
+            - **Options**: Use checkboxes to select which groups you want to compare against
+
+            **Step 3: Provide Your Personal Information**
+            - **Demographics**: Enter your age, education, gender, income, marital status, race/ethnicity, and religion
+            - **Your Rating**: Use the slider to rate the selected topic on a 0-100 scale (0 = very negative feelings, 100 = very positive feelings)
+
+            **Step 4: Generate Your Personalized Analysis**
+            - Click **Generate Analysis** to create customized visualizations
+            - Your responses are compared across multiple demographic breakdowns
+
+            **Understanding Your Results:**
+
+            **Reading the Density Plots:**
+            - **Your rating**: Shown as a vertical line on each chart
+            - **Population curves**: Show how different groups in the US rated the same topic
+            - **Your demographic group**: Highlighted to show where you fit within your peer group
+            - **Curve height**: Indicates how common different rating levels are
+
+            **Interpreting Your Position:**
+            - **Left of the curve peak**: Your rating is lower than most people in that group
+            - **Right of the curve peak**: Your rating is higher than most people in that group
+            - **At the curve peak**: Your rating aligns with the most common response in that group
+            - **Multiple curves**: Compare how different political/ideological groups rated the same topic
+
+            **Demographic Faceting:**
+            Each chart shows your rating compared to people who share your specific demographic characteristics (age group, education level, etc.), allowing you to see how your views align with or differ from your demographic peers across the political spectrum.
+
+            This tool provides insights into where your political attitudes fit within the broader American public opinion landscape, helping you understand both how typical or unique your views are within your demographic group and across different political identities.
             """,
             "button_text": "Compare Yourself to the US",
             "page": "pages/3_Rate_and_Compare.py",

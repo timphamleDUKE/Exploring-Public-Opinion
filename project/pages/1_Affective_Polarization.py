@@ -19,7 +19,7 @@ tab1, tab2 = st.tabs(["Featured", "Explore"])
 
 with tab1:
     st.write("Explore key trends in affective polarization with density plots showing how Democrats, Republicans, and people across the ideological spectrum rate each other. You’ll also see how each party rated the 2024 presidential candidates, both before and after the election.")
-    st.header("Thermometer Ratings: Democratics & Republicans")
+    st.header("Thermometer Ratings: Democrats & Republicans")
     col1, col2 = st.columns(2)
     with col1:
         democratic_graph = densityGraph(

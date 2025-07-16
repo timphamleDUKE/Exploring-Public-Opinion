@@ -12,14 +12,14 @@ load_custom_css()
 def render_hero_section():
     st.markdown("""
     <div class="hero-container">
-        <h1 class="hero-title">Welcome to the Survey Navigator!</h1>
+        <h1 class="hero-title">How polarized is the American public?</h1>
     </div>
     """, unsafe_allow_html=True)
 
 def render_about_section():
     st.markdown("## About Our Project", unsafe_allow_html=True)
     st.markdown("""
-    This project analyzes the 2024 American National Election Study data to explore political polarization 
+    This survey navigator tool analyzes the 2024 American National Election Study data to explore political polarization 
     and public opinion patterns. Through interactive visualizations, we examine both affective polarization 
     (how people feel about opposing parties) and issue positions (where Americans stand on key political topics).
     """)
