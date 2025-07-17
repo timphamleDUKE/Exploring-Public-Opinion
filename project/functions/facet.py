@@ -26,13 +26,13 @@ educ_facet_map = {
     -8: None,
     -4: None,
     -2: None,
-    1: "Non-college",
-    2: "Non-college",
-    3: "Non-college",
-    4: "College grad+",
-    5: "College grad+"
+    1: "Less than high school credential",
+    2: "High school credential",
+    3: "Some post-high school, no bachelor’s degree",
+    4: "Bachelor’s degree",
+    5: "Graduate degree"
 }
-educ_valid_facet_values = ["Non-college", "College grad+"]
+educ_valid_facet_values = ["Less than high school credential", "High school credential", "Some post-high school, no bachelor’s degree", "Bachelor’s degree", "Graduate degree"]
 
 marriage_facet_map = {
     -2: None,

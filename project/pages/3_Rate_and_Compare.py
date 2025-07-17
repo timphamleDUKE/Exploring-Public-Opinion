@@ -1,6 +1,5 @@
 import pandas as pd
 import streamlit as st
-import os
 from functions.dictionaries import *
 from functions.density import densityGraphFaceted
 from functions.sidebar_density import ideological_check, political_check, list_of_groups_check
