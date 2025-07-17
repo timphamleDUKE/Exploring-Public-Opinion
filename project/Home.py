@@ -16,14 +16,6 @@ def render_hero_section():
     </div>
     """, unsafe_allow_html=True)
 
-def render_about_section():
-    st.markdown("## About Our Project", unsafe_allow_html=True)
-    st.markdown("""
-    This survey navigator tool analyzes the 2024 American National Election Study data to explore political polarization 
-    and public opinion patterns. Through interactive visualizations, we examine both affective polarization 
-    (how people feel about opposing parties) and issue positions (where Americans stand on key political topics).
-    """)
-
 # Enhanced card configuration - Fixed to have 3 unique cards
 FEATURE_CARDS = [
     {

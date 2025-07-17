@@ -13,6 +13,8 @@ library(here)
 library(survey)
 library(ggplot2)
 library(survey)
+library(extrafont)
+
 
 ```
 
@@ -23,7 +25,18 @@ library(survey)
 
 anes_2024 <- read_csv("../data/anes_2024_clean.csv")
 codebook <- read_csv("../data/codebook.csv")
+
 ```
+
+```{r}
+#| label: fonts
+
+font_import()
+loadfonts(device = "win")
+fonts()
+
+```
+
 
 ```{r}
 #| label: weights
@@ -107,12 +120,14 @@ ggplot(top_10_missing_count, aes(x = neg_count, y = variable)) +
     y = "Question",
     caption = "Data source: ANES 2024"
   ) +
-  geom_text(aes(label = neg_count, hjust = 1.15), color = "white") +
+  geom_text(aes(label = neg_count, hjust = 1.15), color = "white", family = "Source Sans 3") +
   theme_minimal() +
   theme(
-    text = element_text(family = "sans"),
-    axis.title.x = element_text(color = "black"),      # x-axis title color
-    axis.title.y = element_text(color = "black"),       # y-axis title color
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),  # Add this line
+    plot.caption = element_text(face = "italic"),
+    axis.title.x = element_text(color = "black", face = "bold"),      # x-axis title color
+    axis.title.y = element_text(color = "black", face = "bold"),       # y-axis title color
     axis.text.x = element_text(color = "black"),  # x-axis tick labels color
     axis.text.y = element_text(color = "black")      # y-axis tick labels color
   )
@@ -147,12 +162,14 @@ ggplot(least_10_missing_count, aes(x = neg_count, y = variable)) +
     y = "Question",
     caption = "Data source: ANES 2024"
   ) +
-  geom_text(aes(label = neg_count, hjust = 1.15), color = "white") +
+  geom_text(aes(label = neg_count, hjust = 1.15), color = "white", family = "Source Sans 3") +
   theme_minimal() +
   theme(
-    text = element_text(family = "sans"),
-    axis.title.x = element_text(color = "black"),      # x-axis title color
-    axis.title.y = element_text(color = "black"),       # y-axis title color
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),  # Add this line
+    plot.caption = element_text(face = "italic"),
+    axis.title.x = element_text(color = "black", face = "bold"),      # x-axis title color
+    axis.title.y = element_text(color = "black", face = "bold"),       # y-axis title color
     axis.text.x = element_text(color = "black"),  # x-axis tick labels color
     axis.text.y = element_text(color = "black")      # y-axis tick labels color
   )
@@ -196,12 +213,14 @@ ggplot(least_10_demographic_count, aes(x = neg_count, y = variable)) +
     y = "Question",
     caption = "Data source: ANES 2024"
   ) +
-  geom_text(aes(label = neg_count, hjust = 1.15), color = "white") +
+  geom_text(aes(label = neg_count, hjust = 1.15), color = "white", family = "Source Sans 3") +
   theme_minimal() +
   theme(
-    text = element_text(family = "sans"),
-    axis.title.x = element_text(color = "black"),      # x-axis title color
-    axis.title.y = element_text(color = "black"),       # y-axis title color
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),  # Add this line
+    plot.caption = element_text(face = "italic"),
+    axis.title.x = element_text(color = "black", face = "bold"),      # x-axis title color
+    axis.title.y = element_text(color = "black", face = "bold"),       # y-axis title color
     axis.text.x = element_text(color = "black"),  # x-axis tick labels color
     axis.text.y = element_text(color = "black")      # y-axis tick labels color
   )
@@ -425,11 +444,11 @@ race_hispanicthermometer_missing <- compute_missing_by(
   question_var= "hispanic_thermometer"
 )
 
-# race_christian_missing <- compute_missing_by(
-#  design      = anes_design,
-#  group_var   = "race_label",
-#  question_var= "christian_thermometer"
-#)
+race_christians_missing <- compute_missing_by(
+  design      = anes_design,
+  group_var   = "race_label",
+  question_var= "christians_thermometer"
+)
 
 # Inspect the results
 race_libcon_missing
@@ -449,7 +468,52 @@ race_whitethermometer_missing
 race_asianthermometer_missing
 race_hispanicthermometer_missing
 
+race_christians_missing
+
 ```
+```{r}
+#| label: top-missing-weighted-heatmap-race
+#| message: FALSE
+#| warning: FALSE
+
+# Combine all your results into one dataframe
+
+combined_missing <- bind_rows(
+  race_libcon_missing %>% mutate(question = "Liberal-Conservative", group_type = "Race"),
+  race_gaymarriage_missing %>% mutate(question = "Gay Marriage", group_type = "Race"),
+  race_politicalparty_missing %>% mutate(question = "Political Party", group_type = "Race"),
+  race_presvote_missing %>% mutate(question = "Presidential Vote", group_type = "Race"),
+  race_blackthermometer_missing %>% mutate(question = "Black Thermometer", group_type = "Race"),
+  race_whitethermometer_missing %>% mutate(question = "White Thermometer", group_type = "Race")
+  #gender_libcon_missing %>% mutate(question = "Liberal-Conservative", group_type = "Gender"),
+  #gender_gaymarriage_missing %>% mutate(question = "Gay Marriage", group_type = "Gender"),
+  #gender_politicalparty_missing %>% mutate(question = "Political Party", group_type = "Gender"),
+  #gender_presvote_missing %>% mutate(question = "Presidential Vote", group_type = "Gender")
+) |>
+  # Create a unified group variable
+  mutate(group = race_label) |>
+  # mutate(group = if_else(group_type == "Race", race_label, gender_label)) |>
+  select(group, question, missing_pct) |>
+  mutate(question = factor(question, levels = c(
+    "Liberal-Conservative",
+    "Gay Marriage", 
+    "Political Party",
+    "Presidential Vote",
+    "Black Thermometer",
+    "White Thermometer"
+  )))
+
+# Create heatmap
+ggplot(combined_missing, aes(x = question, y = group, fill = missing_pct)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient(low = "white", high = "red", name = "Missing %") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title = "Missing Response Rates by Demographic Group",
+       subtitle = "Lower percentages indicate higher response rates")
+
+```
+
 
 ```{r}
 #| label: top-missing-educated
@@ -596,3 +660,44 @@ educ_hispanicthermometer_missing
 # People with less than/equal to a high school credential are most likely to answer questions
 
 ```
+
+```{r}
+#| label: top-missing-weighted-heatmap-educ
+
+combined_missing <- bind_rows(
+  educ_libcon_missing %>% mutate(question = "Liberal-Conservative", group_type = "Education"),
+  educ_gaymarriage_missing %>% mutate(question = "Gay Marriage", group_type = "Education"),
+  educ_politicalparty_missing %>% mutate(question = "Political Party", group_type = "Education"),
+  educ_presvote_missing %>% mutate(question = "Presidential Vote", group_type = "Education"),
+  educ_imports_missing %>% mutate(question = "Imports", group_type = "Education"),
+  educ_blackthermometer_missing %>% mutate(question = "Black Thermometer", group_type = "Education"),
+  educ_whitethermometer_missing %>% mutate(question = "White Thermometer", group_type = "Education"),
+  educ_asianthermometer_missing %>% mutate(question = "Asian Thermometer", group_type = "Education"),
+  educ_hispanicthermometer_missing %>% mutate(question = "Hispanic Thermometer", group_type = "Education"),
+) |>
+  # Create a unified group variable
+  mutate(group = educ_label) |>
+  select(group, question, missing_pct) |>
+  mutate(question = factor(question, levels = c(
+    "Liberal-Conservative",
+    "Gay Marriage", 
+    "Political Party",
+    "Presidential Vote",
+    "Imports",
+    "Black Thermometer",
+    "White Thermometer",
+    "Asian Thermometer",
+    "Hispanic Thermometer"
+  )))
+
+# Create heatmap
+ggplot(combined_missing, aes(x = question, y = group, fill = missing_pct)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient(low = "white", high = "red", name = "Missing %") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title = "Missing Response Rates by Demographic Group",
+       subtitle = "Lower percentages indicate higher response rates")
+
+```
+
