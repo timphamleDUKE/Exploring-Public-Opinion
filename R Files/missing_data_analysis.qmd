@@ -24,6 +24,10 @@ library(naniar)
 
 anes_2024 <- read_csv("../data/anes_2024_clean.csv")
 codebook <- read_csv("../data/codebook.csv")
+
+anes_2024 <- anes_2024 |>
+  filter(pre_interview_mode == 2 & post_interview_mode == 2) |>
+  select(-'...1', -pre_full, -post_full, -full_var_psu, -full_var_stratum)
 ```
 
 ```{r}
@@ -100,6 +104,7 @@ anes_2024 <- anes_2024 |>
 #| warning: FALSE
 
 missing_count <- anes_2024 |>
+  select(-pre_interview_mode, -post_interview_mode) |>
   summarise(across(everything(), ~ sum(is.na(.x)))) |>
   pivot_longer(cols = everything(), names_to = "variable", values_to = "neg_count") |>
   arrange(desc(neg_count)) |>
@@ -127,12 +132,12 @@ ggplot(top_10_missing_count, aes(x = neg_count, y = variable)) +
 
 least_10_missing_count <- missing_count |>
   arrange(neg_count) |>
-  slice(-(1:4)) |>
   head(10)
 
 ggplot(least_10_missing_count, aes(x = neg_count, y = variable)) +
   geom_bar(stat = "identity", fill = "#b4b5b9") +
   geom_bar(data = least_10_missing_count[1, ], stat = "identity", fill = "#7b3ad4") +
+  geom_bar(data = least_10_missing_count[2, ], stat = "identity", fill = "#7b3ad4") +
   geom_text(aes(label = neg_count, hjust = 1.15), color = "white", family = "Source Sans 3") +
   labs(title = "Top 10 Most Answered Questions", x = "Respondents Missed", y = "Question",
        caption = "Data source: ANES 2024") +
@@ -149,7 +154,6 @@ ggplot(least_10_missing_count, aes(x = neg_count, y = variable)) +
 
 least_10_demographic_count <- missing_count |>
   arrange((neg_count)) |>
-  slice(-(1:4)) |>
   filter(variable %in% c("age_election_day", "educ", "marriage", "income", "religion", "gender", "race_ethnicity")) |>
   head(10)
 
@@ -193,7 +197,7 @@ race_pres_vote_missing <- compute_missing_simple(anes_2024, "race_ethnicity", "p
 ```
 
 ```{r}
-#| label: missing-visualization
+#| label: missingness-thermometer
 #| message: FALSE
 #| warning: FALSE
 
@@ -214,6 +218,12 @@ anes_2024 |>
   theme(
     axis.text.x = element_text(angle = 90)
     )
+```
+
+```{r}
+#| label: missingness-issue
+#| message: FALSE
+#| warning: FALSE
 
 # all issue questions
 anes_2024 |>
@@ -237,6 +247,55 @@ anes_2024 |>
   theme(
     axis.text.x = element_text(angle = 90)
     )
+
+# social and cultural issues
+anes_2024 |>
+  select(
+    abortion, paid_leave, transgender_bathrooms, transgender_sports, lgbt_discrimination, 
+    lgbt_adoption, gay_marriage_view, gay_marriage, diversity, sexual_harassment, 
+    transgender_military, colleges_run, dei
+  ) |>
+  vis_miss(cluster = TRUE, sort_miss = TRUE)
+
+# guns and crime
+anes_2024 |>
+  select(
+    death_penalty, gun_difficulty, gun_background_checks, 
+    gun_ban_assault_rifles, police_force, budget_crime
+  ) |>
+  vis_miss(cluster = TRUE, sort_miss = TRUE)
+
+# military and foreign policy
+anes_2024 |>
+  select(
+    us_world_involvement, international_force, mexico_wall, ukraine_russia, israel, 
+    palestine_aid, israel_palestine, gaza_protests, china_threat, russia_threat, 
+    mexico_threat, iran_threat, japan_threat, israel_threat
+  ) |>
+  vis_miss(cluster = TRUE, sort_miss = TRUE)
+
+# voting rights and democratic access
+anes_2024 |>
+  select(
+    voting_id, voting_felons, journalists
+  ) |>
+  vis_miss(cluster = TRUE, sort_miss = TRUE)
+
+# environment
+anes_2024 |>
+  select(
+    climate_inc_temps, climate_temps, climate_regulate_emissions, budget_environment
+  ) |>
+  vis_miss(cluster = TRUE, sort_miss = TRUE)
+
+# social welfare, healthcare, and education
+anes_2024 |>
+  select(
+    vaccines_schools, climate_temps, opioid_epidemic, budget_healthcare, 
+    vaccines, budget_social_security, budget_public_schools, budget_welfare, 
+    budget_highways, budget_aid_poor
+  ) |>
+  vis_miss(cluster = TRUE, sort_miss = TRUE)
 ```
 
 # Heat map
