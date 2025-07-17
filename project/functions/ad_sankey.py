@@ -402,8 +402,8 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups,
     unique_nodes = list(set(flows_df['Source']).union(set(flows_df['Target'])))
 
     # Hide the dummy END node labels but keep all nodes gray
-    # Also wrap long text labels
-    def wrap_text(text, max_length=25):
+    # Also wrap long text labels with shorter lines
+    def wrap_text(text, max_length=20):
         """Wrap text at word boundaries"""
         if len(text) <= max_length:
             return text
@@ -440,8 +440,8 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups,
                           vdims=['Value', 'Color'])
         sankey = sankey.opts(
             opts.Sankey(
-                width=600,
-                height=200,
+                width=800,
+                height=300,
                 edge_color='Color',
                 edge_alpha=0.6,
                 edge_line_width=1,
@@ -458,7 +458,7 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups,
                 node_line_width=0.25,
                 label_text_font_size='10pt',
                 label_position='right',
-                node_padding=80,
+                node_padding=75,
                 tools=['hover'],
                 active_tools=[],
                 bgcolor='white',

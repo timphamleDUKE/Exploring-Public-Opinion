@@ -28,7 +28,7 @@ from functions.directionspopup import show_ip_directions_popup
 hv.extension('bokeh')
 
 # Text wrapping utility function
-def wrap_text(text, max_length=25):
+def wrap_text(text, max_length=20):
     """Wrap text at word boundaries for better readability in visualizations"""
     if len(text) <= max_length:
         return text
@@ -155,7 +155,9 @@ else:
             from holoviews import dim, opts
             hv_obj = hv_obj.opts(
                 opts.Sankey(
-                    node_padding=80,
+                    width=800,
+                    height=300,
+                    node_padding=75,
                     labels=dim('index').categorize(node_labels)
                 )
             )
