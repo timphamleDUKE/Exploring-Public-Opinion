@@ -314,11 +314,6 @@ Please enter the rating number in the number box. Ratings between 50 degrees and
 6. Conservative
 7. Extremely conservative
 99. Haven’t thought much about this",,,
-2024,v241178,Pre,lib_con_2pt,Ideology / Party,,"If you had to choose, would you consider yourself a liberal or a conservative?","-9. Refused
--8. Don’t know
--1. Inapplicable
-1. Liberal
-2. Conservative",,,
 2024,V242067,Post,pres_vote,Ideology / Party,,Who did you vote for?,"-9. Refused
 -8. Don’t know
 -7. Insufficient partial, interview deleted
