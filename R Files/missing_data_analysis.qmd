@@ -183,14 +183,6 @@ compute_missing_simple <- function(data, group_label_col, question_col) {
     arrange(desc(missing_percentage))
 }
 
-```
-
-
-```{r}
-#| label: top-missing-explore
-#| message: FALSE
-#| warning: FALSE
-
 race_gaymarriage_missing <- compute_missing_simple(anes_2024, "race_ethnicity", "gay_marriage")
 race_poli_party_reg_missing <- compute_missing_simple(anes_2024, "race_ethnicity", "poli_party_reg")
 race_pres_vote_missing <- compute_missing_simple(anes_2024, "race_ethnicity", "pres_vote")
@@ -205,23 +197,46 @@ race_pres_vote_missing <- compute_missing_simple(anes_2024, "race_ethnicity", "p
 #| message: FALSE
 #| warning: FALSE
 
-# Select demographic variables
-anes_2024_demographics <- anes_2024 |>
-  select(age_election_day, educ, marriage, income, religion, gender, race_ethnicity)
+# demographic variables
+anes_2024 |>
+  select(age_election_day, educ, marriage, income, religion, gender, race_ethnicity) |>
+  vis_miss(cluster = TRUE, sort_miss = TRUE)
 
-# Select racial thermometer variables
-anes_2024_racethermometer <- anes_2024 |>
-  select(white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer)
+# racial thermometer variables
+anes_2024 |>
+  select(white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer) |>
+  vis_miss(cluster = TRUE, sort_miss = TRUE) 
 
-# Thermometer + ideology arrangement
-anes_2024_racethermometer_arranged <- anes_2024 |>
-  arrange(lib_con_7pt) |>
-  select(white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer, lib_con_7pt)
+# all thermometer questions
+anes_2024 |>
+  select(contains("thermometer")) |>
+  vis_miss(cluster = TRUE, sort_miss = TRUE) +
+  theme(
+    axis.text.x = element_text(angle = 90)
+    )
 
-# Basic missingness plots
-vis_miss(anes_2024_demographics)
-vis_miss(anes_2024_racethermometer)
-vis_miss(anes_2024_racethermometer_arranged)
+# all issue questions
+anes_2024 |>
+  select(
+    abortion, death_penalty, us_world_involvement, international_force, voting_id, voting_felons,
+    journalists, climate_inc_temps, paid_leave, transgender_bathrooms, transgender_sports,
+    birthright_citizenship, lgbt_discrimination, lgbt_adoption, gay_marriage_view, gay_marriage,
+    children_immigrants, mexico_wall, ukraine_russia, israel, palestine_aid, israel_palestine,
+    gaza_protests, political_violence, import_limits, immigration_levels, immigration_jobs,
+    immigration_crime, immigration_citizenship, immigration_economy, immigration_customs,
+    hiring_black, affirmative_action, gov_involvement, gov_regulation, income_inequality,
+    equal_opportunity, gender_roles, budget_deficit, tax_millionaires, vaccines_schools,
+    climate_temps, climate_regulate_emissions, gun_difficulty, gun_background_checks,
+    gun_ban_assault_rifles, opioid_epidemic, police_force, free_trade, diversity,
+    federal_min_wage, budget_healthcare, vaccines, sexual_harassment, transgender_military,
+    china_threat, russia_threat, mexico_threat, iran_threat, japan_threat, israel_threat,
+    budget_social_security, budget_public_schools, budget_border_security, budget_crime,
+    budget_welfare, budget_highways, budget_aid_poor, budget_environment, colleges_run, dei
+  ) |>
+  vis_miss(cluster = TRUE, sort_miss = TRUE) +
+  theme(
+    axis.text.x = element_text(angle = 90)
+    )
 ```
 
 # Heat map
@@ -247,6 +262,7 @@ anes_2024 |>
     axis.text.x = element_text(angle = 45, hjust = 1),
     )
 ```
+
 ```{r}
 #| label: missing-heatmap-race
 #| message: FALSE
@@ -254,6 +270,13 @@ anes_2024 |>
 
 anes_2024 |>
   select(race_ethnicity, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer) |>
+  mutate(race_ethnicity = fct_relevel(
+    race_ethnicity, 
+    "White", 
+    "Hispanic", 
+    "Black", 
+    "Asian/Native Hawaiian/other Pacific Islander",
+    "Native American/Alaska Native/other")) |>
   gg_miss_fct(fct = race_ethnicity) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
@@ -310,7 +333,7 @@ anes_2024 |>
   gg_miss_fct(fct = lib_con_7pt) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
-  labs(title = "Missing Data Patterns by Ideology \nand Thermometer Questions",
+  labs(title = "Missing Data Patterns by Ideology \nand All Survey Questions",
        x = "Education",
        y = "Question",
        fill = "Missing %") +
@@ -323,4 +346,3 @@ anes_2024 |>
     )
 
 ```
-
