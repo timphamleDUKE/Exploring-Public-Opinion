@@ -51,8 +51,18 @@ top_10_missing_count <- missing_count |>
   head(10)
 
 ggplot(top_10_missing_count, aes(x = neg_count, y = variable)) +
-  geom_bar(stat = "identity", fill = "#b4b5b9", color = "#b4b5b9") +
-  geom_bar(data = top_10_missing_count[1, ], stat = "identity", fill = "#7b3ad4", color = "#7b3ad4") +
+  geom_bar(
+    stat = "identity",
+    fill = "#b4b5b9",
+    color = "#b4b5b9") +
+  geom_bar(
+    data = top_10_missing_count[1, ],  # first row (highest count)
+    aes(x = neg_count, y = variable),
+    stat = "identity",
+    fill = "#7b3ad4",
+    color = "#7b3ad4",
+    size = 1
+  ) +
   labs(
     title = "Top 10 Unanswered Questions",
     x = "Respondents Missed",
@@ -63,8 +73,12 @@ ggplot(top_10_missing_count, aes(x = neg_count, y = variable)) +
   theme_minimal() +
   theme(
     text = element_text(family = "Source Sans 3"),
-    plot.title = element_text(face = "bold"),
-    plot.caption = element_text(face = "italic")
+    plot.title = element_text(face = "bold"),  # Add this line
+    plot.caption = element_text(face = "italic"),
+    axis.title.x = element_text(color = "black", face = "bold"),      # x-axis title color
+    axis.title.y = element_text(color = "black", face = "bold"),       # y-axis title color
+    axis.text.x = element_text(color = "black"),  # x-axis tick labels color
+    axis.text.y = element_text(color = "black")      # y-axis tick labels color
   )
   
 ```
@@ -80,8 +94,18 @@ least_10_missing_count <- missing_count |>
   head(10)
 
 ggplot(least_10_missing_count, aes(x = neg_count, y = variable)) +
-  geom_bar(stat = "identity", fill = "#b4b5b9", color = "#b4b5b9") +
-  geom_bar(data = least_10_missing_count[1, ], stat = "identity", fill = "#7b3ad4", color = "#7b3ad4") +
+  geom_bar(
+    stat = "identity",
+    fill = "#b4b5b9",
+    color = "#b4b5b9") +
+  geom_bar(
+    data = least_10_missing_count[1, ],  # first row (highest count)
+    aes(x = neg_count, y = variable),
+    stat = "identity",
+    fill = "#7b3ad4",
+    color = "#7b3ad4",
+    size = 1
+  ) +
   labs(
     title = "Least 10 Unanswered Questions",
     x = "Respondents Missed",
@@ -92,8 +116,12 @@ ggplot(least_10_missing_count, aes(x = neg_count, y = variable)) +
   theme_minimal() +
   theme(
     text = element_text(family = "Source Sans 3"),
-    plot.title = element_text(face = "bold"), 
-    plot.caption = element_text(face = "italic")
+    plot.title = element_text(face = "bold"),  # Add this line
+    plot.caption = element_text(face = "italic"),
+    axis.title.x = element_text(color = "black", face = "bold"),      # x-axis title color
+    axis.title.y = element_text(color = "black", face = "bold"),       # y-axis title color
+    axis.text.x = element_text(color = "black"),  # x-axis tick labels color
+    axis.text.y = element_text(color = "black")      # y-axis tick labels color
   )
 
 ```
@@ -117,8 +145,18 @@ least_10_demographic_count <- missing_count |>
   head(10)
 
 ggplot(least_10_demographic_count, aes(x = neg_count, y = variable)) +
-  geom_bar(stat = "identity", fill = "#b4b5b9", color = "#b4b5b9") +
-  geom_bar(data = least_10_demographic_count[1, ], stat = "identity", fill = "#7b3ad4", color = "#7b3ad4") +
+  geom_bar(
+    stat = "identity",
+    fill = "#b4b5b9",
+    color = "#b4b5b9") +
+  geom_bar(
+    data = least_10_demographic_count[1, ],  # first row (highest count)
+    aes(x = neg_count, y = variable),
+    stat = "identity",
+    fill = "#7b3ad4",
+    color = "#7b3ad4",
+    size = 1
+  ) +
   labs(
     title = "Missed Demographic Questions",
     x = "Respondents Missed",
@@ -129,8 +167,12 @@ ggplot(least_10_demographic_count, aes(x = neg_count, y = variable)) +
   theme_minimal() +
   theme(
     text = element_text(family = "Source Sans 3"),
-    plot.title = element_text(face = "bold"),
-    plot.caption = element_text(face = "italic")
+    plot.title = element_text(face = "bold"),  # Add this line
+    plot.caption = element_text(face = "italic"),
+    axis.title.x = element_text(color = "black", face = "bold"),      # x-axis title color
+    axis.title.y = element_text(color = "black", face = "bold"),       # y-axis title color
+    axis.text.x = element_text(color = "black"),  # x-axis tick labels color
+    axis.text.y = element_text(color = "black")      # y-axis tick labels color
   )
 
 ```
@@ -205,15 +247,14 @@ compute_missing_simple <- function(data, group_var, question_var) {
 #| message: FALSE
 #| warning: FALSE
 
-race_libcon_missing <- compute_missing_simple(anes_2024, "race_ethnicity", "lib_con_2pt")
 race_gaymarriage_missing <- compute_missing_simple(anes_2024, "race_ethnicity", "gay_marriage")
 race_poli_party_reg_missing <- compute_missing_simple(anes_2024, "race_ethnicity", "poli_party_reg")
 race_pres_vote_missing <- compute_missing_simple(anes_2024, "race_ethnicity", "pres_vote")
 
-#View(race_libcon_missing)
-#View(race_gaymarriage_missing)
-#View(race_poli_party_reg_missing)
-#View(race_pres_vote_missing)
+View(race_gaymarriage_missing)
+View(race_poli_party_reg_missing)
+View(race_pres_vote_missing)
+
 ```
 
 ```{r}
@@ -278,7 +319,7 @@ vis_miss(extremely_liberal_plot, cluster=TRUE)
 ```
 
 ```{r}
-#| label: missing-heatmap
+#| label: missing-heatmap-educ
 #| message: FALSE
 #| warning: FALSE
 
@@ -326,8 +367,155 @@ anes_2024_for_missing |>
     axis.title.y = element_text(color = "black", face = "bold"),       # y-axis title color
     axis.text.x = element_text(color = "black", angle = 45, hjust = 1),  # x-axis tick labels color
     axis.text.y = element_text(color = "black")      # y-axis tick labels color
-    
     )
 
 ```
+
+```{r}
+#| label: missing-heatmap-libcon
+#| message: FALSE
+#| warning: FALSE
+
+# Prepare your data
+anes_2024_for_missing <- anes_2024 |>
+  select(lib_con_7pt, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer) |>
+  replace_with_na_all(condition = ~.x < 0) |>
+  mutate(lib_con_7pt = case_when(
+    lib_con_7pt == '-9' ~ "Refused",
+    lib_con_7pt == '-4' ~ "Error",
+    lib_con_7pt == '1' ~ "Extremely liberal",
+    lib_con_7pt == '2' ~ "Liberal",
+    lib_con_7pt == '3' ~ "Slightly liberal",
+    lib_con_7pt == '4' ~ "Moderate; middle of the road",
+    lib_con_7pt == '5' ~ "Slightly conservative",
+    lib_con_7pt == '6' ~ "Conservative",
+    lib_con_7pt == '7' ~ "Extremely conservative",
+    lib_con_7pt == '99' ~ "Haven't thought much about this"
+  )) |>
+  mutate(lib_con_7pt = factor(lib_con_7pt, levels = c(
+    "Extremely liberal",
+    "Liberal", 
+    "Slightly liberal",
+    "Moderate; middle of the road",
+    "Slightly conservative",
+    "Conservative",
+    "Extremely conservative",
+    "Haven't thought much about this",
+    "Error",
+    "Refused"
+  )))
+
+# Then create the plot
+anes_2024_for_missing |>
+  gg_miss_fct(fct = lib_con_7pt) +
+  scale_fill_gradient(low = "white", high = "#7b3ad4") +
+  theme_minimal() +
+  labs(title = "Missing Data Patterns by Education Level",
+       x = "Education",
+       y = "Question",
+       fill = "Missing %") +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),  # Add this line
+    plot.caption = element_text(face = "italic"),
+    axis.title.x = element_text(color = "black", face = "bold"),      # x-axis title color
+    axis.title.y = element_text(color = "black", face = "bold"),       # y-axis title color
+    axis.text.x = element_text(color = "black", angle = 45, hjust = 1),  # x-axis tick labels color
+    axis.text.y = element_text(color = "black")      # y-axis tick labels color
+    )
+
+# Prepare your data
+anes_2024_for_missing <- anes_2024 |>
+  select(lib_con_7pt, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer) |>
+  replace_with_na_all(condition = ~.x < 0) |>
+  mutate(lib_con_7pt = case_when(
+    lib_con_7pt == '-9' ~ "NA",
+    lib_con_7pt == '-4' ~ "NA",
+    lib_con_7pt == '1' ~ "Extremely liberal",
+    lib_con_7pt == '2' ~ "Liberal",
+    lib_con_7pt == '3' ~ "Slightly liberal",
+    lib_con_7pt == '4' ~ "Moderate; middle of the road",
+    lib_con_7pt == '5' ~ "Slightly conservative",
+    lib_con_7pt == '6' ~ "Conservative",
+    lib_con_7pt == '7' ~ "Extremely conservative",
+    lib_con_7pt == '99' ~ "NA"
+  )) |>
+  mutate(lib_con_7pt = factor(lib_con_7pt, levels = c(
+    "Extremely liberal",
+    "Liberal", 
+    "Slightly liberal",
+    "Moderate; middle of the road",
+    "Slightly conservative",
+    "Conservative",
+    "Extremely conservative",
+    "NA"
+  )))
+
+# Then create the plot
+anes_2024_for_missing |>
+  gg_miss_fct(fct = lib_con_7pt) +
+  scale_fill_gradient(low = "white", high = "#7b3ad4") +
+  theme_minimal() +
+  labs(title = "Missing Data Patterns by Education Level",
+       x = "Education",
+       y = "Question",
+       fill = "Missing %") +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),  # Add this line
+    plot.caption = element_text(face = "italic"),
+    axis.title.x = element_text(color = "black", face = "bold"),      # x-axis title color
+    axis.title.y = element_text(color = "black", face = "bold"),       # y-axis title color
+    axis.text.x = element_text(color = "black", angle = 45, hjust = 1),  # x-axis tick labels color
+    axis.text.y = element_text(color = "black")      # y-axis tick labels color
+    )
+
+# Prepare your data
+anes_2024_for_missing <- anes_2024 |>
+  select(lib_con_7pt, gay_marriage, poli_party_reg, pres_vote, import_limits) |>
+  replace_with_na_all(condition = ~.x < 0) |>
+  mutate(lib_con_7pt = case_when(
+    lib_con_7pt == '-9' ~ "NA",
+    lib_con_7pt == '-4' ~ "NA",
+    lib_con_7pt == '1' ~ "Extremely liberal",
+    lib_con_7pt == '2' ~ "Liberal",
+    lib_con_7pt == '3' ~ "Slightly liberal",
+    lib_con_7pt == '4' ~ "Moderate; middle of the road",
+    lib_con_7pt == '5' ~ "Slightly conservative",
+    lib_con_7pt == '6' ~ "Conservative",
+    lib_con_7pt == '7' ~ "Extremely conservative",
+    lib_con_7pt == '99' ~ "NA"
+  )) |>
+  mutate(lib_con_7pt = factor(lib_con_7pt, levels = c(
+    "Extremely liberal",
+    "Liberal", 
+    "Slightly liberal",
+    "Moderate; middle of the road",
+    "Slightly conservative",
+    "Conservative",
+    "Extremely conservative",
+    "NA"
+  )))
+
+# Then create the plot
+anes_2024_for_missing |>
+  gg_miss_fct(fct = lib_con_7pt) +
+  scale_fill_gradient(low = "white", high = "#7b3ad4") +
+  theme_minimal() +
+  labs(title = "Missing Data Patterns by Education Level",
+       x = "Education",
+       y = "Question",
+       fill = "Missing %") +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),  # Add this line
+    plot.caption = element_text(face = "italic"),
+    axis.title.x = element_text(color = "black", face = "bold"),      # x-axis title color
+    axis.title.y = element_text(color = "black", face = "bold"),       # y-axis title color
+    axis.text.x = element_text(color = "black", angle = 45, hjust = 1),  # x-axis tick labels color
+    axis.text.y = element_text(color = "black")      # y-axis tick labels color
+    )
+
+```
+
 

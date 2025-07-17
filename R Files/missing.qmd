@@ -15,7 +15,6 @@ library(ggplot2)
 library(survey)
 library(extrafont)
 
-
 ```
 
 ```{r}
@@ -509,7 +508,7 @@ ggplot(combined_missing, aes(x = question, y = group, fill = missing_pct)) +
   scale_fill_gradient(low = "white", high = "red", name = "Missing %") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(title = "Missing Response Rates by Demographic Group",
+  labs(title = "Missing Response Rates by \nDemographic Group",
        subtitle = "Lower percentages indicate higher response rates")
 
 ```
