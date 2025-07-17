@@ -1,6 +1,5 @@
 import pandas as pd
 import streamlit as st
-import os
 from functions.dictionaries import *
 from functions.density import densityGraphFaceted
 from functions.sidebar_density import ideological_check, political_check, list_of_groups_check
@@ -46,7 +45,7 @@ with tab1:
 
     # Sidebar for Analysis Settings
     with st.sidebar:
-        st.title("Please Select")
+        st.title("Please Select:")
         
         topic = st.selectbox("Topic", list_of_thermometer_topics)
         thermometer_label = st.selectbox("Question", topic_to_list_of_thermometer_map[topic])
@@ -61,7 +60,7 @@ with tab1:
         list_of_groups = list_of_groups_check(group, checks)
 
     # User inputs
-    st.header("Your information")
+    st.subheader("Please Input Your Information:")
 
     user_inputs = {}
 
@@ -71,18 +70,17 @@ with tab1:
     with col1:
         user_inputs["age_election_day"] = st.slider("Age", 18, 100, 35)
         user_inputs["educ"] = st.selectbox("Education", facet_config["educ"]["valid_values"])
+        user_inputs["religion"] = st.selectbox("Religion", facet_config["religion"]["valid_values"])
 
     with col2:
-        st.markdown("<div style='height: 1rem;'></div>", unsafe_allow_html=True)  # Reduced spacing
+        st.markdown("<div style='height: 1rem;'></div>", unsafe_allow_html=True)
         user_inputs["gender"] = st.selectbox("Gender", facet_config["gender"]["valid_values"])
         user_inputs["marriage"] = st.selectbox("Marital Status", facet_config["marriage"]["valid_values"])
 
     with col3:
-        st.markdown("<div style='height: 1rem;'></div>", unsafe_allow_html=True)  # Reduced spacing
+        st.markdown("<div style='height: 1rem;'></div>", unsafe_allow_html=True)
         user_inputs["race_ethnicity"] = st.selectbox("Race/Ethnicity", facet_config["race_ethnicity"]["valid_values"])
         user_inputs["income"] = st.selectbox("Income", facet_config["income"]["valid_values"])
-
-    user_inputs["religion"] = st.selectbox("Religion", facet_config["religion"]["valid_values"])
 
     # Rating
     user_rating = st.slider(
