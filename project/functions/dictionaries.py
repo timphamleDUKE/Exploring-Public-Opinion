@@ -71,16 +71,16 @@ topic_to_list_of_issue_map = (
 
 # List of colors based on group by
 political_colors = {
-    "Democrat": "blue",
-    "Republican": "red",
-    "Independent": "green",
+    "Democrats": "blue",
+    "Republicans": "red",
+    "Independents": "green",
     "N/A": "rgb(141, 142, 147)"
 }
 
 political_fill_colors = {
-    "Democrat": "rgba(0, 0, 255, 0.3)",     # Blue
-    "Republican": "rgba(255, 0, 0, 0.3)",     # Red
-    "Independent": "rgba(0, 128, 0, 0.3)",  # Green
+    "Democrats": "rgba(0, 0, 255, 0.3)",     # Blue
+    "Republicans": "rgba(255, 0, 0, 0.3)",     # Red
+    "Independents": "rgba(0, 128, 0, 0.3)",  # Green
     "N/A": "rgba(141, 142, 147, 0.3)"
 }
 
@@ -124,9 +124,9 @@ def map_group_info(df, group):
 
     elif group == "Political Groups":
         df["party"] = df["poli_party_self_7pt"].map({
-            1: "Democrat", 2: "Democrat",
-            3: "Independent", 4: "Independent", 5: "Independent",
-            6: "Republican", 7: "Republican",
+            1: "Democrats", 2: "Democrats",
+            3: "Independents", 4: "Independents", 5: "Independents",
+            6: "Republicans", 7: "Republicans",
             -9: "N/A", -4: "N/A", -1: "N/A"
         }).fillna("N/A")
         colors = political_colors
@@ -160,9 +160,9 @@ lib_con_map_3pt = {
 }
 
 political_map_3pt = {
-    1: "Democrat",
-    2: "Republican",
-    3: "Independent"
+    1: "Democrats",
+    2: "Republicans",
+    3: "Independents"
 }
 
 def find_weight_col(question):
