@@ -51,18 +51,8 @@ top_10_missing_count <- missing_count |>
   head(10)
 
 ggplot(top_10_missing_count, aes(x = neg_count, y = variable)) +
-  geom_bar(
-    stat = "identity",
-    fill = "#b4b5b9",
-    color = "#b4b5b9") +
-  geom_bar(
-    data = top_10_missing_count[1, ],  # first row (highest count)
-    aes(x = neg_count, y = variable),
-    stat = "identity",
-    fill = "#7b3ad4",
-    color = "#7b3ad4",
-    size = 1
-  ) +
+  geom_bar(stat = "identity", fill = "#b4b5b9", color = "#b4b5b9") +
+  geom_bar(data = top_10_missing_count[1, ], stat = "identity", fill = "#7b3ad4", color = "#7b3ad4") +
   labs(
     title = "Top 10 Unanswered Questions",
     x = "Respondents Missed",
@@ -73,12 +63,8 @@ ggplot(top_10_missing_count, aes(x = neg_count, y = variable)) +
   theme_minimal() +
   theme(
     text = element_text(family = "Source Sans 3"),
-    plot.title = element_text(face = "bold"),  # Add this line
-    plot.caption = element_text(face = "italic"),
-    axis.title.x = element_text(color = "black", face = "bold"),      # x-axis title color
-    axis.title.y = element_text(color = "black", face = "bold"),       # y-axis title color
-    axis.text.x = element_text(color = "black"),  # x-axis tick labels color
-    axis.text.y = element_text(color = "black")      # y-axis tick labels color
+    plot.title = element_text(face = "bold"),
+    plot.caption = element_text(face = "italic")
   )
   
 ```
@@ -94,18 +80,8 @@ least_10_missing_count <- missing_count |>
   head(10)
 
 ggplot(least_10_missing_count, aes(x = neg_count, y = variable)) +
-  geom_bar(
-    stat = "identity",
-    fill = "#b4b5b9",
-    color = "#b4b5b9") +
-  geom_bar(
-    data = least_10_missing_count[1, ],  # first row (highest count)
-    aes(x = neg_count, y = variable),
-    stat = "identity",
-    fill = "#7b3ad4",
-    color = "#7b3ad4",
-    size = 1
-  ) +
+  geom_bar(stat = "identity", fill = "#b4b5b9", color = "#b4b5b9") +
+  geom_bar(data = least_10_missing_count[1, ], stat = "identity", fill = "#7b3ad4", color = "#7b3ad4") +
   labs(
     title = "Least 10 Unanswered Questions",
     x = "Respondents Missed",
@@ -116,12 +92,8 @@ ggplot(least_10_missing_count, aes(x = neg_count, y = variable)) +
   theme_minimal() +
   theme(
     text = element_text(family = "Source Sans 3"),
-    plot.title = element_text(face = "bold"),  # Add this line
-    plot.caption = element_text(face = "italic"),
-    axis.title.x = element_text(color = "black", face = "bold"),      # x-axis title color
-    axis.title.y = element_text(color = "black", face = "bold"),       # y-axis title color
-    axis.text.x = element_text(color = "black"),  # x-axis tick labels color
-    axis.text.y = element_text(color = "black")      # y-axis tick labels color
+    plot.title = element_text(face = "bold"), 
+    plot.caption = element_text(face = "italic")
   )
 
 ```
@@ -145,18 +117,8 @@ least_10_demographic_count <- missing_count |>
   head(10)
 
 ggplot(least_10_demographic_count, aes(x = neg_count, y = variable)) +
-  geom_bar(
-    stat = "identity",
-    fill = "#b4b5b9",
-    color = "#b4b5b9") +
-  geom_bar(
-    data = least_10_demographic_count[1, ],  # first row (highest count)
-    aes(x = neg_count, y = variable),
-    stat = "identity",
-    fill = "#7b3ad4",
-    color = "#7b3ad4",
-    size = 1
-  ) +
+  geom_bar(stat = "identity", fill = "#b4b5b9", color = "#b4b5b9") +
+  geom_bar(data = least_10_demographic_count[1, ], stat = "identity", fill = "#7b3ad4", color = "#7b3ad4") +
   labs(
     title = "Missed Demographic Questions",
     x = "Respondents Missed",
@@ -167,12 +129,8 @@ ggplot(least_10_demographic_count, aes(x = neg_count, y = variable)) +
   theme_minimal() +
   theme(
     text = element_text(family = "Source Sans 3"),
-    plot.title = element_text(face = "bold"),  # Add this line
-    plot.caption = element_text(face = "italic"),
-    axis.title.x = element_text(color = "black", face = "bold"),      # x-axis title color
-    axis.title.y = element_text(color = "black", face = "bold"),       # y-axis title color
-    axis.text.x = element_text(color = "black"),  # x-axis tick labels color
-    axis.text.y = element_text(color = "black")      # y-axis tick labels color
+    plot.title = element_text(face = "bold"),
+    plot.caption = element_text(face = "italic")
   )
 
 ```
@@ -252,11 +210,10 @@ race_gaymarriage_missing <- compute_missing_simple(anes_2024, "race_ethnicity", 
 race_poli_party_reg_missing <- compute_missing_simple(anes_2024, "race_ethnicity", "poli_party_reg")
 race_pres_vote_missing <- compute_missing_simple(anes_2024, "race_ethnicity", "pres_vote")
 
-View(race_libcon_missing)
-View(race_gaymarriage_missing)
-View(race_poli_party_reg_missing)
-View(race_pres_vote_missing)
-
+#View(race_libcon_missing)
+#View(race_gaymarriage_missing)
+#View(race_poli_party_reg_missing)
+#View(race_pres_vote_missing)
 ```
 
 ```{r}
