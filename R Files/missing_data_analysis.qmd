@@ -36,12 +36,12 @@ anes_2024 <- anes_2024 |>
       race_ethnicity == '-9' ~ "Refused",
       race_ethnicity == '-8' ~ "Don't know",
       race_ethnicity == '-4' ~ "Error",
-      race_ethnicity == '1' ~ "White, non-Hispanic",
-      race_ethnicity == '2' ~ "Black, non-Hispanic",
+      race_ethnicity == '1' ~ "White",
+      race_ethnicity == '2' ~ "Black",
       race_ethnicity == '3' ~ "Hispanic",
-      race_ethnicity == '4' ~ "Asian or Native Hawaiian/other Pacific Islander, non-Hispanic",
-      race_ethnicity == '5' ~ "Native American/Alaska Native or other race, non-Hispanic",
-      race_ethnicity == '6' ~ "Multiple races, non-Hispanic",
+      race_ethnicity == '4' ~ "Asian/Native Hawaiian/other Pacific Islander",
+      race_ethnicity == '5' ~ "Native American/Alaska Native/other",
+      race_ethnicity == '6' ~ "Multiple races",
       TRUE ~ as.character(race_ethnicity)
     ),
     gender = case_when(
@@ -236,8 +236,29 @@ anes_2024 |>
   gg_miss_fct(fct = educ) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
-  labs(title = "Missing Data Patterns by Education Level",
+  labs(title = "Missing Data Patterns by Education Level \nand Race Thermometer Questions",
        x = "Education",
+       y = "Question",
+       fill = "Missing %") +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),
+    plot.caption = element_text(face = "italic"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    )
+```
+```{r}
+#| label: missing-heatmap-race
+#| message: FALSE
+#| warning: FALSE
+
+anes_2024 |>
+  select(race_ethnicity, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer) |>
+  gg_miss_fct(fct = race_ethnicity) +
+  scale_fill_gradient(low = "white", high = "#7b3ad4") +
+  theme_minimal() +
+  labs(title = "Missing Data Patterns by Race \nand Race Thermometer Questions",
+       x = "Race",
        y = "Question",
        fill = "Missing %") +
   theme(
@@ -258,7 +279,7 @@ anes_2024 |>
   gg_miss_fct(fct = lib_con_7pt) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
-  labs(title = "Missing Data Patterns by Education Level",
+  labs(title = "Missing Data Patterns by Ideology \nand Race Thermometer Questions",
        x = "Education",
        y = "Question",
        fill = "Missing %") +
@@ -270,11 +291,11 @@ anes_2024 |>
     )
 
 anes_2024 |>
-  select(lib_con_7pt, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer) |>
+  select(lib_con_7pt, gay_marriage_view, gay_marriage, poli_party_reg, pres_vote, import_limits) |>
   gg_miss_fct(fct = lib_con_7pt) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
-  labs(title = "Missing Data Patterns by Education Level",
+  labs(title = "Missing Data Patterns by Ideology \nand Top 5 Unanswered Questions",
        x = "Education",
        y = "Question",
        fill = "Missing %") +
@@ -286,11 +307,10 @@ anes_2024 |>
     )
 
 anes_2024 |>
-  select(lib_con_7pt, gay_marriage, poli_party_reg, pres_vote, import_limits) |>
   gg_miss_fct(fct = lib_con_7pt) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
-  labs(title = "Missing Data Patterns by Education Level",
+  labs(title = "Missing Data Patterns by Ideology \nand Thermometer Questions",
        x = "Education",
        y = "Question",
        fill = "Missing %") +
@@ -298,61 +318,9 @@ anes_2024 |>
     text = element_text(family = "Source Sans 3"),
     plot.title = element_text(face = "bold"),
     plot.caption = element_text(face = "italic"),
-    axis.text.x = element_text(angle = 45, hjust = 1)
-    )
-```
-
-```{r}
-#| label: missing-heatmap-libcon-concerns
-#| message: FALSE
-#| warning: FALSE
-
-anes_2024 |>
-  select(lib_con_7pt, sexual_harassment, budget_healthcare, gun_ban_assault_rifles, gun_difficulty, blm_thermometer) |>
-  gg_miss_fct(fct = lib_con_7pt) +
-  scale_fill_gradient(low = "white", high = "#7b3ad4") +
-  theme_minimal() +
-  labs(title = "Missing Data Patterns by Education Level and Liberal Concerns",
-       x = "Education",
-       y = "Question",
-       fill = "Missing %") +
-  theme(
-    text = element_text(family = "Source Sans 3"),
-    plot.title = element_text(face = "bold"),
-    plot.caption = element_text(face = "italic"),
-    axis.text.x = element_text(angle = 45, hjust = 1)
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.text.y = element_blank()
     )
 
-anes_2024 |>
-  select(lib_con_7pt, import_limits, free_trade, illegal_immigrant_thermometer, mexico_threat, immigration_crime) |>
-  gg_miss_fct(fct = lib_con_7pt) +
-  scale_fill_gradient(low = "white", high = "#7b3ad4") +
-  theme_minimal() +
-  labs(title = "Missing Data Patterns by Education Level and Conservative Concerns",
-       x = "Education",
-       y = "Question",
-       fill = "Missing %") +
-  theme(
-    text = element_text(family = "Source Sans 3"),
-    plot.title = element_text(face = "bold"),
-    plot.caption = element_text(face = "italic"),
-    axis.text.x = element_text(angle = 45, hjust = 1)
-    )
-
-
-anes_2024 |>
-  gg_miss_fct(fct = lib_con_7pt) +
-  scale_fill_gradient(low = "white", high = "#7b3ad4") +
-  theme_minimal() +
-  labs(title = "Missing Data Patterns by Education Level and Thermometer Questions",
-       x = "Education",
-       y = "Question",
-       fill = "Missing %") +
-  theme(
-    text = element_text(family = "Source Sans 3"),
-    plot.title = element_text(face = "bold"),
-    plot.caption = element_text(face = "italic"),
-    axis.text.x = element_text(angle = 45, hjust = 1)
-    )
 ```
 
