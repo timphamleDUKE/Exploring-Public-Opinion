@@ -8,7 +8,7 @@ from functions.expander import expander
 from functions.css import load_save_list_css
 from functions.ad_sankey import create_binary_flow_sankey_holoviews, check_needs_binary_sankey
 from functions.saved import star_button, show_saved_button
-from functions.ipdirectionspopup import show_directions_popup
+from functions.directionspopup import show_ip_directions_popup
 
 hv.extension('bokeh')
 
@@ -37,8 +37,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-show_directions_popup()
-
+show_ip_directions_popup()
 
 topic = st.selectbox("Topic", list_of_issue_topics, index=0)
 list_of_issues = topic_to_list_of_issue_map.get(topic)

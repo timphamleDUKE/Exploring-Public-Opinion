@@ -6,12 +6,12 @@ from functions.density import densityGraph, densityGraphFaceted
 from functions.expander import expander
 from functions.saved import star_button, show_saved_button
 from functions.css import load_save_list_css
-from functions.apdirectionspopup import show_directions_popup
+from functions.directionspopup import show_ap_directions_popup
 
 set_logo()
 load_save_list_css()
 
-show_directions_popup()
+show_ap_directions_popup()
 
 # Tabs
 tab1, tab2 = st.tabs(["Featured", "Explore"])
