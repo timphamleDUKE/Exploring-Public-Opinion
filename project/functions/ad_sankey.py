@@ -49,7 +49,7 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups, grou
         txt = answer_choice_map.get(val, f"Response {val}").lower()
         
         # Check for "neither" first (most specific)
-        if any(w in txt for w in ['neither favor nor oppose', 'neither approve nor disapprove', 'neither agree nor disagree', 'neither']):
+        if any(w in txt for w in ['neither favor nor oppose', 'neither']):
             return 'Neither'
             
         # Check for agree/disagree patterns FIRST (before favor/oppose)
@@ -71,13 +71,13 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups, grou
             return 'More'
         if any(w in txt for w in ['decrease', 'less', 'great deal less', 'little less', 'somewhat less']):
             return 'Less'
-        if any(w in txt for w in ['same', 'about the same', 'right amount', 'kept the same', 'currently doing the right amount', 'no change', 'makes no difference']):
+        if any(w in txt for w in ['same', 'about the same', 'right amount']):
             return 'Same'
             
         # Check for favor/oppose patterns (most general, last)
-        if any(w in txt for w in ['favor', 'support', 'yes', 'approve']):
+        if any(w in txt for w in ['favor', 'support', 'yes']):
             return 'Favor'
-        if any(w in txt for w in ['oppose', 'against', 'no', 'disapprove']):
+        if any(w in txt for w in ['oppose', 'against', 'no']):
             return 'Oppose'
             
         return 'Other'
@@ -97,33 +97,84 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups, grou
     if df_valid.empty:
         return None
 
-    # NEW APPROACH: Use explicit layer prefixes to force positioning
+    # Build flows between group_label -> general_position -> specific_response
     flows = []
-    terminal_positions = ['Neither', 'Same']
     
-    # Layer 1: Group (L1_) to General Position (L2_)
+    # Layer 1: Group to General Position - ALL positions get flows
     for (grp, gen), cnt in df_valid.groupby(['group_label', 'general_position']).size().items():
         color = (ideological_fill_colors if group_type.startswith('Ideological') else political_fill_colors).get(grp, '#ccc')
-        source_node = f"L1_{grp}"
-        target_node = f"L2_{gen}"
-        flows.append((source_node, target_node, cnt, color, grp))
+        flows.append((grp, gen, cnt, color, grp))  # Add group info for sorting
     
-    # Layer 2: Non-terminal positions (L2_) to Specific Response (L3_)
+    # Layer 2: General Position to Specific Response 
+    # CRITICAL FIX: Only non-Neither and non-Same positions flow to specific responses
+    terminal_positions = ['Neither', 'Same']
     non_terminal = df_valid[~df_valid['general_position'].isin(terminal_positions)]
     
     for (grp, gen, spec), cnt in non_terminal.groupby(['group_label', 'general_position', 'specific_response']).size().items():
         color = (ideological_fill_colors if group_type.startswith('Ideological') else political_fill_colors).get(grp, '#ccc')
-        source_node = f"L2_{gen}"
-        target_node = f"L3_{spec}"
-        flows.append((source_node, target_node, cnt, color, grp))
+        flows.append((gen, spec, cnt, color, grp))  # Add group info for sorting
+    
+    # SIMPLE FIX: Add minimal dummy flows from terminal positions to force them to middle
+    for pos in terminal_positions:
+        if pos in df_valid['general_position'].values:
+            flows.append((pos, f"{pos}__END", 0.0001, '#ffffff', 'dummy'))
 
     flows_df = pd.DataFrame(flows, columns=['Source', 'Target', 'Value', 'Color', 'Group'])
     
-    # Filter flows to exclude unwanted target nodes
+    # Filter flows to exclude unwanted target nodes (additional cleanup)
     excluded_responses = ['neither favor nor oppose', 'about the same amount']
-    flows_df = flows_df[~flows_df['Target'].str.lower().str.contains('|'.join([ex.lower() for ex in excluded_responses]), na=False)]
+    flows_df = flows_df[~flows_df['Target'].str.lower().isin([ex.lower() for ex in excluded_responses])]
     
-    # Sort flows for consistent ordering
+    # Create ordered node lists for proper positioning
+    # Define the order for each layer
+    group_nodes = list_of_groups  # First layer: group labels
+    
+    # Get all possible general positions that could exist
+    all_possible_positions = ['Favor', 'Neither', 'Oppose', 'Agree', 'Disagree', 'More', 'Same', 'Less']
+    
+    # Force proper ordering in middle column based on what actually exists
+    general_position_nodes = [
+        pos for pos in all_possible_positions
+        if pos in flows_df['Source'].values or pos in flows_df['Target'].values
+    ]
+    
+    # FIXED: Use target_order to preserve codebook ordering
+    # Keep the original order from the codebook - process responses to match cleaned format
+    processed_target_order = []
+    for i in sorted(answer_choice_map.keys()):
+        original_response = answer_choice_map[i]
+        # Apply the SAME cleaning process as we do to specific_response column
+        cleaned_response = (
+            str(original_response)
+            .replace(r'\d+', '', 1)  # Remove first occurrence of digits
+            .strip()
+        )
+        # Apply regex cleaning to match the dataframe processing
+        import re
+        cleaned_response = re.sub(r'\d+', '', cleaned_response).strip()
+        processed_target_order.append(cleaned_response)
+    
+    # Filter out unwanted specific response nodes
+    excluded_responses = ['neither favor nor oppose', 'about the same amount']
+    specific_response_nodes = [resp for resp in processed_target_order
+                              if resp in set(flows_df['Target']) 
+                              and resp not in group_nodes 
+                              and resp not in general_position_nodes
+                              and resp.lower() not in [ex.lower() for ex in excluded_responses]]
+    
+    # Create the complete ordered node list
+    all_nodes = group_nodes + general_position_nodes + specific_response_nodes
+    
+    # Filter to only include nodes that actually exist in the data
+    existing_nodes = list(set(flows_df['Source']) | set(flows_df['Target']))
+    ordered_nodes = [node for node in all_nodes if node in existing_nodes]
+
+    # Reorder the flows DataFrame to control node positioning
+    # Create a mapping for desired node order
+    node_order_map = {node: i for i, node in enumerate(ordered_nodes)}
+    
+    # Sort flows to ensure red-on-top, blue-on-bottom ordering
+    # Define priority: Conservative/Republican = 0 (top), Liberal/Democratic = 1 (bottom)
     def get_group_priority(group):
         if group in ['Conservative', 'Republicans']:
             return 0  # Top
@@ -133,19 +184,19 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups, grou
             return 0.5  # Middle
     
     flows_df['group_priority'] = flows_df['Group'].apply(get_group_priority)
-    flows_df = flows_df.sort_values(['group_priority']).drop(['group_priority', 'Group'], axis=1)
+    
+    # Sort flows by the desired node order AND group priority
+    flows_df['source_order'] = flows_df['Source'].map(node_order_map)
+    flows_df['target_order'] = flows_df['Target'].map(node_order_map)
+    flows_df = flows_df.sort_values(['target_order', 'group_priority', 'source_order']).drop(['source_order', 'target_order', 'group_priority', 'Group'], axis=1)
 
     unique_nodes = list(set(flows_df['Source']).union(set(flows_df['Target'])))
-    
-    # Create clean labels by removing layer prefixes
+
+    # Hide the dummy END node labels but keep all nodes gray
     node_labels = {}
     for node in unique_nodes:
-        if node.startswith('L1_'):
-            node_labels[node] = node[3:]  # Remove "L1_"
-        elif node.startswith('L2_'):
-            node_labels[node] = node[3:]  # Remove "L2_"
-        elif node.startswith('L3_'):
-            node_labels[node] = node[3:]  # Remove "L3_"
+        if '__END' in node:
+            node_labels[node] = ''  # Empty string to hide __END labels
         else:
             node_labels[node] = node
 
@@ -159,9 +210,8 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups, grou
                 edge_color='Color',
                 edge_alpha=0.6,
                 edge_line_width=1,
-                node_color=dim('Source').categorize({node: '#ececec' for node in unique_nodes}),
-                node_fill_color=dim('Source').categorize({node: '#ececec' for node in unique_nodes}),
-                node_alpha=1.0,
+                node_color=dim('Source').categorize({node: '#ececec' for node in unique_nodes if node != 'Same__END'}),
+                node_fill_color=dim('Source').categorize({node: '#ececec' for node in unique_nodes if node != 'Same__END'}),
                 node_fill_alpha=1.0,
                 node_line_color='black',
                 node_line_width=0.25,
@@ -176,9 +226,10 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups, grou
                 title=title,
                 title_format="{label}",
                 fontsize={'title': '20pt'},
-                labels=dim('Source').categorize(node_labels)
+                labels=dim('index').categorize(node_labels)
             )
         )
+
         return sankey
     except Exception as e:
         print(f"Error creating Sankey: {e}")
