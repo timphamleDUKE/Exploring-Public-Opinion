@@ -174,7 +174,7 @@ with tab2:
     st.divider()
 
     facetCol1, facetCol2 = st.columns(2)
-    facetCol1.header("Group Comparisons: Thermometer Ratings")
+    facetCol1.header("Group Comparisons")
 
     facet_settings = facet_config.get(facet_var)
 
