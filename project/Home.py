@@ -89,6 +89,8 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+st.markdown("<br>", unsafe_allow_html=True)
+
 # Cards
 cols = st.columns(2, gap="large")
 for idx in range(2):
