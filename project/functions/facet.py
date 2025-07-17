@@ -118,6 +118,16 @@ facet_config = {
         "map_func": build_age_facet_map,
         "valid_values": age_valid_facet_values
     },
+    "gender": {
+        "map": gender_facet_map,
+        "valid_values": gender_valid_facet_values
+    },
+    "race_ethnicity": {
+        "map": race_ethnicity_facet_map,
+        "valid_values": race_ethnicity_valid_facet_values,
+        "map_plot": race_ethnicity_facet_map_plot,
+        "valid_values_plot": race_ethnicity_valid_facet_values_plot,
+    },
     "educ": {
         "map": educ_facet_map,
         "valid_values": educ_valid_facet_values
@@ -133,25 +143,15 @@ facet_config = {
     "religion": {
         "map": religion_facet_map,
         "valid_values": religion_valid_facet_values
-    },
-    "gender": {
-        "map": gender_facet_map,
-        "valid_values": gender_valid_facet_values
-    },
-    "race_ethnicity": {
-        "map": race_ethnicity_facet_map,
-        "valid_values": race_ethnicity_valid_facet_values,
-        "map_plot": race_ethnicity_facet_map_plot,
-        "valid_values_plot": race_ethnicity_valid_facet_values_plot,
     }
 }
 
 facet_display_map = {
     "age_election_day": "Age",
+    "gender": "Gender",
+    "race_ethnicity": "Race/Ethnicity",
     "educ": "Education",
     "marriage": "Marital Status",
     "income": "Income",
-    "religion": "Religion",
-    "gender": "Gender",
-    "race_ethnicity": "Race/Ethnicity"
+    "religion": "Religion"
 }
