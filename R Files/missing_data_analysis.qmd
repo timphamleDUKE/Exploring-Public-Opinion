@@ -112,7 +112,7 @@ ggplot(top_10_missing_count, aes(x = neg_count, y = variable)) +
   geom_bar(stat = "identity", fill = "#b4b5b9") +
   geom_bar(data = top_10_missing_count[1, ], stat = "identity", fill = "#7b3ad4") +
   geom_text(aes(label = neg_count, hjust = 1.15), color = "white", family = "Source Sans 3") +
-  labs(title = "Top 10 Unanswered Questions", x = "Respondents Missed", y = "Question",
+  labs(title = "Top 10 Least Answered Questions", x = "Respondents Missed", y = "Question",
        caption = "Data source: ANES 2024") +
   theme_minimal() +
   theme(text = element_text(family = "Source Sans 3"),
@@ -134,7 +134,7 @@ ggplot(least_10_missing_count, aes(x = neg_count, y = variable)) +
   geom_bar(stat = "identity", fill = "#b4b5b9") +
   geom_bar(data = least_10_missing_count[1, ], stat = "identity", fill = "#7b3ad4") +
   geom_text(aes(label = neg_count, hjust = 1.15), color = "white", family = "Source Sans 3") +
-  labs(title = "Least 10 Unanswered Questions", x = "Respondents Missed", y = "Question",
+  labs(title = "Top 10 Most Answered Questions", x = "Respondents Missed", y = "Question",
        caption = "Data source: ANES 2024") +
   theme_minimal() +
   theme(text = element_text(family = "Source Sans 3"),
@@ -157,7 +157,7 @@ ggplot(least_10_demographic_count, aes(x = neg_count, y = variable)) +
   geom_bar(stat = "identity", fill = "#b4b5b9") +
   geom_bar(data = least_10_demographic_count[1, ], stat = "identity", fill = "#7b3ad4") +
   geom_text(aes(label = neg_count, hjust = 1.15), color = "white", family = "Source Sans 3") +
-  labs(title = "Missed Demographic Questions", x = "Respondents Missed", y = "Question",
+  labs(title = "Most Answered Demographic Questions", x = "Respondents Missed", y = "Question",
        caption = "Data source: ANES 2024") +
   theme_minimal() +
   theme(text = element_text(family = "Source Sans 3"),
