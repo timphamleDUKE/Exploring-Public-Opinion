@@ -19,7 +19,7 @@ tab1, tab2 = st.tabs(["Featured", "Explore"])
 with tab1:
     st.write("Explore key trends in Affective Polarization with density plots showing how Democrats, Republicans, and people across the ideological spectrum rate each other. You’ll also see how each party rated the 2024 presidential candidates, both before and after the election.")     
 
-    st.header("Thermometer Ratings: Democrats & Republicans")
+    st.header("Thermometer Ratings: Democrats & Republicans (2024)")
     col1, col2 = st.columns(2)
     with col1:
         democratic_graph = densityGraph(
@@ -46,7 +46,7 @@ with tab1:
     
     st.divider()
 
-    st.header("Thermometer Ratings: Liberals & Conservatives")
+    st.header("Thermometer Ratings: Liberals & Conservatives (2024)")
     col1, col2 = st.columns(2)
     with col1:
         liberal_graph = densityGraph(
@@ -73,7 +73,7 @@ with tab1:
 
     st.divider()
 
-    st.header("Thermometer Ratings: Presidential Candidates")
+    st.header("Thermometer Ratings: Presidential Candidates (2024)")
     col1, col2 = st.columns(2)
     with col1:
         harris_graph_pre = densityGraph(
@@ -156,7 +156,7 @@ with tab2:
         show_saved = show_saved_button("density", thermometer_question, list_of_groups)
 
     densityCol1, densityCol2 = st.columns(2)
-    densityCol1.header("Thermometer Ratings")
+    densityCol1.header("Thermometer Ratings (2024)")
 
     with densityCol2:
         star_button("star-btn-density", "density", df, thermometer_question, list_of_groups, group)
