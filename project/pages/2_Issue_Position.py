@@ -155,7 +155,7 @@ else:
             from holoviews import dim, opts
             hv_obj = hv_obj.opts(
                 opts.Sankey(
-                    node_padding=70,
+                    node_padding=80,
                     labels=dim('index').categorize(node_labels)
                 )
             )
