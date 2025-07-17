@@ -41,37 +41,37 @@ def check_needs_binary_sankey(issue_question):
         'climate_regulate_emissions': True,
         'free_trade': True,
         'dei': True,
-        # Add more as needed
+        'import_limits': True,  # Missing question
+        'us_world_involvement': True,  # Should have binary flow
+        'hiring_black': True,  # Should have binary flow
+        'gov_involvement': True,  # Should have binary flow
+        'gov_regulation': True,  # Should have binary flow
+        'income_inequality': True,  # Should have binary flow
+        'equal_opportunity': True,  # Should have binary flow
+        'gender_roles': True,  # Should have binary flow
+        'opioid_epidemic': True,  # Should have binary flow
+        'diversity': True,  # Should have binary flow
+        'budget_healthcare': True,  # Should have binary flow
+        'vaccines': True,  # Should have binary flow
+        'sexual_harassment': True,  # Should have binary flow
+        'colleges_run': True,  # Should have binary flow
+        'immigration_levels': True,  # Should have binary flow
+        'immigration_economy': True,  # Should have binary flow
+        'immigration_crime': True,  # Should have binary flow
+        # Budget questions - all should have binary flow
+        'budget_social_security': True,
+        'budget_public_schools': True,
+        'budget_border_security': True,
+        'budget_crime': True,
+        'budget_welfare': True,
+        'budget_highways': True,
+        'budget_aid_poor': True,
+        'budget_environment': True,
     }
     
     manual_binary_blocked = {
-        # Questions that should never have Binary Flow (despite what codebook says)
-        'immigration_levels': False,  # Has specific increase/decrease responses
-        'immigration_economy': False,  # Has extremely good/bad responses
-        'immigration_crime': False,   # Has specific increase/decrease responses
-        'us_world_involvement': False,  # Complex agree/disagree with context
-        'hiring_black': False,  # Complex preferential hiring responses
-        'gov_involvement': False,  # Complex government role responses
-        'gov_regulation': False,  # Has more/same/less responses
-        'income_inequality': False,  # Complex favor/oppose with context
-        'equal_opportunity': False,  # Simple agree/disagree but better as direct
-        'gender_roles': False,  # Has better/worse/no difference responses
-        'opioid_epidemic': False,  # Has more/same/less responses
-        'diversity': False,  # Has better/worse/no difference responses
-        'budget_healthcare': False,  # Budget questions with increase/decrease
-        'vaccines': False,  # Benefits vs risks responses
-        'sexual_harassment': False,  # Has too far/about right/not far enough
-        'colleges_run': False,  # Approve/disapprove with intensity
-        # Budget questions - these have increase/same/decrease patterns
-        'budget_social_security': False,
-        'budget_public_schools': False,
-        'budget_border_security': False,
-        'budget_crime': False,
-        'budget_welfare': False,
-        'budget_highways': False,
-        'budget_aid_poor': False,
-        'budget_environment': False,
-        # Add more as needed
+        # Only block questions that truly shouldn't have Binary Flow
+        # (Keep this minimal - most questions should follow codebook)
     }
     
     # Check manual overrides first
@@ -456,7 +456,7 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups,
                 node_fill_alpha=1.0,
                 node_line_color='black',
                 node_line_width=0.25,
-                label_text_font_size='8pt',
+                label_text_font_size='10pt',
                 label_position='right',
                 node_padding=50,
                 tools=['hover'],
