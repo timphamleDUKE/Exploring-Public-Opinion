@@ -272,45 +272,8 @@ PAGES = [
                     <path d="M3 19 C8 19.5 16 20.5 21 21 L21 22 C16 21.5 8 20 3 19.5 Z" fill="#764ba2" opacity="0.3"/>
                 </svg>""",
             "description": """
-            **Issue Position Analysis**
+        
 
-            Issue position polarization is defined as the widening gap in policy opinions between ideological groups, with people taking increasingly opposing stances on key political issues. This page provides an interactive tool to explore how different groups respond to policy questions using data from the 2024 American National Election Studies (ANES) survey.
-
-            **How to Use This Tool:**
-
-            **Choose your analysis approach** using the tabs at the top:
-            - Select **Analyze** for interactive policy analysis
-            - Select **Help** for detailed instructions
-
-            **Using the Analyze Section:**
-
-            **Step 1: Select Your Policy Area**
-            - Choose a **Topic** from the dropdown menu (Economy, Social Issues, etc.)
-            - Select a specific **Issue Question** to analyze
-
-            **Step 2: Configure Your Analysis**
-            - **Groups**: Choose between Ideological Groups (Liberal, Conservative, Moderate) or Political Groups (Democratic, Republican, Independent)
-            - **Options**: Use checkboxes to select which specific groups to compare
-            - **Visualization Type**: Choose between Direct Flow (shows all response categories) or Binary Flow (simplified into opposing positions)
-
-            **Step 3: Interpret Your Results**
-            - **Direct Flow**: Shows the complete range of responses from each group to every answer option
-            - **Binary Flow**: Consolidates responses into broader categories (Favor/Oppose, Agree/Disagree, etc.) to highlight fundamental disagreements
-            - **Flow Width**: Thicker flows indicate more people from that group gave that response
-            - **Color Coding**: Flows are colored by the originating group (red for Conservative/Republican, blue for Liberal/Democratic)
-
-            **Understanding Sankey Diagrams:**
-            - **Left side**: Shows the political/ideological groups
-            - **Right side**: Shows the policy response options
-            - **Flows**: The connecting bands show how each group responded
-            - **Flow thickness**: Proportional to the number of respondents
-
-            **Reading Polarization Patterns:**
-            - **High polarization**: Groups flow to opposite ends of the response spectrum
-            - **Low polarization**: Groups show similar response patterns with overlapping flows
-            - **Moderate positions**: Look for flows to middle-ground response options
-
-            This tool enables you to explore how political identity shapes policy preferences across a wide range of contemporary issues, revealing the extent and nature of ideological divisions in American public opinion.
             """,
             "button_text": "Analyze Issue Positions",
             "page": "pages/2_Issue_Position.py",
