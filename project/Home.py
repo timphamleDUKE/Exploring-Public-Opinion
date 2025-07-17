@@ -12,7 +12,7 @@ load_custom_css()
 def render_hero_section():
     st.markdown("""
     <div class="hero-container">
-        <h1 class="hero-title">How polarized is the American public?</h1>
+        <h1 class="hero-title">How polarized are we?</h1>
     </div>
     """, unsafe_allow_html=True)
 
