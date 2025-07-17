@@ -1,7 +1,7 @@
 import streamlit as st
 from functions.density import densityGraph, densityGraphFaceted
 from functions.dictionaries import description_map
-from functions.ad_sankey import create_binary_flow_sankey_holoviews, check_needs_binary_sankey
+from functions.ad_sankey import create_binary_flow_sankey_holoviews
 from functions.sankey import sankeyGraph
 import holoviews as hv
 from streamlit_bokeh import streamlit_bokeh

@@ -26,13 +26,13 @@ educ_facet_map = {
     -8: None,
     -4: None,
     -2: None,
-    1: "Non-college",
-    2: "Non-college",
-    3: "Non-college",
-    4: "College grad+",
-    5: "College grad+"
+    1: "Less than high school credential",
+    2: "High school credential",
+    3: "Some post-high school, no bachelor’s degree",
+    4: "Bachelor’s degree",
+    5: "Graduate degree"
 }
-educ_valid_facet_values = ["Non-college", "College grad+"]
+educ_valid_facet_values = ["Less than high school credential", "High school credential", "Some post-high school, no bachelor’s degree", "Bachelor’s degree", "Graduate degree"]
 
 marriage_facet_map = {
     -2: None,
@@ -118,6 +118,16 @@ facet_config = {
         "map_func": build_age_facet_map,
         "valid_values": age_valid_facet_values
     },
+    "gender": {
+        "map": gender_facet_map,
+        "valid_values": gender_valid_facet_values
+    },
+    "race_ethnicity": {
+        "map": race_ethnicity_facet_map,
+        "valid_values": race_ethnicity_valid_facet_values,
+        "map_plot": race_ethnicity_facet_map_plot,
+        "valid_values_plot": race_ethnicity_valid_facet_values_plot,
+    },
     "educ": {
         "map": educ_facet_map,
         "valid_values": educ_valid_facet_values
@@ -133,25 +143,15 @@ facet_config = {
     "religion": {
         "map": religion_facet_map,
         "valid_values": religion_valid_facet_values
-    },
-    "gender": {
-        "map": gender_facet_map,
-        "valid_values": gender_valid_facet_values
-    },
-    "race_ethnicity": {
-        "map": race_ethnicity_facet_map,
-        "valid_values": race_ethnicity_valid_facet_values,
-        "map_plot": race_ethnicity_facet_map_plot,
-        "valid_values_plot": race_ethnicity_valid_facet_values_plot,
     }
 }
 
 facet_display_map = {
     "age_election_day": "Age",
+    "gender": "Gender",
+    "race_ethnicity": "Race/Ethnicity",
     "educ": "Education",
     "marriage": "Marital Status",
     "income": "Income",
-    "religion": "Religion",
-    "gender": "Gender",
-    "race_ethnicity": "Race/Ethnicity"
+    "religion": "Religion"
 }
