@@ -231,12 +231,8 @@ vis_miss(anes_2024_racethermometer_arranged)
 #| message: FALSE
 #| warning: FALSE
 
-# Prepare your data
-anes_2024_for_missing <- anes_2024 |>
-  select(educ, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer)
-
-# Then create the plot
-anes_2024_for_missing |>
+anes_2024 |>
+  select(educ, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer) |>
   gg_miss_fct(fct = educ) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
@@ -250,7 +246,6 @@ anes_2024_for_missing |>
     plot.caption = element_text(face = "italic"),
     axis.text.x = element_text(angle = 45, hjust = 1),
     )
-
 ```
 
 ```{r}
@@ -258,12 +253,8 @@ anes_2024_for_missing |>
 #| message: FALSE
 #| warning: FALSE
 
-# Prepare your data
-anes_2024_for_missing <- anes_2024 |>
-  select(lib_con_7pt, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer)
-
-# Then create the plot
-anes_2024_for_missing |>
+anes_2024 |>
+  select(lib_con_7pt, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer) |>
   gg_miss_fct(fct = lib_con_7pt) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
@@ -278,12 +269,8 @@ anes_2024_for_missing |>
     axis.text.x = element_text(angle = 45, hjust = 1)
     )
 
-# Prepare your data
-anes_2024_for_missing <- anes_2024 |>
-  select(lib_con_7pt, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer)
-
-# Then create the plot
-anes_2024_for_missing |>
+anes_2024 |>
+  select(lib_con_7pt, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer) |>
   gg_miss_fct(fct = lib_con_7pt) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
@@ -298,12 +285,8 @@ anes_2024_for_missing |>
     axis.text.x = element_text(angle = 45, hjust = 1)
     )
 
-# Prepare your data
-anes_2024_for_missing <- anes_2024 |>
-  select(lib_con_7pt, gay_marriage, poli_party_reg, pres_vote, import_limits)
-
-# Then create the plot
-anes_2024_for_missing |>
+anes_2024 |>
+  select(lib_con_7pt, gay_marriage, poli_party_reg, pres_vote, import_limits) |>
   gg_miss_fct(fct = lib_con_7pt) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
@@ -317,7 +300,6 @@ anes_2024_for_missing |>
     plot.caption = element_text(face = "italic"),
     axis.text.x = element_text(angle = 45, hjust = 1)
     )
-
 ```
 
 ```{r}
@@ -325,18 +307,8 @@ anes_2024_for_missing |>
 #| message: FALSE
 #| warning: FALSE
 
-# Prepare your data
-anes_2024_for_missing <- anes_2024 |>
-  select(lib_con_7pt, 
-         sexual_harassment, 
-         budget_healthcare, 
-         gun_ban_assault_rifles, 
-         gun_difficulty, 
-         blm_thermometer
-       ) 
-
-# Then create the plot
-anes_2024_for_missing |>
+anes_2024 |>
+  select(lib_con_7pt, sexual_harassment, budget_healthcare, gun_ban_assault_rifles, gun_difficulty, blm_thermometer) |>
   gg_miss_fct(fct = lib_con_7pt) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
@@ -351,18 +323,8 @@ anes_2024_for_missing |>
     axis.text.x = element_text(angle = 45, hjust = 1)
     )
 
-# Prepare your data
-anes_2024_for_missing <- anes_2024 |>
-  select(lib_con_7pt, 
-         import_limits, 
-         free_trade, 
-         illegal_immigrant_thermometer, 
-         mexico_threat, 
-         immigration_crime
-) 
-
-# Then create the plot
-anes_2024_for_missing |>
+anes_2024 |>
+  select(lib_con_7pt, import_limits, free_trade, illegal_immigrant_thermometer, mexico_threat, immigration_crime) |>
   gg_miss_fct(fct = lib_con_7pt) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
@@ -378,8 +340,7 @@ anes_2024_for_missing |>
     )
 
 
-# Then create the plot
-anes_2024_for_missing |>
+anes_2024 |>
   gg_miss_fct(fct = lib_con_7pt) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
@@ -393,6 +354,5 @@ anes_2024_for_missing |>
     plot.caption = element_text(face = "italic"),
     axis.text.x = element_text(angle = 45, hjust = 1)
     )
-
 ```
 
