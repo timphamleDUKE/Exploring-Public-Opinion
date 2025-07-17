@@ -26,6 +26,72 @@ anes_2024 <- read_csv("../data/anes_2024_clean.csv")
 codebook <- read_csv("../data/codebook.csv")
 ```
 
+```{r}
+#| label: data-cleaning
+
+anes_2024 <- anes_2024 |>
+  replace_with_na_all(condition = ~.x < 0) |>
+  mutate(
+    race_ethnicity = case_when(
+      race_ethnicity == '-9' ~ "Refused",
+      race_ethnicity == '-8' ~ "Don't know",
+      race_ethnicity == '-4' ~ "Error",
+      race_ethnicity == '1' ~ "White, non-Hispanic",
+      race_ethnicity == '2' ~ "Black, non-Hispanic",
+      race_ethnicity == '3' ~ "Hispanic",
+      race_ethnicity == '4' ~ "Asian or Native Hawaiian/other Pacific Islander, non-Hispanic",
+      race_ethnicity == '5' ~ "Native American/Alaska Native or other race, non-Hispanic",
+      race_ethnicity == '6' ~ "Multiple races, non-Hispanic",
+      TRUE ~ as.character(race_ethnicity)
+    ),
+    gender = case_when(
+      gender == '-9' ~ "Refused",
+      gender == '-1' ~ "Inapplicable",
+      gender == '1' ~ "Man",
+      gender == '2' ~ "Woman",
+      gender == '3' ~ "Nonbinary",
+      gender == '4' ~ "Something else, please specify",
+      TRUE ~ as.character(gender)
+    ),
+    educ = case_when(
+      educ == '-9' ~ "Refused",
+      educ == '-8' ~ "Don't Know",
+      educ == '-4' ~ "Error",
+      educ == '-2' ~ "Other/specify open-ended responses to be coded",
+      educ == '1' ~ "Less than high school credential",
+      educ == '2' ~ "High school credential",
+      educ == '3' ~ "Some post-high school, no bachelor's degree",
+      educ == '4' ~ "Bachelor's degree",
+      educ == '5' ~ "Graduate degree",
+      TRUE ~ as.character(educ)
+    ),
+    lib_con_7pt = case_when(
+      lib_con_7pt %in% c('-9', '-4', '99') ~ "NA",
+      lib_con_7pt == '1' ~ "Extremely liberal",
+      lib_con_7pt == '2' ~ "Liberal",
+      lib_con_7pt == '3' ~ "Slightly liberal",
+      lib_con_7pt == '4' ~ "Moderate; middle of the road",
+      lib_con_7pt == '5' ~ "Slightly conservative",
+      lib_con_7pt == '6' ~ "Conservative",
+      lib_con_7pt == '7' ~ "Extremely conservative",
+      TRUE ~ as.character(lib_con_7pt)
+    )
+  ) |>
+  mutate(
+    educ = factor(educ, levels = c(
+      "Refused", "Don't Know", "Error", "Other/specify open-ended responses to be coded",
+      "Less than high school credential", "High school credential", 
+      "Some post-high school, no bachelor's degree", "Bachelor's degree", "Graduate degree"
+    )),
+    lib_con_7pt = factor(lib_con_7pt, levels = c(
+      "Extremely liberal", "Liberal", "Slightly liberal", 
+      "Moderate; middle of the road", "Slightly conservative", 
+      "Conservative", "Extremely conservative", "NA"
+    ))
+  )
+
+```
+
 # Bar chart
 
 ```{r}
@@ -34,7 +100,7 @@ codebook <- read_csv("../data/codebook.csv")
 #| warning: FALSE
 
 missing_count <- anes_2024 |>
-  summarise(across(everything(), ~ sum(.x < 0 | is.na(.x)))) |>
+  summarise(across(everything(), ~ sum(is.na(.x)))) |>
   pivot_longer(cols = everything(), names_to = "variable", values_to = "neg_count") |>
   arrange(desc(neg_count)) |>
   mutate(variable = fct_reorder(variable, neg_count))
@@ -65,30 +131,15 @@ least_10_missing_count <- missing_count |>
   head(10)
 
 ggplot(least_10_missing_count, aes(x = neg_count, y = variable)) +
-  geom_bar(
-    stat = "identity",
-    fill = "#b4b5b9",
-    color = "#b4b5b9") +
-  geom_bar(
-    data = least_10_missing_count[1, ],
-    stat = "identity",
-    fill = "#7b3ad4",
-    color = "#7b3ad4"
-  ) +
-  labs(
-    title = "Least 10 Unanswered Questions",
-    x = "Respondents Missed",
-    y = "Question",
-    caption = "Data source: ANES 2024"
-  ) +
+  geom_bar(stat = "identity", fill = "#b4b5b9") +
+  geom_bar(data = least_10_missing_count[1, ], stat = "identity", fill = "#7b3ad4") +
   geom_text(aes(label = neg_count, hjust = 1.15), color = "white", family = "Source Sans 3") +
+  labs(title = "Least 10 Unanswered Questions", x = "Respondents Missed", y = "Question",
+       caption = "Data source: ANES 2024") +
   theme_minimal() +
-  theme(
-    text = element_text(family = "Source Sans 3"),
-    plot.title = element_text(face = "bold"),
-    plot.caption = element_text(face = "italic")
-  )
-
+  theme(text = element_text(family = "Source Sans 3"),
+        plot.title = element_text(face = "bold"),
+        plot.caption = element_text(face = "italic"))
 ```
 
 ```{r}
@@ -99,41 +150,19 @@ ggplot(least_10_missing_count, aes(x = neg_count, y = variable)) +
 least_10_demographic_count <- missing_count |>
   arrange((neg_count)) |>
   slice(-(1:4)) |>
-  filter(variable %in% 
-           c("age_election_day", 
-             "educ", 
-             "marriage", 
-             "income", 
-             "religion", 
-             "gender", 
-             "race_ethnicity")) |>
+  filter(variable %in% c("age_election_day", "educ", "marriage", "income", "religion", "gender", "race_ethnicity")) |>
   head(10)
 
 ggplot(least_10_demographic_count, aes(x = neg_count, y = variable)) +
-  geom_bar(
-    stat = "identity",
-    fill = "#b4b5b9",
-    color = "#b4b5b9") +
-  geom_bar(
-    data = least_10_demographic_count[1, ],    
-    stat = "identity",
-    fill = "#7b3ad4",
-    color = "#7b3ad4"
-  ) +
-  labs(
-    title = "Missed Demographic Questions",
-    x = "Respondents Missed",
-    y = "Question",
-    caption = "Data source: ANES 2024"
-  ) +
+  geom_bar(stat = "identity", fill = "#b4b5b9") +
+  geom_bar(data = least_10_demographic_count[1, ], stat = "identity", fill = "#7b3ad4") +
   geom_text(aes(label = neg_count, hjust = 1.15), color = "white", family = "Source Sans 3") +
+  labs(title = "Missed Demographic Questions", x = "Respondents Missed", y = "Question",
+       caption = "Data source: ANES 2024") +
   theme_minimal() +
-  theme(
-    text = element_text(family = "Source Sans 3"),
-    plot.title = element_text(face = "bold"),
-    plot.caption = element_text(face = "italic")
-  )
-
+  theme(text = element_text(family = "Source Sans 3"),
+        plot.title = element_text(face = "bold"),
+        plot.caption = element_text(face = "italic"))
 ```
 
 # Missingness plot
@@ -143,61 +172,15 @@ ggplot(least_10_demographic_count, aes(x = neg_count, y = variable)) +
 #| message: FALSE
 #| warning: FALSE
 
-compute_missing_simple <- function(data, group_var, question_var) {
-  
-  # Create the appropriate label variable based on group_var
-  if (group_var == "race_ethnicity") {
-    data <- data |>
-      mutate(group_label = case_when(
-        !!sym(group_var) == '-9' ~ "Refused",
-        !!sym(group_var) == '-8' ~ "Don't know",
-        !!sym(group_var) == '-4' ~ "Error",
-        !!sym(group_var) == '1' ~ "White, non-Hispanic",
-        !!sym(group_var) == '2' ~ "Black, non-Hispanic",
-        !!sym(group_var) == '3' ~ "Hispanic",
-        !!sym(group_var) == '4' ~ "Asian or Native Hawaiian/other Pacific Islander, non-Hispanic",
-        !!sym(group_var) == '5' ~ "Native American/Alaska Native or other race, non-Hispanic",
-        !!sym(group_var) == '6' ~ "Multiple races, non-Hispanic"
-      ))
-  } else if (group_var == "gender") {
-    data <- data |>
-      mutate(group_label = case_when(
-        !!sym(group_var) == '-9' ~ "Refused",
-        !!sym(group_var) == '-1' ~ "Inapplicable",
-        !!sym(group_var) == '1' ~ "Man",
-        !!sym(group_var) == '2' ~ "Woman",
-        !!sym(group_var) == '3' ~ "Nonbinary",
-        !!sym(group_var) == '4' ~ "Something else, please specify"
-      ))
-  } else if (group_var == "educ") {
-    data <- data |>
-      mutate(group_label = case_when(
-        !!sym(group_var) == '-9' ~ "Refused",
-        !!sym(group_var) == '-8' ~ "Don't Know",
-        !!sym(group_var) == '-4' ~ "Error",
-        !!sym(group_var) == '-2' ~ "Other/specify open-ended responses to be coded",
-        !!sym(group_var) == '1' ~ "Less than high school credential",
-        !!sym(group_var) == '2' ~ "High school credential",
-        !!sym(group_var) == '3' ~ "Some post-high school, no bachelor's degree",
-        !!sym(group_var) == '4' ~ "Bachelor's degree",
-        !!sym(group_var) == '5' ~ "Graduate degree"
-      ))
-  } else {
-    # For other variables, just use the original variable
-    data <- data |>
-      mutate(group_label = !!sym(group_var))
-  }
-  
-  # Compute missing statistics
-  result <- data |>
-    group_by(group_label) |>
+compute_missing_simple <- function(data, group_label_col, question_col) {
+  data |>
+    group_by(across(all_of(group_label_col))) |>
     summarize(
-      missing_count = sum(!!sym(question_var) < 0 | is.na(!!sym(question_var))),
-      missing_percentage = missing_count/n() * 100
+      missing_count = sum(is.na(.data[[question_col]])),
+      missing_percentage = 100 * missing_count / n(),
+      .groups = "drop"
     ) |>
     arrange(desc(missing_percentage))
-  
-  return(result)
 }
 
 ```
@@ -222,60 +205,23 @@ race_pres_vote_missing <- compute_missing_simple(anes_2024, "race_ethnicity", "p
 #| message: FALSE
 #| warning: FALSE
 
+# Select demographic variables
 anes_2024_demographics <- anes_2024 |>
-  select("age_election_day", "educ", "marriage", "income", "religion", "gender", "race_ethnicity") |>
-  replace_with_na_all(condition = ~.x < 0)
+  select(age_election_day, educ, marriage, income, religion, gender, race_ethnicity)
 
+# Select racial thermometer variables
 anes_2024_racethermometer <- anes_2024 |>
-  select("white_thermometer", "black_thermometer", "asian_thermometer", "hispanic_thermometer") |>
-  replace_with_na_all(condition = ~.x < 0)
+  select(white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer)
 
+# Thermometer + ideology arrangement
 anes_2024_racethermometer_arranged <- anes_2024 |>
-  arrange(ifelse(lib_con_7pt < 0, NA, lib_con_7pt)) |>
-  select("white_thermometer", "black_thermometer", "asian_thermometer", "hispanic_thermometer", "lib_con_7pt") |>
-  replace_with_na_all(condition = ~.x < 0)
+  arrange(lib_con_7pt) |>
+  select(white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer, lib_con_7pt)
 
+# Basic missingness plots
 vis_miss(anes_2024_demographics)
 vis_miss(anes_2024_racethermometer)
 vis_miss(anes_2024_racethermometer_arranged)
-
-# Create ideology groups for faceting
-anes_2024_racethermometer_arranged_libcon3 <- anes_2024_racethermometer_arranged |>
-  mutate(ideology_group = case_when(
-    lib_con_7pt <= 3 ~ "Liberal",
-    lib_con_7pt == 4 ~ "Moderate", 
-    lib_con_7pt >= 5 ~ "Conservative",
-    TRUE ~ "Missing"
-  ))
-
-# Create separate plots for each ideology group
-liberal_plot <- anes_2024_racethermometer_arranged_libcon3 |>
-  filter(ideology_group == "Liberal") |>
-  select(-ideology_group)
-
-moderate_plot <- anes_2024_racethermometer_arranged_libcon3 |>
-  filter(ideology_group == "Moderate") |>
-  select(-ideology_group)
-
-conservative_plot <- anes_2024_racethermometer_arranged_libcon3 |>
-  filter(ideology_group == "Conservative") |>
-  select(-ideology_group)
-
-vis_miss(liberal_plot, cluster=TRUE)
-vis_miss(moderate_plot, cluster=TRUE)
-vis_miss(conservative_plot, cluster=TRUE)
-
-anes_2024_racethermometer_arranged_lib <- anes_2024_racethermometer_arranged |>
-  mutate(ideology_group = case_when(
-    lib_con_7pt == 1 ~ "Extremely Liberal",
-  ))
-
-extremely_liberal_plot <- anes_2024_racethermometer_arranged_lib |>
-  filter(ideology_group == "Extremely Liberal") |>
-  select(-ideology_group)
-
-vis_miss(extremely_liberal_plot, cluster=TRUE)
-
 ```
 
 # Heat map
@@ -287,30 +233,7 @@ vis_miss(extremely_liberal_plot, cluster=TRUE)
 
 # Prepare your data
 anes_2024_for_missing <- anes_2024 |>
-  select(educ, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer) |>
-  replace_with_na_all(condition = ~.x < 0) |>
-  mutate(educ = case_when(
-    educ == '-9' ~ "Refused",
-    educ == '-8' ~ "Don't Know",
-    educ == '-4' ~ "Error",
-    educ == '-2' ~ "Other/specify open-ended responses to be coded",
-    educ == '1' ~ "Less than high school credential",
-    educ == '2' ~ "High school credential",
-    educ == '3' ~ "Some post-high school, no bachelor's degree",
-    educ == '4' ~ "Bachelor's degree",
-    educ == '5' ~ "Graduate degree"
-  )) |>
-  mutate(educ = factor(educ, levels = c(
-    "Refused",
-    "Don't Know", 
-    "Error",
-    "Other/specify open-ended responses to be coded",
-    "Less than high school credential",
-    "High school credential",
-    "Some post-high school, no bachelor's degree",
-    "Bachelor's degree",
-    "Graduate degree"
-  )))
+  select(educ, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer)
 
 # Then create the plot
 anes_2024_for_missing |>
@@ -323,12 +246,9 @@ anes_2024_for_missing |>
        fill = "Missing %") +
   theme(
     text = element_text(family = "Source Sans 3"),
-    plot.title = element_text(face = "bold"),  # Add this line
+    plot.title = element_text(face = "bold"),
     plot.caption = element_text(face = "italic"),
-    axis.title.x = element_text(color = "black", face = "bold"),      # x-axis title color
-    axis.title.y = element_text(color = "black", face = "bold"),       # y-axis title color
-    axis.text.x = element_text(color = "black", angle = 45, hjust = 1),  # x-axis tick labels color
-    axis.text.y = element_text(color = "black")      # y-axis tick labels color
+    axis.text.x = element_text(angle = 45, hjust = 1),
     )
 
 ```
@@ -340,32 +260,7 @@ anes_2024_for_missing |>
 
 # Prepare your data
 anes_2024_for_missing <- anes_2024 |>
-  select(lib_con_7pt, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer) |>
-  replace_with_na_all(condition = ~.x < 0) |>
-  mutate(lib_con_7pt = case_when(
-    lib_con_7pt == '-9' ~ "Refused",
-    lib_con_7pt == '-4' ~ "Error",
-    lib_con_7pt == '1' ~ "Extremely liberal",
-    lib_con_7pt == '2' ~ "Liberal",
-    lib_con_7pt == '3' ~ "Slightly liberal",
-    lib_con_7pt == '4' ~ "Moderate; middle of the road",
-    lib_con_7pt == '5' ~ "Slightly conservative",
-    lib_con_7pt == '6' ~ "Conservative",
-    lib_con_7pt == '7' ~ "Extremely conservative",
-    lib_con_7pt == '99' ~ "Haven't thought much about this"
-  )) |>
-  mutate(lib_con_7pt = factor(lib_con_7pt, levels = c(
-    "Extremely liberal",
-    "Liberal", 
-    "Slightly liberal",
-    "Moderate; middle of the road",
-    "Slightly conservative",
-    "Conservative",
-    "Extremely conservative",
-    "Haven't thought much about this",
-    "Error",
-    "Refused"
-  )))
+  select(lib_con_7pt, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer)
 
 # Then create the plot
 anes_2024_for_missing |>
@@ -385,30 +280,7 @@ anes_2024_for_missing |>
 
 # Prepare your data
 anes_2024_for_missing <- anes_2024 |>
-  select(lib_con_7pt, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer) |>
-  replace_with_na_all(condition = ~.x < 0) |>
-  mutate(lib_con_7pt = case_when(
-    lib_con_7pt == '-9' ~ "NA",
-    lib_con_7pt == '-4' ~ "NA",
-    lib_con_7pt == '1' ~ "Extremely liberal",
-    lib_con_7pt == '2' ~ "Liberal",
-    lib_con_7pt == '3' ~ "Slightly liberal",
-    lib_con_7pt == '4' ~ "Moderate; middle of the road",
-    lib_con_7pt == '5' ~ "Slightly conservative",
-    lib_con_7pt == '6' ~ "Conservative",
-    lib_con_7pt == '7' ~ "Extremely conservative",
-    lib_con_7pt == '99' ~ "NA"
-  )) |>
-  mutate(lib_con_7pt = factor(lib_con_7pt, levels = c(
-    "Extremely liberal",
-    "Liberal", 
-    "Slightly liberal",
-    "Moderate; middle of the road",
-    "Slightly conservative",
-    "Conservative",
-    "Extremely conservative",
-    "NA"
-  )))
+  select(lib_con_7pt, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer)
 
 # Then create the plot
 anes_2024_for_missing |>
@@ -428,30 +300,7 @@ anes_2024_for_missing |>
 
 # Prepare your data
 anes_2024_for_missing <- anes_2024 |>
-  select(lib_con_7pt, gay_marriage, poli_party_reg, pres_vote, import_limits) |>
-  replace_with_na_all(condition = ~.x < 0) |>
-  mutate(lib_con_7pt = case_when(
-    lib_con_7pt == '-9' ~ "NA",
-    lib_con_7pt == '-4' ~ "NA",
-    lib_con_7pt == '1' ~ "Extremely liberal",
-    lib_con_7pt == '2' ~ "Liberal",
-    lib_con_7pt == '3' ~ "Slightly liberal",
-    lib_con_7pt == '4' ~ "Moderate; middle of the road",
-    lib_con_7pt == '5' ~ "Slightly conservative",
-    lib_con_7pt == '6' ~ "Conservative",
-    lib_con_7pt == '7' ~ "Extremely conservative",
-    lib_con_7pt == '99' ~ "NA"
-  )) |>
-  mutate(lib_con_7pt = factor(lib_con_7pt, levels = c(
-    "Extremely liberal",
-    "Liberal", 
-    "Slightly liberal",
-    "Moderate; middle of the road",
-    "Slightly conservative",
-    "Conservative",
-    "Extremely conservative",
-    "NA"
-  )))
+  select(lib_con_7pt, gay_marriage, poli_party_reg, pres_vote, import_limits)
 
 # Then create the plot
 anes_2024_for_missing |>
@@ -484,30 +333,7 @@ anes_2024_for_missing <- anes_2024 |>
          gun_ban_assault_rifles, 
          gun_difficulty, 
          blm_thermometer
-) |>
-  replace_with_na_all(condition = ~.x < 0) |>
-  mutate(lib_con_7pt = case_when(
-    lib_con_7pt == '-9' ~ "NA",
-    lib_con_7pt == '-4' ~ "NA",
-    lib_con_7pt == '1' ~ "Extremely liberal",
-    lib_con_7pt == '2' ~ "Liberal",
-    lib_con_7pt == '3' ~ "Slightly liberal",
-    lib_con_7pt == '4' ~ "Moderate; middle of the road",
-    lib_con_7pt == '5' ~ "Slightly conservative",
-    lib_con_7pt == '6' ~ "Conservative",
-    lib_con_7pt == '7' ~ "Extremely conservative",
-    lib_con_7pt == '99' ~ "NA"
-  )) |>
-  mutate(lib_con_7pt = factor(lib_con_7pt, levels = c(
-    "Extremely liberal",
-    "Liberal", 
-    "Slightly liberal",
-    "Moderate; middle of the road",
-    "Slightly conservative",
-    "Conservative",
-    "Extremely conservative",
-    "NA"
-  )))
+       ) 
 
 # Then create the plot
 anes_2024_for_missing |>
@@ -533,30 +359,7 @@ anes_2024_for_missing <- anes_2024 |>
          illegal_immigrant_thermometer, 
          mexico_threat, 
          immigration_crime
-) |>
-  replace_with_na_all(condition = ~.x < 0) |>
-  mutate(lib_con_7pt = case_when(
-    lib_con_7pt == '-9' ~ "NA",
-    lib_con_7pt == '-4' ~ "NA",
-    lib_con_7pt == '1' ~ "Extremely liberal",
-    lib_con_7pt == '2' ~ "Liberal",
-    lib_con_7pt == '3' ~ "Slightly liberal",
-    lib_con_7pt == '4' ~ "Moderate; middle of the road",
-    lib_con_7pt == '5' ~ "Slightly conservative",
-    lib_con_7pt == '6' ~ "Conservative",
-    lib_con_7pt == '7' ~ "Extremely conservative",
-    lib_con_7pt == '99' ~ "NA"
-  )) |>
-  mutate(lib_con_7pt = factor(lib_con_7pt, levels = c(
-    "Extremely liberal",
-    "Liberal", 
-    "Slightly liberal",
-    "Moderate; middle of the road",
-    "Slightly conservative",
-    "Conservative",
-    "Extremely conservative",
-    "NA"
-  )))
+) 
 
 # Then create the plot
 anes_2024_for_missing |>
@@ -574,31 +377,6 @@ anes_2024_for_missing |>
     axis.text.x = element_text(angle = 45, hjust = 1)
     )
 
-# Prepare your data
-anes_2024_for_missing <- anes_2024 |>
-  replace_with_na_all(condition = ~.x < 0) |>
-  mutate(lib_con_7pt = case_when(
-    lib_con_7pt == '-9' ~ "NA",
-    lib_con_7pt == '-4' ~ "NA",
-    lib_con_7pt == '1' ~ "Extremely liberal",
-    lib_con_7pt == '2' ~ "Liberal",
-    lib_con_7pt == '3' ~ "Slightly liberal",
-    lib_con_7pt == '4' ~ "Moderate; middle of the road",
-    lib_con_7pt == '5' ~ "Slightly conservative",
-    lib_con_7pt == '6' ~ "Conservative",
-    lib_con_7pt == '7' ~ "Extremely conservative",
-    lib_con_7pt == '99' ~ "NA"
-  )) |>
-  mutate(lib_con_7pt = factor(lib_con_7pt, levels = c(
-    "Extremely liberal",
-    "Liberal", 
-    "Slightly liberal",
-    "Moderate; middle of the road",
-    "Slightly conservative",
-    "Conservative",
-    "Extremely conservative",
-    "NA"
-  )))
 
 # Then create the plot
 anes_2024_for_missing |>
