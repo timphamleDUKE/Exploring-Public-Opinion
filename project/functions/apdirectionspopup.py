@@ -1,6 +1,6 @@
 import streamlit as st
 
-@st.dialog("Affective Polarization Directions")
+@st.dialog("Affective Polarization Information")
 def show_directions_dialog():
     """Display directions in a proper dialog"""
     st.markdown("**What is Affective Polarization?**")
@@ -13,7 +13,7 @@ def show_directions_dialog():
 def show_directions_popup():
     """Display the directions popup to the right of the title"""
     # Create columns with specific width ratios - first column much wider
-    col1, col2, col3, col4, col5, col6, col7, col8, col9, col10 = st.columns([4, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+    col1, col2, col3, col4, col5, col6, col7, col8, col9, col10 = st.columns([6, 1, 1, 1, 1, 1, 1, 1, 1, 1])
     
     with col1:
         st.markdown("# Affective Polarization")

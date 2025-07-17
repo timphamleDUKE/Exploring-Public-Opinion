@@ -11,15 +11,13 @@ from functions.apdirectionspopup import show_directions_popup
 set_logo()
 load_save_list_css()
 
-show_directions_popup()  # This now handles both title and button
+show_directions_popup()
 
 # Tabs
 tab1, tab2 = st.tabs(["Featured", "Explore"])
 
 with tab1:
-    # Featured tab content
-    st.markdown(" Pre-selected key visualizations showing important trends in affective polarization")
-
+    st.write("Explore key trends in Affective Polarization with density plots showing how Democrats, Republicans, and people across the ideological spectrum rate each other. You’ll also see how each party rated the 2024 presidential candidates, both before and after the election.")     
 
     st.header("Thermometer Ratings: Democrats & Republicans")
     col1, col2 = st.columns(2)
@@ -125,8 +123,7 @@ with tab1:
 
 # Display Plot
 with tab2:
-    # Explore tab content
-    st.markdown("Interactive tools to filter and customize your analysis of the data")
+    st.write("Dig deeper into the data using interactive tools. Filter ANES 2024 feeling thermometer responses by party, ideology, and more. Customize the graphs to compare groups of the survey respondents.")
     
     with st.sidebar:
         st.title("Please Select:")
