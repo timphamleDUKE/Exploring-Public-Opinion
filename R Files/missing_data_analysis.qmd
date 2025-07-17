@@ -254,6 +254,13 @@ anes_2024 |>
 
 anes_2024 |>
   select(race_ethnicity, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer) |>
+  mutate(race_ethnicity = fct_relevel(
+    race_ethnicity, 
+    "White", 
+    "Hispanic", 
+    "Black", 
+    "Asian/Native Hawaiian/other Pacific Islander",
+    "Native American/Alaska Native/other")) |>
   gg_miss_fct(fct = race_ethnicity) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
@@ -310,7 +317,7 @@ anes_2024 |>
   gg_miss_fct(fct = lib_con_7pt) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
-  labs(title = "Missing Data Patterns by Ideology \nand Thermometer Questions",
+  labs(title = "Missing Data Patterns by Ideology \nand All Survey Questions",
        x = "Education",
        y = "Question",
        fill = "Missing %") +
