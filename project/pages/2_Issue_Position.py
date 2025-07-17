@@ -69,7 +69,7 @@ title = wrap_title(description_map.get(issue_question))
 
 st.divider()
 col1, col2 = st.columns(2)
-col1.header("Issue Position Questions")
+col1.header("Issue Position Questions (2024)")
 
 with col2:
     star_button("star-btn-sankey", "sankey", df, issue_question, list_of_groups, group, title=title, viz_type=viz_type)

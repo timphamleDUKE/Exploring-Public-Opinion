@@ -93,7 +93,7 @@ with tab1:
     # Generate Analysis
     if st.button("Generate Analysis"):
         st.divider()
-        st.header(f"Analysis: {description_map.get(thermometer_question)}")
+        st.header(f"{description_map.get(thermometer_question)} (2024)")
         
         # Create plots in a 2-column layout
         facet_items = list(facet_display_map.items())
