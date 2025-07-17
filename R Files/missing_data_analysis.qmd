@@ -518,4 +518,159 @@ anes_2024_for_missing |>
 
 ```
 
+```{r}
+#| label: missing-heatmap-libcon-concerns
+#| message: FALSE
+#| warning: FALSE
+
+# Prepare your data
+anes_2024_for_missing <- anes_2024 |>
+  select(lib_con_7pt, 
+         sexual_harassment, 
+         budget_healthcare, 
+         gun_ban_assault_rifles, 
+         gun_difficulty, 
+         blm_thermometer
+) |>
+  replace_with_na_all(condition = ~.x < 0) |>
+  mutate(lib_con_7pt = case_when(
+    lib_con_7pt == '-9' ~ "NA",
+    lib_con_7pt == '-4' ~ "NA",
+    lib_con_7pt == '1' ~ "Extremely liberal",
+    lib_con_7pt == '2' ~ "Liberal",
+    lib_con_7pt == '3' ~ "Slightly liberal",
+    lib_con_7pt == '4' ~ "Moderate; middle of the road",
+    lib_con_7pt == '5' ~ "Slightly conservative",
+    lib_con_7pt == '6' ~ "Conservative",
+    lib_con_7pt == '7' ~ "Extremely conservative",
+    lib_con_7pt == '99' ~ "NA"
+  )) |>
+  mutate(lib_con_7pt = factor(lib_con_7pt, levels = c(
+    "Extremely liberal",
+    "Liberal", 
+    "Slightly liberal",
+    "Moderate; middle of the road",
+    "Slightly conservative",
+    "Conservative",
+    "Extremely conservative",
+    "NA"
+  )))
+
+# Then create the plot
+anes_2024_for_missing |>
+  gg_miss_fct(fct = lib_con_7pt) +
+  scale_fill_gradient(low = "white", high = "#7b3ad4") +
+  theme_minimal() +
+  labs(title = "Missing Data Patterns by Education Level and Liberal Concerns",
+       x = "Education",
+       y = "Question",
+       fill = "Missing %") +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),  # Add this line
+    plot.caption = element_text(face = "italic"),
+    axis.title.x = element_text(color = "black", face = "bold"),      # x-axis title color
+    axis.title.y = element_text(color = "black", face = "bold"),       # y-axis title color
+    axis.text.x = element_text(color = "black", angle = 45, hjust = 1),  # x-axis tick labels color
+    axis.text.y = element_text(color = "black")      # y-axis tick labels color
+    )
+
+# Prepare your data
+anes_2024_for_missing <- anes_2024 |>
+  select(lib_con_7pt, 
+         import_limits, 
+         free_trade, 
+         illegal_immigrant_thermometer, 
+         mexico_threat, 
+         immigration_crime
+) |>
+  replace_with_na_all(condition = ~.x < 0) |>
+  mutate(lib_con_7pt = case_when(
+    lib_con_7pt == '-9' ~ "NA",
+    lib_con_7pt == '-4' ~ "NA",
+    lib_con_7pt == '1' ~ "Extremely liberal",
+    lib_con_7pt == '2' ~ "Liberal",
+    lib_con_7pt == '3' ~ "Slightly liberal",
+    lib_con_7pt == '4' ~ "Moderate; middle of the road",
+    lib_con_7pt == '5' ~ "Slightly conservative",
+    lib_con_7pt == '6' ~ "Conservative",
+    lib_con_7pt == '7' ~ "Extremely conservative",
+    lib_con_7pt == '99' ~ "NA"
+  )) |>
+  mutate(lib_con_7pt = factor(lib_con_7pt, levels = c(
+    "Extremely liberal",
+    "Liberal", 
+    "Slightly liberal",
+    "Moderate; middle of the road",
+    "Slightly conservative",
+    "Conservative",
+    "Extremely conservative",
+    "NA"
+  )))
+
+# Then create the plot
+anes_2024_for_missing |>
+  gg_miss_fct(fct = lib_con_7pt) +
+  scale_fill_gradient(low = "white", high = "#7b3ad4") +
+  theme_minimal() +
+  labs(title = "Missing Data Patterns by Education Level and Conservative Concerns",
+       x = "Education",
+       y = "Question",
+       fill = "Missing %") +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),  # Add this line
+    plot.caption = element_text(face = "italic"),
+    axis.title.x = element_text(color = "black", face = "bold"),      # x-axis title color
+    axis.title.y = element_text(color = "black", face = "bold"),       # y-axis title color
+    axis.text.x = element_text(color = "black", angle = 45, hjust = 1),  # x-axis tick labels color
+    axis.text.y = element_text(color = "black")      # y-axis tick labels color
+    )
+
+# Prepare your data
+anes_2024_for_missing <- anes_2024 |>
+  replace_with_na_all(condition = ~.x < 0) |>
+  mutate(lib_con_7pt = case_when(
+    lib_con_7pt == '-9' ~ "NA",
+    lib_con_7pt == '-4' ~ "NA",
+    lib_con_7pt == '1' ~ "Extremely liberal",
+    lib_con_7pt == '2' ~ "Liberal",
+    lib_con_7pt == '3' ~ "Slightly liberal",
+    lib_con_7pt == '4' ~ "Moderate; middle of the road",
+    lib_con_7pt == '5' ~ "Slightly conservative",
+    lib_con_7pt == '6' ~ "Conservative",
+    lib_con_7pt == '7' ~ "Extremely conservative",
+    lib_con_7pt == '99' ~ "NA"
+  )) |>
+  mutate(lib_con_7pt = factor(lib_con_7pt, levels = c(
+    "Extremely liberal",
+    "Liberal", 
+    "Slightly liberal",
+    "Moderate; middle of the road",
+    "Slightly conservative",
+    "Conservative",
+    "Extremely conservative",
+    "NA"
+  )))
+
+# Then create the plot
+anes_2024_for_missing |>
+  gg_miss_fct(fct = lib_con_7pt) +
+  scale_fill_gradient(low = "white", high = "#7b3ad4") +
+  theme_minimal() +
+  labs(title = "Missing Data Patterns by Education Level and Thermometer Questions",
+       x = "Education",
+       y = "Question",
+       fill = "Missing %") +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),  # Add this line
+    plot.caption = element_text(face = "italic"),
+    axis.title.x = element_text(color = "black", face = "bold"),      # x-axis title color
+    axis.title.y = element_text(color = "black", face = "bold"),       # y-axis title color
+    axis.text.x = element_text(color = "black", angle = 45, hjust = 1),  # x-axis tick labels color
+    axis.text.y = element_text(color = "black")      # y-axis tick labels color
+    )
+
+```
 
