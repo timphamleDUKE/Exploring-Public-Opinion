@@ -6,19 +6,21 @@ from functions.density import densityGraph, densityGraphFaceted
 from functions.expander import expander
 from functions.saved import star_button, show_saved_button
 from functions.css import load_save_list_css
+from functions.apdirectionspopup import show_directions_popup
 
 set_logo()
 load_save_list_css()
 
-st.title("Affective Polarization")
-
-st.write("Affective polarization refers to the emotional gap between how warmly people feel about their own political party compared to the opposing one. It’s often measured using feeling thermometer ratings, where respondents rate a target on a 0–100 scale. Higher ratings mean warmer or more favorable feelings, while lower ratings reflect colder or more negative feelings.")
+show_directions_popup()  # This now handles both title and button
 
 # Tabs
 tab1, tab2 = st.tabs(["Featured", "Explore"])
 
 with tab1:
-    st.write("Explore key trends in affective polarization with density plots showing how Democrats, Republicans, and people across the ideological spectrum rate each other. You’ll also see how each party rated the 2024 presidential candidates, both before and after the election.")
+    # Featured tab content
+    st.markdown(" Pre-selected key visualizations showing important trends in affective polarization")
+
+
     st.header("Thermometer Ratings: Democrats & Republicans")
     col1, col2 = st.columns(2)
     with col1:
@@ -123,6 +125,9 @@ with tab1:
 
 # Display Plot
 with tab2:
+    # Explore tab content
+    st.markdown("Interactive tools to filter and customize your analysis of the data")
+    
     with st.sidebar:
         st.title("Please Select:")
 
@@ -152,8 +157,6 @@ with tab2:
 
         # Saved List Button
         show_saved = show_saved_button("density", thermometer_question, list_of_groups)
-
-    st.write("Dig deeper into the data using interactive tools. Filter ANES 2024 feeling thermometer responses by party, ideology, and more. Customize the graphs to compare groups of the survey respondents.")
 
     densityCol1, densityCol2 = st.columns(2)
     densityCol1.header("Thermometer Ratings")
