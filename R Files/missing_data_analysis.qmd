@@ -34,17 +34,8 @@ codebook <- read_csv("../data/codebook.csv")
 #| warning: FALSE
 
 missing_count <- anes_2024 |>
-  summarise(
-    across(
-      everything(),
-      ~ sum(.x < 0 | is.na(.x))
-    )
-  ) |>
-  pivot_longer(
-    cols = everything(),
-    names_to = "variable",
-    values_to = "neg_count"
-  ) |>
+  summarise(across(everything(), ~ sum(.x < 0 | is.na(.x)))) |>
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "neg_count") |>
   arrange(desc(neg_count)) |>
   mutate(variable = fct_reorder(variable, neg_count))
 
@@ -52,30 +43,15 @@ top_10_missing_count <- missing_count |>
   head(10)
 
 ggplot(top_10_missing_count, aes(x = neg_count, y = variable)) +
-  geom_bar(
-    stat = "identity",
-    fill = "#b4b5b9",
-    color = "#b4b5b9") +
-  geom_bar(
-    data = top_10_missing_count[1, ],
-    stat = "identity",
-    fill = "#7b3ad4",
-    color = "#7b3ad4"
-  ) +
-  labs(
-    title = "Top 10 Unanswered Questions",
-    x = "Respondents Missed",
-    y = "Question",
-    caption = "Data source: ANES 2024"
-  ) +
+  geom_bar(stat = "identity", fill = "#b4b5b9") +
+  geom_bar(data = top_10_missing_count[1, ], stat = "identity", fill = "#7b3ad4") +
   geom_text(aes(label = neg_count, hjust = 1.15), color = "white", family = "Source Sans 3") +
+  labs(title = "Top 10 Unanswered Questions", x = "Respondents Missed", y = "Question",
+       caption = "Data source: ANES 2024") +
   theme_minimal() +
-  theme(
-    text = element_text(family = "Source Sans 3"),
-    plot.title = element_text(face = "bold"),
-    plot.caption = element_text(face = "italic")
-  )
-  
+  theme(text = element_text(family = "Source Sans 3"),
+        plot.title = element_text(face = "bold"),
+        plot.caption = element_text(face = "italic"))
 ```
 
 ```{r}
