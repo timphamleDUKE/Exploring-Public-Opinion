@@ -26,6 +26,8 @@ anes_2024 <- read_csv("../data/anes_2024_clean.csv")
 codebook <- read_csv("../data/codebook.csv")
 ```
 
+# Bar chart
+
 ```{r}
 #| label: top-missing-question
 #| message: FALSE
@@ -157,6 +159,8 @@ ggplot(least_10_demographic_count, aes(x = neg_count, y = variable)) +
   )
 
 ```
+
+# Missingness plot
 
 ```{r}
 #| label: top-missing-explore-function
@@ -297,6 +301,8 @@ extremely_liberal_plot <- anes_2024_racethermometer_arranged_lib |>
 vis_miss(extremely_liberal_plot, cluster=TRUE)
 
 ```
+
+# Heat map
 
 ```{r}
 #| label: missing-heatmap-educ
