@@ -1,0 +1,376 @@
+---
+title: "missing_data_analysis"
+format: html
+---
+
+```{r}
+#| label: packages
+#| message: FALSE
+
+library(tidyverse)
+library(readr)
+library(here)
+library(survey)
+library(ggplot2)
+library(survey)
+library(extrafont)
+library(naniar)
+```
+
+```{r}
+#| label: data
+#| message: FALSE
+#| warning: FALSE
+
+anes_2024 <- read_csv("../data/anes_2024_clean.csv")
+codebook <- read_csv("../data/codebook.csv")
+
+```
+
+```{r}
+#| label: top-missing-question
+#| message: FALSE
+#| warning: FALSE
+
+missing_count <- anes_2024 |>
+  summarise(
+    across(
+      everything(),
+      ~ sum(.x < 0 | is.na(.x))
+    )
+  ) |>
+  pivot_longer(
+    cols = everything(),
+    names_to = "variable",
+    values_to = "neg_count"
+  ) |>
+  arrange(desc(neg_count)) |>
+  mutate(variable = fct_reorder(variable, neg_count))
+
+top_10_missing_count <- missing_count |>
+  head(10)
+
+ggplot(top_10_missing_count, aes(x = neg_count, y = variable)) +
+  geom_bar(
+    stat = "identity",
+    fill = "#b4b5b9",
+    color = "#b4b5b9") +
+  geom_bar(
+    data = top_10_missing_count[1, ],  # first row (highest count)
+    aes(x = neg_count, y = variable),
+    stat = "identity",
+    fill = "#7b3ad4",
+    color = "#7b3ad4",
+    size = 1
+  ) +
+  labs(
+    title = "Top 10 Unanswered Questions",
+    x = "Respondents Missed",
+    y = "Question",
+    caption = "Data source: ANES 2024"
+  ) +
+  geom_text(aes(label = neg_count, hjust = 1.15), color = "white", family = "Source Sans 3") +
+  theme_minimal() +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),  # Add this line
+    plot.caption = element_text(face = "italic"),
+    axis.title.x = element_text(color = "black", face = "bold"),      # x-axis title color
+    axis.title.y = element_text(color = "black", face = "bold"),       # y-axis title color
+    axis.text.x = element_text(color = "black"),  # x-axis tick labels color
+    axis.text.y = element_text(color = "black")      # y-axis tick labels color
+  )
+  
+```
+
+```{r}
+#| label: least-missing-question
+#| message: FALSE
+#| warning: FALSE
+
+least_10_missing_count <- missing_count |>
+  arrange(neg_count) |>
+  slice(-(1:4)) |>
+  head(10)
+
+ggplot(least_10_missing_count, aes(x = neg_count, y = variable)) +
+  geom_bar(
+    stat = "identity",
+    fill = "#b4b5b9",
+    color = "#b4b5b9") +
+  geom_bar(
+    data = least_10_missing_count[1, ],  # first row (highest count)
+    aes(x = neg_count, y = variable),
+    stat = "identity",
+    fill = "#7b3ad4",
+    color = "#7b3ad4",
+    size = 1
+  ) +
+  labs(
+    title = "Least 10 Unanswered Questions",
+    x = "Respondents Missed",
+    y = "Question",
+    caption = "Data source: ANES 2024"
+  ) +
+  geom_text(aes(label = neg_count, hjust = 1.15), color = "white", family = "Source Sans 3") +
+  theme_minimal() +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),  # Add this line
+    plot.caption = element_text(face = "italic"),
+    axis.title.x = element_text(color = "black", face = "bold"),      # x-axis title color
+    axis.title.y = element_text(color = "black", face = "bold"),       # y-axis title color
+    axis.text.x = element_text(color = "black"),  # x-axis tick labels color
+    axis.text.y = element_text(color = "black")      # y-axis tick labels color
+  )
+
+```
+
+```{r}
+#| label: least-missing-demographic
+#| message: FALSE
+#| warning: FALSE
+
+least_10_demographic_count <- missing_count |>
+  arrange((neg_count)) |>
+  slice(-(1:4)) |>
+  filter(variable %in% 
+           c("age_election_day", 
+             "educ", 
+             "marriage", 
+             "income", 
+             "religion", 
+             "gender", 
+             "race_ethnicity")) |>
+  head(10)
+
+ggplot(least_10_demographic_count, aes(x = neg_count, y = variable)) +
+  geom_bar(
+    stat = "identity",
+    fill = "#b4b5b9",
+    color = "#b4b5b9") +
+  geom_bar(
+    data = least_10_demographic_count[1, ],  # first row (highest count)
+    aes(x = neg_count, y = variable),
+    stat = "identity",
+    fill = "#7b3ad4",
+    color = "#7b3ad4",
+    size = 1
+  ) +
+  labs(
+    title = "Missed Demographic Questions",
+    x = "Respondents Missed",
+    y = "Question",
+    caption = "Data source: ANES 2024"
+  ) +
+  geom_text(aes(label = neg_count, hjust = 1.15), color = "white", family = "Source Sans 3") +
+  theme_minimal() +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),  # Add this line
+    plot.caption = element_text(face = "italic"),
+    axis.title.x = element_text(color = "black", face = "bold"),      # x-axis title color
+    axis.title.y = element_text(color = "black", face = "bold"),       # y-axis title color
+    axis.text.x = element_text(color = "black"),  # x-axis tick labels color
+    axis.text.y = element_text(color = "black")      # y-axis tick labels color
+  )
+
+```
+
+```{r}
+#| label: top-missing-explore-function
+#| message: FALSE
+#| warning: FALSE
+
+compute_missing_simple <- function(data, group_var, question_var) {
+  
+  # Create the appropriate label variable based on group_var
+  if (group_var == "race_ethnicity") {
+    data <- data |>
+      mutate(group_label = case_when(
+        !!sym(group_var) == '-9' ~ "Refused",
+        !!sym(group_var) == '-8' ~ "Don't know",
+        !!sym(group_var) == '-4' ~ "Error",
+        !!sym(group_var) == '1' ~ "White, non-Hispanic",
+        !!sym(group_var) == '2' ~ "Black, non-Hispanic",
+        !!sym(group_var) == '3' ~ "Hispanic",
+        !!sym(group_var) == '4' ~ "Asian or Native Hawaiian/other Pacific Islander, non-Hispanic",
+        !!sym(group_var) == '5' ~ "Native American/Alaska Native or other race, non-Hispanic",
+        !!sym(group_var) == '6' ~ "Multiple races, non-Hispanic"
+      ))
+  } else if (group_var == "gender") {
+    data <- data |>
+      mutate(group_label = case_when(
+        !!sym(group_var) == '-9' ~ "Refused",
+        !!sym(group_var) == '-1' ~ "Inapplicable",
+        !!sym(group_var) == '1' ~ "Man",
+        !!sym(group_var) == '2' ~ "Woman",
+        !!sym(group_var) == '3' ~ "Nonbinary",
+        !!sym(group_var) == '4' ~ "Something else, please specify"
+      ))
+  } else if (group_var == "educ") {
+    data <- data |>
+      mutate(group_label = case_when(
+        !!sym(group_var) == '-9' ~ "Refused",
+        !!sym(group_var) == '-8' ~ "Don't Know",
+        !!sym(group_var) == '-4' ~ "Error",
+        !!sym(group_var) == '-2' ~ "Other/specify open-ended responses to be coded",
+        !!sym(group_var) == '1' ~ "Less than high school credential",
+        !!sym(group_var) == '2' ~ "High school credential",
+        !!sym(group_var) == '3' ~ "Some post-high school, no bachelor's degree",
+        !!sym(group_var) == '4' ~ "Bachelor's degree",
+        !!sym(group_var) == '5' ~ "Graduate degree"
+      ))
+  } else {
+    # For other variables, just use the original variable
+    data <- data |>
+      mutate(group_label = !!sym(group_var))
+  }
+  
+  # Compute missing statistics
+  result <- data |>
+    group_by(group_label) |>
+    summarize(
+      missing_count = sum(!!sym(question_var) < 0 | is.na(!!sym(question_var))),
+      missing_percentage = missing_count/n() * 100
+    ) |>
+    arrange(desc(missing_percentage))
+  
+  return(result)
+}
+
+```
+
+
+```{r}
+#| label: top-missing-explore
+#| message: FALSE
+#| warning: FALSE
+
+race_libcon_missing <- compute_missing_simple(anes_2024, "race_ethnicity", "lib_con_2pt")
+race_gaymarriage_missing <- compute_missing_simple(anes_2024, "race_ethnicity", "gay_marriage")
+race_poli_party_reg_missing <- compute_missing_simple(anes_2024, "race_ethnicity", "poli_party_reg")
+race_pres_vote_missing <- compute_missing_simple(anes_2024, "race_ethnicity", "pres_vote")
+
+View(race_libcon_missing)
+View(race_gaymarriage_missing)
+View(race_poli_party_reg_missing)
+View(race_pres_vote_missing)
+
+```
+
+```{r}
+#| label: missing-visualization
+#| message: FALSE
+#| warning: FALSE
+
+anes_2024_demographics <- anes_2024 |>
+  select("age_election_day", "educ", "marriage", "income", "religion", "gender", "race_ethnicity") |>
+  replace_with_na_all(condition = ~.x < 0)
+
+anes_2024_racethermometer <- anes_2024 |>
+  select("white_thermometer", "black_thermometer", "asian_thermometer", "hispanic_thermometer") |>
+  replace_with_na_all(condition = ~.x < 0)
+
+anes_2024_racethermometer_arranged <- anes_2024 |>
+  arrange(ifelse(lib_con_7pt < 0, NA, lib_con_7pt)) |>
+  select("white_thermometer", "black_thermometer", "asian_thermometer", "hispanic_thermometer", "lib_con_7pt") |>
+  replace_with_na_all(condition = ~.x < 0)
+
+vis_miss(anes_2024_demographics)
+vis_miss(anes_2024_racethermometer)
+vis_miss(anes_2024_racethermometer_arranged)
+
+# Create ideology groups for faceting
+anes_2024_racethermometer_arranged_libcon3 <- anes_2024_racethermometer_arranged |>
+  mutate(ideology_group = case_when(
+    lib_con_7pt <= 3 ~ "Liberal",
+    lib_con_7pt == 4 ~ "Moderate", 
+    lib_con_7pt >= 5 ~ "Conservative",
+    TRUE ~ "Missing"
+  ))
+
+# Create separate plots for each ideology group
+liberal_plot <- anes_2024_racethermometer_arranged_libcon3 |>
+  filter(ideology_group == "Liberal") |>
+  select(-ideology_group)
+
+moderate_plot <- anes_2024_racethermometer_arranged_libcon3 |>
+  filter(ideology_group == "Moderate") |>
+  select(-ideology_group)
+
+conservative_plot <- anes_2024_racethermometer_arranged_libcon3 |>
+  filter(ideology_group == "Conservative") |>
+  select(-ideology_group)
+
+vis_miss(liberal_plot, cluster=TRUE)
+vis_miss(moderate_plot, cluster=TRUE)
+vis_miss(conservative_plot, cluster=TRUE)
+
+anes_2024_racethermometer_arranged_lib <- anes_2024_racethermometer_arranged |>
+  mutate(ideology_group = case_when(
+    lib_con_7pt == 1 ~ "Extremely Liberal",
+  ))
+
+extremely_liberal_plot <- anes_2024_racethermometer_arranged_lib |>
+  filter(ideology_group == "Extremely Liberal") |>
+  select(-ideology_group)
+
+vis_miss(extremely_liberal_plot, cluster=TRUE)
+
+```
+
+```{r}
+#| label: missing-heatmap
+#| message: FALSE
+#| warning: FALSE
+
+# Prepare your data
+anes_2024_for_missing <- anes_2024 |>
+  select(educ, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer) |>
+  replace_with_na_all(condition = ~.x < 0) |>
+  mutate(educ = case_when(
+    educ == '-9' ~ "Refused",
+    educ == '-8' ~ "Don't Know",
+    educ == '-4' ~ "Error",
+    educ == '-2' ~ "Other/specify open-ended responses to be coded",
+    educ == '1' ~ "Less than high school credential",
+    educ == '2' ~ "High school credential",
+    educ == '3' ~ "Some post-high school, no bachelor's degree",
+    educ == '4' ~ "Bachelor's degree",
+    educ == '5' ~ "Graduate degree"
+  )) |>
+  mutate(educ = factor(educ, levels = c(
+    "Refused",
+    "Don't Know", 
+    "Error",
+    "Other/specify open-ended responses to be coded",
+    "Less than high school credential",
+    "High school credential",
+    "Some post-high school, no bachelor's degree",
+    "Bachelor's degree",
+    "Graduate degree"
+  )))
+
+# Then create the plot
+anes_2024_for_missing |>
+  gg_miss_fct(fct = educ) +
+  scale_fill_gradient(low = "white", high = "#7b3ad4") +
+  theme_minimal() +
+  labs(title = "Missing Data Patterns by Education Level",
+       x = "Education",
+       y = "Question",
+       fill = "Missing %") +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),  # Add this line
+    plot.caption = element_text(face = "italic"),
+    axis.title.x = element_text(color = "black", face = "bold"),      # x-axis title color
+    axis.title.y = element_text(color = "black", face = "bold"),       # y-axis title color
+    axis.text.x = element_text(color = "black", angle = 45, hjust = 1),  # x-axis tick labels color
+    axis.text.y = element_text(color = "black")      # y-axis tick labels color
+    
+    )
+
+```
+
