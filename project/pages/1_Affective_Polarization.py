@@ -1,25 +1,23 @@
 import streamlit as st
 from functions.sidebar_density import ideological_check, political_check, list_of_groups_check
-from functions.dictionaries import set_logo, list_of_thermometer_topics, topic_to_list_of_thermometer_map, df, description_map, dropdown_to_renamed, PAGES
+from functions.dictionaries import set_logo, list_of_thermometer_topics, topic_to_list_of_thermometer_map, df, description_map, dropdown_to_renamed
 from functions.facet import *
 from functions.density import densityGraph, densityGraphFaceted
 from functions.expander import expander
 from functions.saved import star_button, show_saved_button
 from functions.css import load_save_list_css
-from functions.apdirectionspopup import show_directions_popup
+from functions.directionspopup import show_ap_directions_popup
 
 set_logo()
 load_save_list_css()
 
-show_directions_popup()  # This now handles both title and button
+show_ap_directions_popup()
 
 # Tabs
 tab1, tab2 = st.tabs(["Featured", "Explore"])
 
 with tab1:
-    # Featured tab content
-    st.markdown(" Pre-selected key visualizations showing important trends in affective polarization")
-
+    st.write("Explore key trends in Affective Polarization with density plots showing how Democrats, Republicans, and people across the ideological spectrum rate each other. You’ll also see how each party rated the 2024 presidential candidates, both before and after the election.")     
 
     st.header("Thermometer Ratings: Democrats & Republicans")
     col1, col2 = st.columns(2)
@@ -27,7 +25,7 @@ with tab1:
         democratic_graph = densityGraph(
             df,
             "democrat_thermometer_pre",
-            ("Republican", "Democrat"),
+            ("Republicans", "Democrats"),
             group="Political Groups",
             title=description_map.get("democrat_thermometer_pre"), 
             yaxis_range=[0, 0.041]
@@ -38,7 +36,7 @@ with tab1:
         republican_graph = densityGraph(
             df,
             "republican_thermometer_pre",
-            ("Republican", "Democrat"),
+            ("Republicans", "Democrats"),
             group="Political Groups",
             title=description_map.get("republican_thermometer_pre"),
             yaxis_range=[0, 0.041]
@@ -81,7 +79,7 @@ with tab1:
         harris_graph_pre = densityGraph(
             df,
             "harris_thermometer_pre",
-            ("Republican", "Democrat"),
+            ("Republicans", "Democrats"),
             group="Political Groups",
             title=description_map.get("harris_thermometer_pre"),
             yaxis_range=[0, 0.072]
@@ -90,7 +88,7 @@ with tab1:
         harris_graph_post = densityGraph(
             df,
             "harris_thermometer_post",
-            ("Republican", "Democrat"),
+            ("Republicans", "Democrats"),
             group="Political Groups",
             title=description_map.get("harris_thermometer_post"),
             yaxis_range=[0, 0.072]
@@ -104,7 +102,7 @@ with tab1:
         trump_graph_pre = densityGraph(
             df,
             "trump_thermometer_pre",
-            ("Republican", "Democrat"),
+            ("Republicans", "Democrats"),
             group="Political Groups",
             title=description_map.get("trump_thermometer_pre"),
             yaxis_range=[0, 0.072]
@@ -113,7 +111,7 @@ with tab1:
         trump_graph_post = densityGraph(
             df,
             "trump_thermometer_post",
-            ("Republican", "Democrat"),
+            ("Republicans", "Democrats"),
             group="Political Groups",
             title=description_map.get("trump_thermometer_post"),
             yaxis_range=[0, 0.072]
@@ -125,8 +123,7 @@ with tab1:
 
 # Display Plot
 with tab2:
-    # Explore tab content
-    st.markdown("Interactive tools to filter and customize your analysis of the data")
+    st.write("Dig deeper into the data using interactive tools. Filter ANES 2024 feeling thermometer responses by party, ideology, and more. Customize the graphs to compare groups of the survey respondents.")
     
     with st.sidebar:
         st.title("Please Select:")
@@ -177,7 +174,7 @@ with tab2:
     st.divider()
 
     facetCol1, facetCol2 = st.columns(2)
-    facetCol1.header("Group Comparisons: Thermometer Ratings")
+    facetCol1.header("Group Comparisons")
 
     facet_settings = facet_config.get(facet_var)
 

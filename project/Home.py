@@ -74,7 +74,7 @@ def render_card_button(card):
 # Title
 st.markdown("""
 <div class="hero-container">
-    <h1 class="hero-title">How polarized are we?</h1>
+    <h1 class="hero-title">How polarized is the American public?</h1>
 </div>
 """, unsafe_allow_html=True)
 
@@ -82,12 +82,14 @@ st.markdown("""
 st.markdown("""
 <div style="text-align: center; width: 100%; margin: 1rem auto;">
     <p style="font-size: 1.2rem; color: #5a6c7d; line-height: 1.6; margin: 0.5rem 0;">
-        This project analyzes the 2024 American National Election Study data to explore political polarization 
+        This survey navigator tool analyzes the 2024 American National Election Study data to explore political polarization 
         and public opinion patterns. Through interactive visualizations, we examine both affective polarization 
         (how people feel about opposing parties) and issue positions (where Americans stand on key political topics).
     </p>
 </div>
 """, unsafe_allow_html=True)
+
+st.markdown("<br>", unsafe_allow_html=True)
 
 # Cards
 cols = st.columns(2, gap="large")
