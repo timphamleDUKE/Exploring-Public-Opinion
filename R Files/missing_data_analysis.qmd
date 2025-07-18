@@ -396,6 +396,22 @@ anes_2024 |>
     )
 
 anes_2024 |>
+  select(lib_con_7pt, liberals_thermometer, conservatives_thermometer) |>
+  gg_miss_fct(fct = lib_con_7pt) +
+  scale_fill_gradient(low = "white", high = "#7b3ad4") +
+  theme_minimal() +
+  labs(title = "Missing Data Patterns by Ideology \nand Ideological Questions (WEB)",
+       x = "Ideology",
+       y = "Question",
+       fill = "Missing %") +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),
+    plot.caption = element_text(face = "italic"),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+    )
+
+anes_2024 |>
   gg_miss_fct(fct = lib_con_7pt) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
@@ -455,6 +471,63 @@ anes_2024 |>
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
   labs(title = "Missing Data Patterns by Marriage \nand All Survey Questions (WEB)",
+       x = "Marital Status",
+       y = "Question",
+       fill = "Missing %") +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),
+    plot.caption = element_text(face = "italic"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.text.y = element_blank()
+    )
+
+```
+```{r}
+#| label: missing-heatmap-gender
+#| message: FALSE
+#| warning: FALSE
+
+anes_2024 |>
+  select(gender, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer) |>
+  gg_miss_fct(fct = gender) +
+  scale_fill_gradient(low = "white", high = "#7b3ad4") +
+  theme_minimal() +
+  labs(title = "Missing Data Patterns by Gender \nand Race Thermometer Questions (WEB)",
+       x = "Marital Status",
+       y = "Question",
+       fill = "Missing 
+%") +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),
+    plot.caption = element_text(face = "italic"),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+    )
+
+anes_2024 |>
+  select(gender, feminists_thermometer, lgbt_thermometer, 
+         transgender_thermometer, transgender_bathrooms, 
+         transgender_sports, gender_roles, transgender_military) |>
+  gg_miss_fct(fct = gender) +
+  scale_fill_gradient(low = "white", high = "#7b3ad4") +
+  theme_minimal() +
+  labs(title = "Missing Data Patterns by Gender \nand Gender Questions (WEB)",
+       x = "Marital Status",
+       y = "Question",
+       fill = "Missing %") +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),
+    plot.caption = element_text(face = "italic"),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+    )
+
+anes_2024 |>
+  gg_miss_fct(fct = gender) +
+  scale_fill_gradient(low = "white", high = "#7b3ad4") +
+  theme_minimal() +
+  labs(title = "Missing Data Patterns by Gender \nand All Survey Questions (WEB)",
        x = "Marital Status",
        y = "Question",
        fill = "Missing %") +
