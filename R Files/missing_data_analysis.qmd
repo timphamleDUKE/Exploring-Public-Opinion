@@ -27,7 +27,8 @@ codebook <- read_csv("../data/codebook.csv")
 
 anes_2024 <- anes_2024 |>
   filter(pre_interview_mode == 2 & post_interview_mode == 2) |>
-  select(-'...1', -pre_full, -post_full, -full_var_psu, -full_var_stratum)
+  select(-'...1', -pre_full, -post_full, -full_var_psu, 
+         -full_var_stratum, -gay_marriage_view, -gay_marriage)
 ```
 
 ```{r}
@@ -70,7 +71,7 @@ anes_2024 <- anes_2024 |>
       TRUE ~ as.character(educ)
     ),
     lib_con_7pt = case_when(
-      lib_con_7pt %in% c('-9', '-4', '99') ~ "NA",
+      lib_con_7pt %in% c('-9', '-4', '99') ~ NA,
       lib_con_7pt == '1' ~ "Extremely liberal",
       lib_con_7pt == '2' ~ "Liberal",
       lib_con_7pt == '3' ~ "Slightly liberal",
@@ -79,6 +80,15 @@ anes_2024 <- anes_2024 |>
       lib_con_7pt == '6' ~ "Conservative",
       lib_con_7pt == '7' ~ "Extremely conservative",
       TRUE ~ as.character(lib_con_7pt)
+    ),
+    marriage = case_when(
+      marriage == '1' ~ "Married",
+      marriage == '2' ~ "Married",
+      marriage == '3' ~ "Widowed",
+      marriage == '4' ~ "Divorced",
+      marriage == '5' ~ "Separated",
+      marriage == '6' ~ "Never Married",
+      TRUE ~ NA
     )
   ) |>
   mutate(
@@ -90,7 +100,11 @@ anes_2024 <- anes_2024 |>
     lib_con_7pt = factor(lib_con_7pt, levels = c(
       "Extremely liberal", "Liberal", "Slightly liberal", 
       "Moderate; middle of the road", "Slightly conservative", 
-      "Conservative", "Extremely conservative", "NA"
+      "Conservative", "Extremely conservative", NA
+    )),
+    marriage = factor(marriage, levels = c(
+      "Married", "Widowed", "Divorced", "Separated",
+      "Never Married", NA
     ))
   )
 
@@ -99,7 +113,7 @@ anes_2024 <- anes_2024 |>
 # Bar chart
 
 ```{r}
-#| label: top-missing-question
+#| label: top-missing-question-WEB
 #| message: FALSE
 #| warning: FALSE
 
@@ -117,7 +131,7 @@ ggplot(top_10_missing_count, aes(x = neg_count, y = variable)) +
   geom_bar(stat = "identity", fill = "#b4b5b9") +
   geom_bar(data = top_10_missing_count[1, ], stat = "identity", fill = "#7b3ad4") +
   geom_text(aes(label = neg_count, hjust = 1.15), color = "white", family = "Source Sans 3") +
-  labs(title = "Top 10 Least Answered Questions", x = "Respondents Missed", y = "Question",
+  labs(title = "Top 10 Least Answered Questions (WEB)", x = "Respondents Missed", y = "Question",
        caption = "Data source: ANES 2024") +
   theme_minimal() +
   theme(text = element_text(family = "Source Sans 3"),
@@ -126,7 +140,7 @@ ggplot(top_10_missing_count, aes(x = neg_count, y = variable)) +
 ```
 
 ```{r}
-#| label: least-missing-question
+#| label: least-missing-question-WEB
 #| message: FALSE
 #| warning: FALSE
 
@@ -137,9 +151,8 @@ least_10_missing_count <- missing_count |>
 ggplot(least_10_missing_count, aes(x = neg_count, y = variable)) +
   geom_bar(stat = "identity", fill = "#b4b5b9") +
   geom_bar(data = least_10_missing_count[1, ], stat = "identity", fill = "#7b3ad4") +
-  geom_bar(data = least_10_missing_count[2, ], stat = "identity", fill = "#7b3ad4") +
   geom_text(aes(label = neg_count, hjust = 1.15), color = "white", family = "Source Sans 3") +
-  labs(title = "Top 10 Most Answered Questions", x = "Respondents Missed", y = "Question",
+  labs(title = "Top 10 Most Answered Questions (WEB)", x = "Respondents Missed", y = "Question",
        caption = "Data source: ANES 2024") +
   theme_minimal() +
   theme(text = element_text(family = "Source Sans 3"),
@@ -161,7 +174,7 @@ ggplot(least_10_demographic_count, aes(x = neg_count, y = variable)) +
   geom_bar(stat = "identity", fill = "#b4b5b9") +
   geom_bar(data = least_10_demographic_count[1, ], stat = "identity", fill = "#7b3ad4") +
   geom_text(aes(label = neg_count, hjust = 1.15), color = "white", family = "Source Sans 3") +
-  labs(title = "Most Answered Demographic Questions", x = "Respondents Missed", y = "Question",
+  labs(title = "Most Answered Demographic Questions (WEB)", x = "Respondents Missed", y = "Question",
        caption = "Data source: ANES 2024") +
   theme_minimal() +
   theme(text = element_text(family = "Source Sans 3"),
@@ -170,31 +183,6 @@ ggplot(least_10_demographic_count, aes(x = neg_count, y = variable)) +
 ```
 
 # Missingness plot
-
-```{r}
-#| label: top-missing-explore-function
-#| message: FALSE
-#| warning: FALSE
-
-compute_missing_simple <- function(data, group_label_col, question_col) {
-  data |>
-    group_by(across(all_of(group_label_col))) |>
-    summarize(
-      missing_count = sum(is.na(.data[[question_col]])),
-      missing_percentage = 100 * missing_count / n(),
-      .groups = "drop"
-    ) |>
-    arrange(desc(missing_percentage))
-}
-
-race_gaymarriage_missing <- compute_missing_simple(anes_2024, "race_ethnicity", "gay_marriage")
-race_poli_party_reg_missing <- compute_missing_simple(anes_2024, "race_ethnicity", "poli_party_reg")
-race_pres_vote_missing <- compute_missing_simple(anes_2024, "race_ethnicity", "pres_vote")
-
-#View(race_gaymarriage_missing)
-#View(race_poli_party_reg_missing)
-#View(race_pres_vote_missing)
-```
 
 ```{r}
 #| label: missingness-thermometer
@@ -230,7 +218,7 @@ anes_2024 |>
   select(
     abortion, death_penalty, us_world_involvement, international_force, voting_id, voting_felons,
     journalists, climate_inc_temps, paid_leave, transgender_bathrooms, transgender_sports,
-    birthright_citizenship, lgbt_discrimination, lgbt_adoption, gay_marriage_view, gay_marriage,
+    birthright_citizenship, lgbt_discrimination, lgbt_adoption,
     children_immigrants, mexico_wall, ukraine_russia, israel, palestine_aid, israel_palestine,
     gaza_protests, political_violence, import_limits, immigration_levels, immigration_jobs,
     immigration_crime, immigration_citizenship, immigration_economy, immigration_customs,
@@ -252,7 +240,7 @@ anes_2024 |>
 anes_2024 |>
   select(
     abortion, paid_leave, transgender_bathrooms, transgender_sports, lgbt_discrimination, 
-    lgbt_adoption, gay_marriage_view, gay_marriage, diversity, sexual_harassment, 
+    lgbt_adoption, diversity, sexual_harassment, 
     transgender_military, colleges_run, dei
   ) |>
   vis_miss(cluster = TRUE, sort_miss = TRUE)
@@ -310,7 +298,7 @@ anes_2024 |>
   gg_miss_fct(fct = educ) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
-  labs(title = "Missing Data Patterns by Education Level \nand Race Thermometer Questions",
+  labs(title = "Missing Data Patterns by Education Level \nand Race Thermometer Questions (WEB)",
        x = "Education",
        y = "Question",
        fill = "Missing %") +
@@ -320,6 +308,25 @@ anes_2024 |>
     plot.caption = element_text(face = "italic"),
     axis.text.x = element_text(angle = 45, hjust = 1),
     )
+
+anes_2024 |>
+  select(educ, colleges_run, budget_public_schools, vaccines_schools, children_immigrants, affirmative_action) |>
+  gg_miss_fct(fct = educ) +
+  scale_fill_gradient(low = "white", high = "#7b3ad4") +
+  theme_minimal() +
+  labs(title = "Missing Data Patterns by Education Level \nand School Questions (WEB)",
+       x = "Education",
+       y = "Question",
+       fill = "Missing %") +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),
+    plot.caption = element_text(face = "italic"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    )
+
+
+
 ```
 
 ```{r}
@@ -339,7 +346,7 @@ anes_2024 |>
   gg_miss_fct(fct = race_ethnicity) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
-  labs(title = "Missing Data Patterns by Race \nand Race Thermometer Questions",
+  labs(title = "Missing Data Patterns by Race \nand Race Thermometer Questions (WEB)",
        x = "Race",
        y = "Question",
        fill = "Missing %") +
@@ -361,8 +368,8 @@ anes_2024 |>
   gg_miss_fct(fct = lib_con_7pt) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
-  labs(title = "Missing Data Patterns by Ideology \nand Race Thermometer Questions",
-       x = "Education",
+  labs(title = "Missing Data Patterns by Ideology \nand Race Thermometer Questions (WEB)",
+       x = "Ideology",
        y = "Question",
        fill = "Missing %") +
   theme(
@@ -373,12 +380,12 @@ anes_2024 |>
     )
 
 anes_2024 |>
-  select(lib_con_7pt, gay_marriage_view, gay_marriage, poli_party_reg, pres_vote, import_limits) |>
+  select(lib_con_7pt, poli_party_reg, pres_vote, black_thermometer, white_thermometer) |>
   gg_miss_fct(fct = lib_con_7pt) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
-  labs(title = "Missing Data Patterns by Ideology \nand Top 5 Unanswered Questions",
-       x = "Education",
+  labs(title = "Missing Data Patterns by Ideology \nand Top 5 Unanswered Questions (WEB)",
+       x = "Ideology",
        y = "Question",
        fill = "Missing %") +
   theme(
@@ -392,8 +399,63 @@ anes_2024 |>
   gg_miss_fct(fct = lib_con_7pt) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
-  labs(title = "Missing Data Patterns by Ideology \nand All Survey Questions",
-       x = "Education",
+  labs(title = "Missing Data Patterns by Ideology \nand All Survey Questions (WEB)",
+       x = "Ideology",
+       y = "Question",
+       fill = "Missing %") +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),
+    plot.caption = element_text(face = "italic"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.text.y = element_blank()
+    )
+
+```
+
+```{r}
+#| label: missing-heatmap-marriage
+#| message: FALSE
+#| warning: FALSE
+
+anes_2024 |>
+  select(marriage, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer) |>
+  gg_miss_fct(fct = marriage) +
+  scale_fill_gradient(low = "white", high = "#7b3ad4") +
+  theme_minimal() +
+  labs(title = "Missing Data Patterns by Marriage \nand Race Thermometer Questions (WEB)",
+       x = "Marital Status",
+       y = "Question",
+       fill = "Missing %") +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),
+    plot.caption = element_text(face = "italic"),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+    )
+
+anes_2024 |>
+  select(marriage, poli_party_reg, pres_vote, black_thermometer, white_thermometer) |>
+  gg_miss_fct(fct = marriage) +
+  scale_fill_gradient(low = "white", high = "#7b3ad4") +
+  theme_minimal() +
+  labs(title = "Missing Data Patterns by Marriage \nand Top 5 Unanswered Questions (WEB)",
+       x = "Marital Status",
+       y = "Question",
+       fill = "Missing %") +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),
+    plot.caption = element_text(face = "italic"),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+    )
+
+anes_2024 |>
+  gg_miss_fct(fct = marriage) +
+  scale_fill_gradient(low = "white", high = "#7b3ad4") +
+  theme_minimal() +
+  labs(title = "Missing Data Patterns by Marriage \nand All Survey Questions (WEB)",
+       x = "Marital Status",
        y = "Question",
        fill = "Missing %") +
   theme(
