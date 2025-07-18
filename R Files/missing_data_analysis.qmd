@@ -121,11 +121,24 @@ missing_count <- anes_2024 |>
   select(-pre_interview_mode, -post_interview_mode) |>
   summarise(across(everything(), ~ sum(is.na(.x)))) |>
   pivot_longer(cols = everything(), names_to = "variable", values_to = "neg_count") |>
-  arrange(desc(neg_count)) |>
-  mutate(variable = fct_reorder(variable, neg_count))
+  arrange(desc(neg_count))
 
 top_10_missing_count <- missing_count |>
-  head(10)
+  head(10) |>
+  mutate(variable = case_when(
+    variable == "poli_party_reg" ~ "Political Party Registration",
+    variable == "pres_vote" ~ "2024 Presidential Vote",
+    variable == "lib_con_7pt" ~ "Lib/Con 7pt Scale",
+    variable == "white_thermometer" ~ "White Thermometer Rating",
+    variable == "black_thermometer" ~ "Black Thermometer Rating",
+    variable == "asian_thermometer" ~ "Asian Thermometer Rating",
+    variable == "illegal_immigrant_thermometer" ~ "Illegal Immigrant Thermometer Rating",
+    variable == "hispanic_thermometer" ~ "Hispanic Thermometer Rating",
+    variable == "walz_thermometer_post" ~ "Tim Walz Thermometer Rating (Post)",
+    variable == "income" ~ "Income",
+    TRUE ~ as.character(variable)
+  )) |>
+  mutate(variable = fct_reorder(variable, neg_count))
 
 ggplot(top_10_missing_count, aes(x = neg_count, y = variable)) +
   geom_bar(stat = "identity", fill = "#b4b5b9") +
@@ -146,7 +159,21 @@ ggplot(top_10_missing_count, aes(x = neg_count, y = variable)) +
 
 least_10_missing_count <- missing_count |>
   arrange(neg_count) |>
-  head(10)
+  head(10) |>
+  mutate(variable = case_when(
+    variable == "harris_thermometer_pre" ~ "Kamala Harris Thermometer Rating (Pre)",
+    variable == "budget_social_security" ~ "Federal Spending on Social Security",
+    variable == "voting_felons" ~ "Convicted Felons",
+    variable == "international_force" ~ "Military Force on International Problems",
+    variable == "biden_thermometer_pre" ~ "Joe Biden Thermometer (Pre)",
+    variable == "birthright_citizenship" ~ "Birthright Citizenship",
+    variable == "trump_thermometer_pre" ~ "Donald Trump Thermometer (Pre)",
+    variable == "colleges_run" ~ "Running of Colleges/Universities",
+    variable == "voting_id" ~ "Requirment of Voting ID",
+    variable == "marriage" ~ "Marital Status",
+    TRUE ~ as.character(variable)
+  )) |>
+  mutate(variable = fct_reorder(variable, neg_count))
 
 ggplot(least_10_missing_count, aes(x = neg_count, y = variable)) +
   geom_bar(stat = "identity", fill = "#b4b5b9") +
@@ -168,7 +195,18 @@ ggplot(least_10_missing_count, aes(x = neg_count, y = variable)) +
 least_10_demographic_count <- missing_count |>
   arrange((neg_count)) |>
   filter(variable %in% c("age_election_day", "educ", "marriage", "income", "religion", "gender", "race_ethnicity")) |>
-  head(10)
+  head(10) |>
+  mutate(variable = case_when(
+    variable == "age_election_day" ~ "Age on Election Day",
+    variable == "educ" ~ "Education",
+    variable == "marriage" ~ "Marital Status",
+    variable == "income" ~ "Income Status",
+    variable == "religion" ~ "Religion",
+    variable == "gender" ~ "Gender",
+    variable == "race_ethnicity" ~ "Race/Ethnicity",
+    TRUE ~ as.character(variable)
+  )) |>
+  mutate(variable = fct_reorder(variable, neg_count))
 
 ggplot(least_10_demographic_count, aes(x = neg_count, y = variable)) +
   geom_bar(stat = "identity", fill = "#b4b5b9") +
@@ -294,7 +332,11 @@ anes_2024 |>
 #| warning: FALSE
 
 anes_2024 |>
-  select(educ, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer) |>
+  select(educ, 
+         "White Thermometer Rating" = white_thermometer, 
+         "Black Thermometer Rating" = black_thermometer, 
+         "Asian Thermometer Rating" = asian_thermometer, 
+         "Hispanic Thermometer Rating" = hispanic_thermometer) |>
   gg_miss_fct(fct = educ) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
@@ -335,7 +377,11 @@ anes_2024 |>
 #| warning: FALSE
 
 anes_2024 |>
-  select(race_ethnicity, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer) |>
+  select(race_ethnicity, 
+         "White Thermometer Rating" = white_thermometer, 
+         "Black Thermometer Rating" = black_thermometer, 
+         "Asian Thermometer Rating" = asian_thermometer, 
+         "Hispanic Thermometer Rating" = hispanic_thermometer) |>
   mutate(race_ethnicity = fct_relevel(
     race_ethnicity, 
     "White", 
@@ -364,7 +410,11 @@ anes_2024 |>
 #| warning: FALSE
 
 anes_2024 |>
-  select(lib_con_7pt, white_thermometer, black_thermometer, asian_thermometer, hispanic_thermometer) |>
+  select(lib_con_7pt, 
+         "White Thermometer Rating" = white_thermometer, 
+         "Black Thermometer Rating" = black_thermometer, 
+         "Asian Thermometer Rating" = asian_thermometer, 
+         "Hispanic Thermometer Rating" = hispanic_thermometer) |>
   gg_miss_fct(fct = lib_con_7pt) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
@@ -506,9 +556,14 @@ anes_2024 |>
     )
 
 anes_2024 |>
-  select(gender, feminists_thermometer, lgbt_thermometer, 
-         transgender_thermometer, transgender_bathrooms, 
-         transgender_sports, gender_roles, transgender_military) |>
+  select(gender, 
+         "Feminists Thermometer Rating" = feminists_thermometer, 
+         "Gay and Lesbian Thermometer Rating" = lgbt_thermometer, 
+         "Transgender Thermometer Rating" = transgender_thermometer, 
+         "Transgender Bathrooms" = transgender_bathrooms, 
+         "Transgender Sports" = transgender_sports, 
+         "Gender Roles" = gender_roles, 
+         "Transgender Military" = transgender_military) |>
   gg_miss_fct(fct = gender) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
