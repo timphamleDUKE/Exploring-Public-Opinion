@@ -157,7 +157,7 @@ else:
                 opts.Sankey(
                     width=800,
                     height=300,
-                    node_padding=75,
+                    node_padding=40,
                     labels=dim('index').categorize(node_labels)
                 )
             )
