@@ -39,12 +39,7 @@ def show_ip_directions_dialog():
     """Display issue position directions in a proper dialog"""
     st.markdown("**What is Issue Position Analysis?**")
     st.write("Issue position polarization is the widening gap in policy opinions between ideological groups, with people taking increasingly opposing stances on key political issues. This tool explores how different groups respond to policy questions using data from the 2024 ANES survey.")
-        
-    st.markdown("**How to Use This Tool:**")
-    st.write("**Step 1:** Choose a Topic and specific Issue Question to analyze")
-    st.write("**Step 2:** Select Groups (Ideological or Political) and Visualization Type")
-    st.write("**Step 3:** Interpret the results using the Sankey diagram")
-        
+                
     st.markdown("**Visualization Types:**")
     st.write("**Direct Flow:** Shows all response categories")
     st.write("**Binary Flow:** Simplified into opposing positions (Favor/Oppose, etc.)")
@@ -85,11 +80,6 @@ def show_rc_directions_dialog():
     st.markdown("**What is Rate and Compare Analysis?**")
     st.write("This tool lets you answer the same feeling thermometer questions from the 2024 ANES survey and see how your ratings compare to the US public. Rate topics on a 0-100 scale and get personalized charts showing where you fit.")
         
-    st.markdown("**How to Use This Tool:**")
-    st.write("**Step 1:** Choose a Topic and Question from the dropdowns")
-    st.write("**Step 2:** Select Groups (Ideological or Political) to compare against")
-    st.write("**Step 3:** Enter your demographics and rating (0-100 scale)")
-    st.write("**Step 4:** Click Generate Analysis for personalized charts")
         
     st.markdown("**Understanding Your Results:**")
     st.write("**Your vertical line:** Shows your rating on each chart")
@@ -103,7 +93,7 @@ def show_rc_directions_dialog():
 def show_rc_directions_popup():
     """Display the rate and compare directions popup to the right of the title"""
     # Create columns with specific width ratios - first column much wider
-    col1, col2, col3, col4, col5, col6, col7, col8, col9, col10 = st.columns([5, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+    col1, col2, col3, col4, col5, col6, col7, col8, col9, col10 = st.columns([5.15, 1, 1, 1, 1, 1, 1, 1, 1, 1])
         
     with col1:
         st.markdown("<h1 style='margin-bottom: 0;'>Rate and Compare</h1>", unsafe_allow_html=True)

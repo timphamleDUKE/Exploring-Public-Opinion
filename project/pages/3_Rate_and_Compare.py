@@ -9,11 +9,11 @@ from functions.css import load_save_list_css
 
 # Setup
 set_logo()
-
 load_save_list_css()
 
 # Title and inline popup button
 show_rc_directions_popup()
+
 
 # Sidebar for Analysis Settings
 with st.sidebar:
