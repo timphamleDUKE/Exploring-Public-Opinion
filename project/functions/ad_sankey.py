@@ -274,6 +274,9 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups,
     if df_valid.empty:
         return None
 
+    # total sample used for percentages later on
+    total_sample = len(df_valid)
+
     # Build flows between group_label -> general_position -> specific_response
     flows = []
     
@@ -282,7 +285,8 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups,
                                            'general_position']).size().items():
         color = (ideological_fill_colors if group_type.startswith('Ideological') 
                 else political_fill_colors).get(grp, '#ccc')
-        flows.append((grp, gen, cnt, color, grp))  # Add group info for sorting
+        percent = (cnt / total_sample) * 100 # calc %
+        flows.append((grp, gen, cnt, color, grp, percent))  # Add group info for sorting
     
     # Layer 2: General Position to Specific Response 
     # CRITICAL FIX: Only non-Neither and non-Same positions flow to specific responses
@@ -294,7 +298,8 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups,
                                                       'specific_response']).size().items():
         color = (ideological_fill_colors if group_type.startswith('Ideological') 
                 else political_fill_colors).get(grp, '#ccc')
-        flows.append((gen, spec, cnt, color, grp))  # Add group info for sorting
+        percent = (cnt / total_sample) * 100 # calc %
+        flows.append((gen, spec, cnt, color, grp, percent))  # Add group info for sorting
     
     # SIMPLE FIX: Add minimal dummy flows from terminal positions to force them to middle
     for pos in terminal_positions:
@@ -302,7 +307,7 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups,
             flows.append((pos, f"{pos}__END", 0.0001, '#ffffff', 'dummy'))
 
     flows_df = pd.DataFrame(flows, columns=['Source', 'Target', 'Value', 
-                                           'Color', 'Group'])
+                                           'Color', 'Group', 'Percent'])
     
     # Filter flows to exclude unwanted target nodes (additional cleanup)
     excluded_responses = ['neither favor nor oppose', 'about the same amount']
@@ -436,7 +441,7 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups,
     # Try to build and style the Sankey
     try:
         sankey = hv.Sankey(flows_df, kdims=['Source', 'Target'], 
-                          vdims=['Value', 'Color'])
+                          vdims=['Value', 'Color', 'Percent'])
         sankey = sankey.opts(
             opts.Sankey(
                 width=800,
