@@ -1,27 +1,12 @@
 import streamlit as st
 import holoviews as hv
 from streamlit_bokeh import streamlit_bokeh
-from functions.dictionaries import (
-    set_logo, 
-    description_map, 
-    list_of_issue_topics, 
-    topic_to_list_of_issue_map, 
-    description_to_renamed, 
-    df, 
-    wrap_title
-)
+from functions.dictionaries import set_logo, description_map, list_of_issue_topics, topic_to_list_of_issue_map, description_to_renamed, df, wrap_title
 from functions.sankey import sankeyGraph
-from functions.sidebar_sankey import (
-    political_check, 
-    ideological_check, 
-    list_of_groups_check
-)
+from functions.sidebar_sankey import political_check, ideological_check, list_of_groups_check
 from functions.expander import expander
 from functions.css import load_save_list_css
-from functions.ad_sankey import (
-    create_binary_flow_sankey_holoviews, 
-    check_needs_binary_sankey
-)
+from functions.ad_sankey import create_binary_flow_sankey_holoviews, check_needs_binary_sankey
 from functions.saved import star_button, show_saved_button
 from functions.directionspopup import show_ip_directions_popup
 
@@ -54,37 +39,9 @@ def wrap_text(text, max_length=20):
 
 set_logo()
 load_save_list_css()
-
-# Custom CSS
-st.markdown("""
-    <style>
-    .stCheckbox { 
-        margin-bottom: 0.1rem !important; 
-    }
-    .stCheckbox > label, .stCheckbox > label > div, .stRadio > div > label { 
-        margin-bottom: 0 !important; 
-        padding-bottom: 0 !important; 
-    }
-    .stRadio > div { 
-        gap: 0.25rem !important; 
-    }
-        
-    /* Reduce spacing between title and tabs */
-    .element-container:has(h1) {
-        margin-bottom: -2rem !important;
-    }
-        
-    .stTabs {
-        margin-top: -1rem !important;
-    }
-        
-    .stTabs > div > div > div {
-        padding-top: 0 !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
 show_ip_directions_popup()
+
+st.write("Begin by selecting a topic and issue question to visualize. Use the sidebar to switch between ideological or political groups, and toggle between direct and binary flows.")
 
 topic = st.selectbox("Topic", list_of_issue_topics, index=0)
 list_of_issues = topic_to_list_of_issue_map.get(topic)

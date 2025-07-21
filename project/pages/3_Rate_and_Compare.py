@@ -7,13 +7,12 @@ from functions.facet import *
 from functions.directionspopup import show_rc_directions_popup
 from functions.css import load_save_list_css
 
-# Setup
 set_logo()
 load_save_list_css()
 
-# Title and inline popup button
 show_rc_directions_popup()
 
+st.write("See how your responses compare to ANES participants. Enter your information, choose a thermometer question to answer from the sidebar, and generate your personalized plots.")
 
 # Sidebar for Analysis Settings
 with st.sidebar:

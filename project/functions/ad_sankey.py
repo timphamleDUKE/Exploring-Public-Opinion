@@ -1,12 +1,7 @@
 import pandas as pd
 import holoviews as hv
 from holoviews import opts, dim
-from functions.dictionaries import (
-    find_answer_choices, 
-    ideological_fill_colors, 
-    political_fill_colors, 
-    codebook
-)
+from functions.dictionaries import find_answer_choices, ideological_fill_colors, political_fill_colors, codebook
 
 def check_needs_binary_sankey(issue_question):
     """Check if question needs Binary Sankey based on manual overrides and codebook"""
@@ -239,9 +234,9 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups,
             return 'Disagree'
         
         # Increase/Decrease patterns
-        if any(w in txt for w in ['increase', 'increased', 'more', 'great deal more', 'moderate amount more', 'little more', 'somewhat more']):
+        if any(w in txt for w in ['increase', 'increased', 'increased a lot', 'increased a little', 'more', 'great deal more', 'moderate amount more', 'little more', 'somewhat more']):
             return 'More'
-        elif any(w in txt for w in ['decrease', 'decreased', 'less', 'great deal less', 'moderate amount less', 'little less', 'somewhat less']):
+        elif any(w in txt for w in ['decrease', 'decreased', 'decreased a lot', 'decreased a little', 'less', 'great deal less', 'moderate amount less', 'little less', 'somewhat less']):
             return 'Less'
         elif any(w in txt for w in ['same', 'kept the same', 'left the same', 'about the same', 'right amount', 'currently doing the right amount']):
             return 'Same'
@@ -332,7 +327,8 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups,
         'Good', 'Bad', 'Neither Good Nor Bad',  # Good/Bad scales
         'Better', 'Worse',  # Better/Worse scales
         'Approve', 'Disapprove',  # Approve/Disapprove
-        'For', 'Against'  # For/Against
+        'For', 'Against',  # For/Against
+        'Increase', 'Decrease'
     ]
     
     # Force proper ordering in middle column based on what actually exists
@@ -433,6 +429,9 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups,
             node_labels[node] = ''  # Empty string to hide __END labels
         else:
             node_labels[node] = wrap_text(node)
+    
+    # weights
+    
 
     # Try to build and style the Sankey
     try:
@@ -467,7 +466,12 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups,
                 title=title,
                 title_format="{label}",
                 fontsize={'title': '20pt'},
-                labels=dim('index').categorize(node_labels)
+                labels=dim('index').categorize(node_labels),
+                hover_tooltips=[
+                    ('Flow', '@Source → @Target'),
+                    ('Weighted Count', '@Value{0,0}'),
+                    ('Percent', '@Percent{0.00}%')
+                ]
             )
         )
 

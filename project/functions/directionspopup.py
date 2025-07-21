@@ -13,7 +13,7 @@ def show_ap_directions_dialog():
 def show_ap_directions_popup():
     """Display the affective polarization directions popup to the right of the title"""
     # Create columns with specific width ratios - first column much wider
-    col1, col2, col3, col4, col5, col6, col7, col8, col9, col10 = st.columns([6.3, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+    col1, col2, col3 = st.columns([6.3, 1, 8])
         
     with col1:
         st.markdown("<h1 style='margin-bottom: 0;'>Affective Polarization</h1>", unsafe_allow_html=True)
@@ -41,8 +41,8 @@ def show_ip_directions_dialog():
     st.write("Issue position polarization is the widening gap in policy opinions between ideological groups, with people taking increasingly opposing stances on key political issues. This tool explores how different groups respond to policy questions using data from the 2024 ANES survey.")
                 
     st.markdown("**Visualization Types:**")
-    st.write("**Direct Flow:** Shows all response categories")
-    st.write("**Binary Flow:** Simplified into opposing positions (Favor/Oppose, etc.)")
+    st.write("Direct Flow: Shows all response categories")
+    st.write("Binary Flow: Simplified into opposing positions (Favor/Oppose, etc.)")
         
     st.markdown("**Reading the Diagram:**")
     st.write("• Left side shows political/ideological groups")
@@ -53,7 +53,7 @@ def show_ip_directions_dialog():
 def show_ip_directions_popup():
     """Display the issue position directions popup to the right of the title"""
     # Create columns with specific width ratios - first column much wider
-    col1, col2, col3, col4, col5, col6, col7, col8, col9, col10 = st.columns([3.2, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+    col1, col2, col3 = st.columns([3.5, 1, 8])
         
     with col1:
         st.markdown("<h1 style='margin-bottom: 0;'>Issue Position</h1>", unsafe_allow_html=True)
@@ -93,7 +93,7 @@ def show_rc_directions_dialog():
 def show_rc_directions_popup():
     """Display the rate and compare directions popup to the right of the title"""
     # Create columns with specific width ratios - first column much wider
-    col1, col2, col3, col4, col5, col6, col7, col8, col9, col10 = st.columns([5.15, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+    col1, col2, col3 = st.columns([5, 1, 8])
         
     with col1:
         st.markdown("<h1 style='margin-bottom: 0;'>Rate and Compare</h1>", unsafe_allow_html=True)

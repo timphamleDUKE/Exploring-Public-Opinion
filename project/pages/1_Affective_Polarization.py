@@ -13,11 +13,13 @@ load_save_list_css()
 
 show_ap_directions_popup()
 
+st.write("Begin by selecting a topic and thermometer question from the side bar to visualize on the Explore tab. View responses by ideological or political group, and compare across demographic categories.")
+
 # Tabs
 tab1, tab2 = st.tabs(["Featured", "Explore"])
 
 with tab1:
-    st.write("Explore key trends in Affective Polarization with density plots showing how Democrats, Republicans, and people across the ideological spectrum rate each other. You’ll also see how each party rated the 2024 presidential candidates, both before and after the election.")     
+    st.write("Investigate trends in Affective Polarization with density plots showing how Democrats, Republicans, and people across the ideological spectrum rate each other. Also, see how each party rated the 2024 presidential candidates, both before and after the election.")     
 
     st.header("Thermometer Ratings: Democrats & Republicans (2024)")
     col1, col2 = st.columns(2)
@@ -123,7 +125,7 @@ with tab1:
 
 # Display Plot
 with tab2:
-    st.write("Dig deeper into the data using interactive tools. Filter ANES 2024 feeling thermometer responses by party, ideology, and more. Customize the graphs to compare groups of the survey respondents.")
+    st.write("Explore the ANES 2024 data with interactive tools. Analyze responses to the feeling thermometer questions and customize the graphs to compare different demographic groups.")
     
     with st.sidebar:
         st.title("Please Select:")
