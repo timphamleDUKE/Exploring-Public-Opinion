@@ -2,6 +2,7 @@ import pandas as pd
 import holoviews as hv
 from holoviews import opts, dim
 from functions.dictionaries import find_answer_choices, ideological_fill_colors, political_fill_colors, codebook
+import streamlit as st
 
 def check_needs_binary_sankey(issue_question):
     """Check if question needs Binary Sankey based on manual overrides and codebook"""
@@ -162,11 +163,12 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups,
                 return 'Neither Side'
         
         # LGBT adoption question - special handling
-        if 'permitted to adopt' in txt or 'adopt' in txt:
-            if 'should be permitted' in txt or 'permitted to adopt' in txt:
-                return 'Should Adopt'
-            elif 'should not be permitted' in txt or 'not be permitted' in txt:
+        if 'adopt' in txt and ('gay' in txt or 'lesbian' in txt or 'couples' in txt):
+            # Check for "should NOT be permitted" FIRST (most specific)
+            if 'should not be permitted' in txt:
                 return 'Should Not Adopt'
+            elif 'should be permitted' in txt:
+                return 'Should Adopt'
         
         # Government involvement questions
         if 'less government' in txt or 'less gov' in txt:
@@ -290,7 +292,7 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups,
     
     # Layer 2: General Position to Specific Response 
     # CRITICAL FIX: Only non-Neither and non-Same positions flow to specific responses
-    terminal_positions = ['Neither', 'Same']
+    terminal_positions = ['Neither', 'Same', 'No Difference']
     non_terminal = df_valid[~df_valid['general_position'].isin(terminal_positions)]
     
     for (grp, gen, spec), cnt in non_terminal.groupby(['group_label', 
@@ -431,7 +433,7 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups,
     node_labels = {}
     for node in unique_nodes:
         if '__END' in node:
-            node_labels[node] = ''  # Empty string to hide __END labels
+            node_labels[node] = ' '  # Empty string to hide __END labels
         else:
             node_labels[node] = wrap_text(node)
     
@@ -442,9 +444,19 @@ def create_binary_flow_sankey_holoviews(df, issue_question, list_of_groups,
     try:
         sankey = hv.Sankey(flows_df, kdims=['Source', 'Target'], 
                           vdims=['Value', 'Color', 'Percent'])
+        
+        optimal_width = 800
+
+        if issue_question in {"hiring_black", "gov_involvement"}:
+            optimal_width = 670
+        if issue_question in {"opioid_epidemic"}:
+            optimal_width = 550
+        if issue_question in {"lgbt_adoption"}:
+            optimal_width = 600
+
         sankey = sankey.opts(
             opts.Sankey(
-                width=800,
+                width=optimal_width,
                 height=300,
                 edge_color='Color',
                 edge_alpha=0.6,

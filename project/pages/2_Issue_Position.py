@@ -110,9 +110,19 @@ else:
             
             # Apply wrapped labels and increased node padding to the existing Sankey
             from holoviews import dim, opts
+
+            optimal_width = 800
+            
+            if issue_question in {"hiring_black", "gay_marriage_view", "gov_involvement"}:
+                optimal_width = 670
+            if issue_question in {"opioid_epidemic"}:
+                optimal_width = 550
+            if issue_question in {"abortion", "lgbt_adoption"}:
+                optimal_width = 600
+
             hv_obj = hv_obj.opts(
                 opts.Sankey(
-                    width=800,
+                    width=optimal_width,
                     height=300,
                     node_padding=40,
                     labels=dim('index').categorize(node_labels)

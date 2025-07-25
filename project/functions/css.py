@@ -53,7 +53,7 @@ def load_custom_css():
         background: white;
         border-radius: 20px;
         padding: 2.5rem;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.5rem auto;
         border: 1px solid rgba(102, 126, 234, 0.1);
         transition: all 0.4s ease;
         position: relative;

@@ -107,20 +107,15 @@ for idx in range(2):
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-col1, col2 = st.columns(2, gap="large")
-with col1:
-    card = FEATURE_CARDS[2]
-    st.markdown(f"""
-    <div class="feature-card">
-        <div style="margin-bottom: 1rem; text-align: center;">{card['icon']}</div>
-        <h3 class="card-title" style="text-align: center;">{card['title']}</h3>
-        <p class="card-description" style="text-align: center;">{card['description']}</p>
-    </div>
-    """, unsafe_allow_html=True)
-    render_card_button(card)
-with col2:
-    st.subheader("Presentation Feedback Form:")
-    st.markdown("https://forms.gle/DBTnYfPsn5u99d698")
+card = FEATURE_CARDS[2]
+st.markdown(f"""
+<div class="feature-card">
+    <div style="margin-bottom: 1rem; text-align: center;">{card['icon']}</div>
+    <h3 class="card-title" style="text-align: center;">{card['title']}</h3>
+    <p class="card-description" style="text-align: center;">{card['description']}</p>
+</div>
+""", unsafe_allow_html=True)
+render_card_button(card)
 
 st.markdown("<br><br>", unsafe_allow_html=True)
 st.divider()

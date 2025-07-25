@@ -15,6 +15,7 @@ library(ggplot2)
 library(survey)
 library(extrafont)
 library(naniar)
+library(stringr)
 ```
 
 ```{r}
@@ -35,7 +36,8 @@ anes_2024 <- anes_2024 |>
 #| label: data-cleaning
 
 anes_2024 <- anes_2024 |>
-  replace_with_na_all(condition = ~.x < 0) |>
+  # Apply replace_with_na_all only to numeric columns
+  mutate(across(where(is.numeric), ~ifelse(.x < 0, NA, .x))) |>
   mutate(
     race_ethnicity = case_when(
       race_ethnicity == '-9' ~ "Refused",
@@ -75,7 +77,7 @@ anes_2024 <- anes_2024 |>
       lib_con_7pt == '1' ~ "Extremely liberal",
       lib_con_7pt == '2' ~ "Liberal",
       lib_con_7pt == '3' ~ "Slightly liberal",
-      lib_con_7pt == '4' ~ "Moderate; middle of the road",
+      lib_con_7pt == '4' ~ "Moderate",
       lib_con_7pt == '5' ~ "Slightly conservative",
       lib_con_7pt == '6' ~ "Conservative",
       lib_con_7pt == '7' ~ "Extremely conservative",
@@ -88,7 +90,7 @@ anes_2024 <- anes_2024 |>
       marriage == '4' ~ "Divorced",
       marriage == '5' ~ "Separated",
       marriage == '6' ~ "Never Married",
-      TRUE ~ NA
+      TRUE ~ NA_character_  # Use NA_character_ instead of NA
     )
   ) |>
   mutate(
@@ -99,12 +101,11 @@ anes_2024 <- anes_2024 |>
     )),
     lib_con_7pt = factor(lib_con_7pt, levels = c(
       "Extremely liberal", "Liberal", "Slightly liberal", 
-      "Moderate; middle of the road", "Slightly conservative", 
-      "Conservative", "Extremely conservative", NA
+      "Moderate", "Slightly conservative",  # Fixed: removed "; middle of the road"
+      "Conservative", "Extremely conservative"
     )),
     marriage = factor(marriage, levels = c(
-      "Married", "Widowed", "Divorced", "Separated",
-      "Never Married", NA
+      "Married", "Widowed", "Divorced", "Separated", "Never Married"
     ))
   )
 
@@ -367,6 +368,22 @@ anes_2024 |>
     axis.text.x = element_text(angle = 45, hjust = 1),
     )
 
+anes_2024 |>
+  select(educ, gun_difficulty, gun_background_checks, gun_ban_assault_rifles, 
+         death_penalty, police_force, budget_crime) |>
+  gg_miss_fct(fct = educ) +
+  scale_fill_gradient(low = "white", high = "#7b3ad4") +
+  theme_minimal() +
+  labs(title = "Missing Data Patterns by Education Level \nand Guns/Crime Questions (WEB)",
+       x = "Education",
+       y = "Question",
+       fill = "Missing %") +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),
+    plot.caption = element_text(face = "italic"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    )
 
 
 ```
@@ -375,6 +392,31 @@ anes_2024 |>
 #| label: missing-heatmap-race
 #| message: FALSE
 #| warning: FALSE
+
+anes_2024 |>
+  select(race_ethnicity, 
+         gun_difficulty, gun_background_checks, gun_ban_assault_rifles, 
+         death_penalty, police_force, budget_crime) |>
+  mutate(race_ethnicity = fct_relevel(
+    race_ethnicity, 
+    "White", 
+    "Hispanic", 
+    "Black", 
+    "Asian/Native Hawaiian/other Pacific Islander",
+    "Native American/Alaska Native/other")) |>
+  gg_miss_fct(fct = race_ethnicity) +
+  scale_fill_gradient(low = "white", high = "#7b3ad4") +
+  theme_minimal() +
+  labs(title = "Missing Data Patterns by Race \nand Guns/Crime Questions (WEB)",
+       x = "Race",
+       y = "Question",
+       fill = "Missing %") +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),
+    plot.caption = element_text(face = "italic"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    )
 
 anes_2024 |>
   select(race_ethnicity, 
@@ -402,6 +444,7 @@ anes_2024 |>
     plot.caption = element_text(face = "italic"),
     axis.text.x = element_text(angle = 45, hjust = 1),
     )
+
 ```
 
 ```{r}
@@ -411,16 +454,16 @@ anes_2024 |>
 
 anes_2024 |>
   select(lib_con_7pt, 
-         "White Thermometer Rating" = white_thermometer, 
-         "Black Thermometer Rating" = black_thermometer, 
-         "Asian Thermometer Rating" = asian_thermometer, 
-         "Hispanic Thermometer Rating" = hispanic_thermometer) |>
+         "White" = white_thermometer, 
+         "Black" = black_thermometer, 
+         "Asian" = asian_thermometer, 
+         "Hispanic" = hispanic_thermometer) |>
   gg_miss_fct(fct = lib_con_7pt) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
   labs(title = "Missing Data Patterns by Ideology \nand Race Thermometer Questions (WEB)",
        x = "Ideology",
-       y = "Question",
+       y = "Thermometer Question",
        fill = "Missing %") +
   theme(
     text = element_text(family = "Source Sans 3"),
@@ -451,6 +494,23 @@ anes_2024 |>
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
   labs(title = "Missing Data Patterns by Ideology \nand Ideological Questions (WEB)",
+       x = "Ideology",
+       y = "Question",
+       fill = "Missing %") +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),
+    plot.caption = element_text(face = "italic"),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+    )
+
+anes_2024 |>
+  select(lib_con_7pt, gun_difficulty, gun_background_checks, gun_ban_assault_rifles, 
+         death_penalty, police_force, budget_crime) |>
+  gg_miss_fct(fct = lib_con_7pt) +
+  scale_fill_gradient(low = "white", high = "#7b3ad4") +
+  theme_minimal() +
+  labs(title = "Missing Data Patterns by Ideology \nand Guns/Crime Questions (WEB)",
        x = "Ideology",
        y = "Question",
        fill = "Missing %") +
@@ -517,6 +577,23 @@ anes_2024 |>
     )
 
 anes_2024 |>
+  select(marriage, gun_difficulty, gun_background_checks, gun_ban_assault_rifles, 
+         death_penalty, police_force, budget_crime) |>
+  gg_miss_fct(fct = marriage) +
+  scale_fill_gradient(low = "white", high = "#7b3ad4") +
+  theme_minimal() +
+  labs(title = "Missing Data Patterns by Marriage \nand Guns/Crime Questions (WEB)",
+       x = "Marital Status",
+       y = "Question",
+       fill = "Missing %") +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),
+    plot.caption = element_text(face = "italic"),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+    )
+
+anes_2024 |>
   gg_miss_fct(fct = marriage) +
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
@@ -544,7 +621,7 @@ anes_2024 |>
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
   labs(title = "Missing Data Patterns by Gender \nand Race Thermometer Questions (WEB)",
-       x = "Marital Status",
+       x = "Gender",
        y = "Question",
        fill = "Missing 
 %") +
@@ -568,7 +645,25 @@ anes_2024 |>
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
   labs(title = "Missing Data Patterns by Gender \nand Gender Questions (WEB)",
-       x = "Marital Status",
+       x = "Gender",
+       y = "Question",
+       fill = "Missing %") +
+  theme(
+    text = element_text(family = "Source Sans 3"),
+    plot.title = element_text(face = "bold"),
+    plot.caption = element_text(face = "italic"),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+    )
+
+anes_2024 |>
+  select(gender, 
+         gun_difficulty, gun_background_checks, gun_ban_assault_rifles, 
+         death_penalty, police_force, budget_crime) |>
+  gg_miss_fct(fct = gender) +
+  scale_fill_gradient(low = "white", high = "#7b3ad4") +
+  theme_minimal() +
+  labs(title = "Missing Data Patterns by Gender \nand Guns/Crime Questions (WEB)",
+       x = "Gender",
        y = "Question",
        fill = "Missing %") +
   theme(
@@ -583,7 +678,7 @@ anes_2024 |>
   scale_fill_gradient(low = "white", high = "#7b3ad4") +
   theme_minimal() +
   labs(title = "Missing Data Patterns by Gender \nand All Survey Questions (WEB)",
-       x = "Marital Status",
+       x = "Gender",
        y = "Question",
        fill = "Missing %") +
   theme(
