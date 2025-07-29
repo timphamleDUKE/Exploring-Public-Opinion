@@ -35,10 +35,10 @@ def set_logo():
 # Dataframe
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
-df_path = os.path.join(script_dir, '..', '..', 'data', 'anes_2024_clean.csv')
+df_path = os.path.join(script_dir, '..', 'data', 'anes_2024_clean.csv')
 df = pd.read_csv(df_path)
 
-codebook_path = os.path.join(script_dir, '..', '..', 'data', 'codebook.csv')
+codebook_path = os.path.join(script_dir, '..', 'data', 'codebook.csv')
 codebook = pd.read_csv(codebook_path)
 
 
