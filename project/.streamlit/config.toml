@@ -6,3 +6,8 @@ font = "sans serif"
 [client]
 showSidebarNavigation=true
 
+[server]
+headless = true
+port = 8501
+address = "0.0.0.0"
+enableCORS = false
