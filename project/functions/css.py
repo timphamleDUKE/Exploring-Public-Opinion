@@ -62,6 +62,7 @@ def load_custom_css():
         width: 100%;
         text-align: center;
         backdrop-filter: blur(10px);
+        align-items: baseline;
     }
     
     .feature-card::before {
@@ -84,12 +85,18 @@ def load_custom_css():
         background-clip: text;
         text-align: center;
     }
+                
+    .card-title-icon {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
     
     .card-description {
         font-size: 1.1rem;
         color: #5a6c7d;
         line-height: 1.7;
-        margin-bottom: 2.5rem;
+        margin-bottom: 1rem;
     }
     
     /* Button styling */
@@ -254,5 +261,41 @@ def load_save_list_css():
         width: 1500px !important;
         max-width: 1500px !important;
     }
+    </style>
+    """, unsafe_allow_html=True)
+
+def load_tab_css():
+    st.markdown("""
+    <style>
+    /* Target the actual tab elements in Streamlit */
+    .stTabs [data-baseweb="tab"] {
+        background: #7C41D2;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 1rem 2.5rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        margin-right: 1rem;
+    }
+    
+    .stTabs [data-baseweb="tab"]:hover {
+        color: hsl(0, 0%, 85%);
+    }
+    
+    .stTabs [data-baseweb="tab"][aria-selected="true"] {
+        color: hsl(0, 0%, 85%);
+    }
+    
+    /* Remove default tab styling */
+    .stTabs [data-baseweb="tab-border"] {
+        display: none !important;
+    }
+    
+    .stTabs [data-baseweb="tab-highlight"] {
+        display: none !important;
+    }
+            
     </style>
     """, unsafe_allow_html=True)

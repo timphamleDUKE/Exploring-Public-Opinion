@@ -28,6 +28,9 @@ def set_logo():
             height: 50px !important;
             width: auto;
         }
+                
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
     </style>
     """, unsafe_allow_html=True)
 

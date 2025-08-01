@@ -5,21 +5,23 @@ from functions.facet import *
 from functions.density import densityGraph, densityGraphFaceted
 from functions.expander import expander
 from functions.saved import star_button, show_saved_button
-from functions.css import load_save_list_css
+from functions.css import load_save_list_css, load_tab_css
 from functions.directionspopup import show_ap_directions_popup
 
 set_logo()
 load_save_list_css()
+load_tab_css()
 
 show_ap_directions_popup()
 
-st.write("Begin by selecting a topic and thermometer question from the side bar to visualize on the Explore tab. View responses by ideological or political group, and compare across demographic categories.")
+st.write("Begin by selecting a topic and thermometer question from the side bar to visualize on the Explore tab. View responses by groups and compare across demographic categories.")
 
 # Tabs
 tab1, tab2 = st.tabs(["Featured", "Explore"])
 
 with tab1:
-    st.write("Investigate trends in Affective Polarization with density plots showing how Democrats, Republicans, and people across the ideological spectrum rate each other. Also, see how each party rated the 2024 presidential candidates, both before and after the election.")     
+    st.divider()
+    st.write("See below for some featured measures of affective polarization or explore some on your own using the explore tab above and categories on the left.")     
 
     st.header("Thermometer Ratings: Democrats & Republicans (2024)")
     col1, col2 = st.columns(2)
@@ -125,15 +127,16 @@ with tab1:
 
 # Display Plot
 with tab2:
+    st.divider()
     st.write("Explore the ANES 2024 data with interactive tools. Analyze responses to the feeling thermometer questions and customize the graphs to compare different demographic groups.")
     
     with st.sidebar:
-        st.title("Please Select:")
+        st.title("Explore")
 
-        topic = st.selectbox("Topic", list_of_thermometer_topics, index=0)
+        topic = st.selectbox("Topic", list_of_thermometer_topics, index=1)
         list_of_thermometer = topic_to_list_of_thermometer_map.get(topic)
 
-        dropdown_question = st.selectbox("Thermometer Question", list_of_thermometer, index=0)
+        dropdown_question = st.selectbox("Thermometer Question", list_of_thermometer, index=1)
         thermometer_question = dropdown_to_renamed.get(dropdown_question)
 
         group = st.radio("Groups", ["Ideological Groups", "Political Groups"])

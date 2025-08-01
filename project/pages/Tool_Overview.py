@@ -48,7 +48,7 @@ FEATURE_CARDS = [
         "key": "ip_button"
     },
     {
-        "title": "Rate and Compare", 
+        "title": "How do you Compare to the American Public?", 
         "icon": """<svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="12" cy="12" r="10" stroke="#764ba2" stroke-width="2" fill="none"/>
             <path d="M9 12 L11 14 L15 10" stroke="#667eea" stroke-width="2" fill="none"/>
@@ -82,9 +82,7 @@ st.markdown("""
 st.markdown("""
 <div style="text-align: center; width: 100%; margin: 1rem auto;">
     <p style="font-size: 1.2rem; color: #5a6c7d; line-height: 1.6; margin: 0.5rem 0;">
-        This survey navigator tool analyzes the 2024 American National Election Study data to explore political polarization 
-        and public opinion patterns. Through interactive visualizations, we examine both affective polarization 
-        (how people feel about opposing parties) and issue positions (where Americans stand on key political topics).
+        This survey navigator tool analyzes the 2024 American National Election Study data to explore public opinion patterns.
     </p>
 </div>
 """, unsafe_allow_html=True)
@@ -98,26 +96,32 @@ for idx in range(2):
     with cols[idx]:
         st.markdown(f"""
         <div class="feature-card">
-            <div style="margin-bottom: 1rem;">{card['icon']}</div>
-            <h3 class="card-title">{card['title']}</h3>
+            <div class="card-title-icon">
+                <div style="margin-bottom: 1rem;">{card['icon']}</div>
+                <h3 class="card-title">{card['title']}</h3>
+            </div>
             <p class="card-description">{card['description']}</p>
         </div>
         """, unsafe_allow_html=True)
         render_card_button(card)
 
-st.markdown("<br>", unsafe_allow_html=True)
+st.markdown(f"""
+    <br>
+    <br>
+""", unsafe_allow_html=True)
 
 card = FEATURE_CARDS[2]
 st.markdown(f"""
 <div class="feature-card">
-    <div style="margin-bottom: 1rem; text-align: center;">{card['icon']}</div>
-    <h3 class="card-title" style="text-align: center;">{card['title']}</h3>
-    <p class="card-description" style="text-align: center;">{card['description']}</p>
+    <div class="card-title-icon">
+        <div style="margin-bottom: 1rem;">{card['icon']}</div>
+        <h3 class="card-title">{card['title']}</h3>
+    </div>
+    <p class="card-description">{card['description']}</p>
 </div>
 """, unsafe_allow_html=True)
 render_card_button(card)
 
-st.markdown("<br><br>", unsafe_allow_html=True)
 st.divider()
 st.markdown("""
 <div style="text-align: center; padding: 1rem;">

@@ -22,4 +22,4 @@ COPY . .
 EXPOSE 8501
 
 # Run Streamlit when the container starts
-CMD ["streamlit", "run", "Home.py"]
+CMD ["streamlit", "run", "app.py"]

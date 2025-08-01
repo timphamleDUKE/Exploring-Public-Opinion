@@ -14,7 +14,7 @@ tab1, tab2 = st.tabs(["The Data", "The Team"])
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 df_path = os.path.join(script_dir, '..', 'data', 'anes_2024_clean.csv')
-df = pd.read_csv(df_path)
+df = pd.read_csv(df_path, index_col=0)
 
 # Tab 1: The Data
 with tab1:
@@ -23,7 +23,7 @@ with tab1:
     with col1:
         # Add metadata description
         st.markdown("""  
-        The data used in this project come from the **American National Election Survey (ANES) 2024**, 
+        The data used in this project come from the [**American National Election Survey (ANES) 2024**](https://electionstudies.org/), 
         one of the most respected sources of public opinion data in the United States. ANES is a 
         collaboration of Duke University, University of Michigan, The University of Texas at Austin, 
         and Stanford University, with funding by the National Science Foundation.
@@ -31,7 +31,8 @@ with tab1:
         **Observations:** 5,521 respondents    &    **Variables:** 124
         
         The dataset includes detailed information on political attitudes, voting behavior, 
-        demographic characteristics, ideological self-placement, partisanship, and more.
+        demographic characteristics, ideological self-placement, partisanship, and more from the [**April 30th, 2025 version**](https://electionstudies.org/data-center/2024-time-series-study/).
+                    
         """)
         
     with col2:

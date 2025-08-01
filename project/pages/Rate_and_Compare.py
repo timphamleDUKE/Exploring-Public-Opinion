@@ -12,14 +12,14 @@ load_save_list_css()
 
 show_rc_directions_popup()
 
-st.write("See how your responses compare to ANES participants. Enter your information, choose a thermometer question to answer from the sidebar, and generate your personalized plots.")
+st.write("See how your views compare to others who share each of your demographic characteristics. Enter your information, choose a thermometer question to answer from the sidebar, and generate your personalized plots.")
 
 # Sidebar for Analysis Settings
 with st.sidebar:
     st.title("Please Select:")
 
-    topic = st.selectbox("Topic", list_of_thermometer_topics)
-    thermometer_label = st.selectbox("Question", topic_to_list_of_thermometer_map[topic])
+    topic = st.selectbox("Topic", list_of_thermometer_topics, index=1)
+    thermometer_label = st.selectbox("Question", topic_to_list_of_thermometer_map[topic], index=1)
     thermometer_question = dropdown_to_renamed[thermometer_label]
 
     group = st.radio("Groups", ["Ideological Groups", "Political Groups"])
@@ -62,7 +62,7 @@ user_rating = st.slider(
 # Generate Analysis
 if st.button("Generate Analysis"):
     st.divider()
-    st.header(f"{description_map.get(thermometer_question)} (2024)")
+    st.header("How do you compare?")
 
     # Create plots in a 2-column layout
     facet_items = list(facet_display_map.items())

@@ -41,7 +41,7 @@ set_logo()
 load_save_list_css()
 show_ip_directions_popup()
 
-st.write("Begin by selecting a topic and issue question to visualize. Use the sidebar to switch between ideological or political groups, and toggle between direct and binary flows.")
+st.write("Select a topic and issue question to visualize. Use the sidebar to switch between ideological or political groups, and toggle between direct and binary flows.")
 
 topic = st.selectbox("Topic", list_of_issue_topics, index=0)
 list_of_issues = topic_to_list_of_issue_map.get(topic)

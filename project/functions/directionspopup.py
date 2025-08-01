@@ -56,7 +56,7 @@ def show_ip_directions_popup():
     col1, col2, col3 = st.columns([3.5, 1, 8])
         
     with col1:
-        st.markdown("<h1 style='margin-bottom: 0;'>Issue Position</h1>", unsafe_allow_html=True)
+        st.markdown("<h1 style='margin-bottom: 0;'>Issue Positions</h1>", unsafe_allow_html=True)
         
     with col2:
         # Add custom CSS to align the button with the title
@@ -93,10 +93,10 @@ def show_rc_directions_dialog():
 def show_rc_directions_popup():
     """Display the rate and compare directions popup to the right of the title"""
     # Create columns with specific width ratios - first column much wider
-    col1, col2, col3 = st.columns([5, 1, 8])
+    col1, col2, col3 = st.columns([14, 1, 8])
         
     with col1:
-        st.markdown("<h1 style='margin-bottom: 0;'>Rate and Compare</h1>", unsafe_allow_html=True)
+        st.markdown("<h1 style='margin-bottom: 0;'>How do you Compare to the American Public?</h1>", unsafe_allow_html=True)
         
     with col2:
         # Add custom CSS to align the button with the title
